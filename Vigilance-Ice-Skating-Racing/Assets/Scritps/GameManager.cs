@@ -12,6 +12,7 @@ public class GameManager : MonoBehaviour
 
     void Start()
     {
+        // When Game starts load the menu:
         gameState = GameState.inMenu;
         menuManager.switchPanel(menuManager.UIPanels[0]);
     }
@@ -22,7 +23,7 @@ public class GameManager : MonoBehaviour
         GameStateManager();
     }
 
-    void GameStateManager()
+    void GameStateManager() // Use these states to determine the actions of other scripts based on where the player/user is in the game.
     {
         switch (gameState)
         {
