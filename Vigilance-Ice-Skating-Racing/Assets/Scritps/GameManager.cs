@@ -4,15 +4,52 @@ using UnityEngine;
 
 public class GameManager : MonoBehaviour
 {
-    // Start is called before the first frame update
+    public enum GameState { inMenu,inPaused, inRaceMode, inEndlessMode };
+    public GameState gameState;
+
+    public MenuManager menuManager;
+
+
     void Start()
     {
-        
+        gameState = GameState.inMenu;
+        menuManager.switchPanel(menuManager.UIPanels[0]);
     }
 
-    // Update is called once per frame
+    
     void Update()
     {
-        
+        GameStateManager();
+    }
+
+    void GameStateManager()
+    {
+        switch (gameState)
+        {
+            case GameState.inMenu:
+                
+                break;
+            case GameState.inPaused:
+
+                break;
+            case GameState.inRaceMode:
+                
+                break;
+            case GameState.inEndlessMode:
+                
+                break;
+        }
+    }
+
+    public void loadRaceMode()
+    {
+        // For now this is just to switch UI
+        gameState = GameState.inRaceMode;
+    }
+
+    public void loadEndlessMode()
+    {
+        // For now this is just to switch UI
+        gameState = GameState.inEndlessMode;
     }
 }

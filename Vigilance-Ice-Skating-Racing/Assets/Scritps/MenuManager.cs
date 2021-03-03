@@ -4,6 +4,17 @@ using UnityEngine;
 
 public class MenuManager : MonoBehaviour
 {
+    public GameManager gameManager;
+
+    public GameObject[] UIPanels;
+    /* 
+        0 = Menu
+        1 = Settings
+        2 = Controls
+        3 = InGame
+        4 = Pause
+        5 = LevelComplete
+    */
     
 
     void Start()
@@ -25,5 +36,17 @@ public class MenuManager : MonoBehaviour
         }
 
         panel.SetActive(true);
+    }
+
+    public void backFromSettings()
+    {
+        if (gameManager.gameState == GameManager.GameState.inMenu) // From Menu > Settings; to back to menu
+        {
+            switchPanel(UIPanels[0]); 
+        }
+        else // From InGame > Settings; to back to inGame
+        {
+            switchPanel(UIPanels[3]);
+        }
     }
 }
