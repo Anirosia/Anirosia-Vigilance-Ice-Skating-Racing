@@ -4,47 +4,48 @@ using UnityEngine;
 
 public class MenuManager : MonoBehaviour
 {
-    public GameObject[] UIPanels;
-    /* 
-        0 = Menu
-        1 = Settings
-        2 = Controls
-        3 = InGame
-        4 = Pause
-        5 = LevelComplete
-    */
-    
+    public UIPanel[] UIPanels;
 
-    void Start()
+    //Reference to the Previously active panel
+    private GameObject previousPanel;
+
+    #region OnEnable/OnDisable
+    private void OnEnable()
     {
-        
+        GameManager.OnGameStateChanged += SwitchPanel;
     }
 
-    
-    void Update()
+    private void OnDisable()
     {
-        
+        GameManager.OnGameStateChanged -= SwitchPanel;
     }
+    #endregion
 
-    public void switchPanel(GameObject panel) // Sets all panels to false before activating the passed in panel.
+    #region UI Switching
+    public void SwitchPanel()
     {
-        for (int i = 0; i < gameObject.transform.childCount; i++)
-        {
-            gameObject.transform.GetChild(i).gameObject.SetActive(false);
-        }
+        if(previousPanel != null) previousPanel.SetActive(false);
 
-        panel.SetActive(true);
-    }
-
-    public void backFromSettings()
-    {
-        if (GameManager.Instance.gameState == GameManager.GameState.inMenu) // From Menu > Settings; to back to menu
+        for (int i = 0; i < UIPanels.Length; i++)
         {
-            switchPanel(UIPanels[0]); 
-        }
-        else // From InGame > Settings; to back to inGame
-        {
-            switchPanel(UIPanels[3]);
+            if (UIPanels[i].stateForUI == GameManager.Instance.gameState)
+            {
+                previousPanel = UIPanels[i].uiPanel;
+                previousPanel.SetActive(true);
+                break;
+            }
         }
     }
+    #endregion
 }
+
+#region Structs
+[System.Serializable]
+public struct UIPanel
+{
+    //GameObejct Reference to the UIPanel
+    public GameObject uiPanel;
+    //The State that the UIPanel will be active for
+    public GameManager.GameState stateForUI;
+}
+#endregion

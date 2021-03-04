@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -22,6 +23,8 @@ public class GameManager : MonoBehaviour
 
     private bool scenesHaveBeenPreloaded = false;
     private bool loadEndlessScene = false;
+
+    public static event Action OnGameStateChanged;
     #endregion
 
     #region Mutators
@@ -46,18 +49,20 @@ public class GameManager : MonoBehaviour
     }
     #endregion
 
+    #region Start
     void Start()
     {
         //Application Settings
         Application.targetFrameRate = 60;
 
         // When Game starts load the menu:
-        gameState = GameState.inMenu;
-        menuManager.switchPanel(menuManager.UIPanels[0]);
+        ChangeGameState(GameState.inMenu);
 
         ObjectPool.Instance.InitializePool();
     }
-    
+    #endregion
+
+    #region Update
     void Update()
     {
         GameStateManager();
@@ -81,22 +86,30 @@ public class GameManager : MonoBehaviour
                 break;
         }
     }
+    #endregion
 
     #region Switching Game States
     public void loadRaceMode()
     {
         // For now this is just to switch UI
-        gameState = GameState.inRaceMode;
+        ChangeGameState(GameState.inRaceMode);
     }
 
     public void loadEndlessMode()
     {
         // For now this is just to switch UI
-        gameState = GameState.inEndlessMode;
+        ChangeGameState(GameState.inEndlessMode);
         SceneManager.LoadScene("EndlessRunner");
     }
-    #endregion
 
+    private void ChangeGameState(GameState state)
+    {
+        gameState = state;
+        OnGameStateChanged?.Invoke();
+    }
+
+    #endregion
+    
     #region Menu Methods
     //private void PreloadScences()
     //{
