@@ -8,6 +8,7 @@ public class EndlessLevelManager : MonoBehaviour
     #region Variables
     [Header("Debug")]
     public bool debug = false;
+
     [Header("Assignables")]
     public GameObject player;
 
@@ -82,7 +83,7 @@ public class EndlessLevelManager : MonoBehaviour
 
     private void AddLevel()
     {
-        GameObject level = ObjectPool.Instance.GetLevelFromPool(currentLevel);
+        GameObject level = GetNewLevel();
         level.transform.position = new Vector3(prefabLength * platformsGenerated, 0, 0);
         level.SetActive(true);
         activeChunks.Add(level);
