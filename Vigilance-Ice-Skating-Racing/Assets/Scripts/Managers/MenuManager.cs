@@ -4,8 +4,6 @@ using UnityEngine;
 
 public class MenuManager : MonoBehaviour
 {
-    public GameManager gameManager;
-
     public GameObject[] UIPanels;
     /* 
         0 = Menu
@@ -40,7 +38,7 @@ public class MenuManager : MonoBehaviour
 
     public void backFromSettings()
     {
-        if (gameManager.gameState == GameManager.GameState.inMenu) // From Menu > Settings; to back to menu
+        if (GameManager.Instance.gameState == GameManager.GameState.inMenu) // From Menu > Settings; to back to menu
         {
             switchPanel(UIPanels[0]); 
         }
