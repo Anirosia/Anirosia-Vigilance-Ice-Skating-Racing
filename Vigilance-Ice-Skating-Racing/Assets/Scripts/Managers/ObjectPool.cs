@@ -113,7 +113,7 @@ public class ObjectPool : MonoBehaviour
     {
         if (!isInitialized) InitializePool();
 
-        int startPosInList = -1;
+        int startPosInList = 0;
         int index = 0;
         for (int i = 0; i < gameObjectsToBePooled.Length; i++)
         {
@@ -127,8 +127,6 @@ public class ObjectPool : MonoBehaviour
                 break;
             }
         }
-
-        if (debug) print("Start Position in List is " + startPosInList);
 
         for (int i = startPosInList; i < startPosInList + gameObjectsToBePooled[index].amountToBePooled; i++)
         {
@@ -206,6 +204,7 @@ public class ObjectPool : MonoBehaviour
     public void SetObjectInPool(GameObject go)
     {
         go.SetActive(false);
+        go.transform.position = Vector3.zero;
     }
     public void SetLevelInPool(GameObject level)
     {

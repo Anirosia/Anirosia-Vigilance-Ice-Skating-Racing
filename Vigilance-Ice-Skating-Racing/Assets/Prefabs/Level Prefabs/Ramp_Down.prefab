@@ -20,22 +20,32 @@ PrefabInstance:
     - target: {fileID: 2066841783553172591, guid: 1abc1cc57c6da2c41bedee96e09fb5aa,
         type: 3}
       propertyPath: m_LocalPosition.x
-      value: 3.4
+      value: 3.4448
       objectReference: {fileID: 0}
     - target: {fileID: 2066841783553172591, guid: 1abc1cc57c6da2c41bedee96e09fb5aa,
         type: 3}
       propertyPath: m_LocalPosition.y
-      value: 0.008
+      value: -1.7362
       objectReference: {fileID: 0}
     - target: {fileID: 2503763233007924143, guid: 1abc1cc57c6da2c41bedee96e09fb5aa,
         type: 3}
       propertyPath: m_LocalPosition.x
       value: 2.58
       objectReference: {fileID: 0}
+    - target: {fileID: 2503763233007924143, guid: 1abc1cc57c6da2c41bedee96e09fb5aa,
+        type: 3}
+      propertyPath: m_LocalPosition.y
+      value: -0.869
+      objectReference: {fileID: 0}
     - target: {fileID: 2875855265386039341, guid: 1abc1cc57c6da2c41bedee96e09fb5aa,
         type: 3}
       propertyPath: m_LocalPosition.x
       value: 0.859
+      objectReference: {fileID: 0}
+    - target: {fileID: 2875855265386039341, guid: 1abc1cc57c6da2c41bedee96e09fb5aa,
+        type: 3}
+      propertyPath: m_LocalPosition.y
+      value: -0.86910003
       objectReference: {fileID: 0}
     - target: {fileID: 3649039233094316759, guid: 1abc1cc57c6da2c41bedee96e09fb5aa,
         type: 3}
@@ -97,5 +107,6 @@ PrefabInstance:
       propertyPath: m_Name
       value: Ramp_Down
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 5844860235284635399, guid: 1abc1cc57c6da2c41bedee96e09fb5aa, type: 3}
   m_SourcePrefab: {fileID: 100100000, guid: 1abc1cc57c6da2c41bedee96e09fb5aa, type: 3}

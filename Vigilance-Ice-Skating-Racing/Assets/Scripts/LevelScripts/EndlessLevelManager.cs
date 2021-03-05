@@ -13,7 +13,7 @@ public class EndlessLevelManager : MonoBehaviour
     public GameObject player;
 
     [Header("Variables")]
-    [SerializeField] private int maxChunks = 4;
+    [SerializeField] private int maxChunks = 3;
 
     //Length of Prefabs
     private float prefabLength = 12;
@@ -31,9 +31,7 @@ public class EndlessLevelManager : MonoBehaviour
 
     private void Start()
     {
-        AddLevel();
-        AddLevel();
-        AddLevel();
+        InitializeLevels();
     }
 
     void FixedUpdate()
@@ -61,12 +59,12 @@ public class EndlessLevelManager : MonoBehaviour
 
     private void CalculateChunks()
     {
-        if (player.transform.position.x > prefabLength * (platformsGenerated - 2))
+        if (player.transform.position.x > activeChunks[activeChunks.Count - 1].transform.position.x - 20)
         {
             AddLevel();
         }
 
-        if (player.transform.position.x > prefabLength * (platformsGenerated - 2) - 6)
+        if (player.transform.position.x > activeChunks[1].transform.position.x + 10)
         {
             RemoveLevel();
         }
@@ -74,21 +72,30 @@ public class EndlessLevelManager : MonoBehaviour
 
     private void RemoveLevel()
     {
-        if (activeChunks.Count > maxChunks)
-        {
-            ObjectPool.Instance.SetLevelInPool(activeChunks[0]);
-            activeChunks.RemoveAt(0);
-        }
+        ObjectPool.Instance.SetLevelInPool(activeChunks[0]);
+        activeChunks.RemoveAt(0);
     }
-
+    
     private void AddLevel()
     {
         GameObject level = GetNewLevel();
-        level.transform.position = new Vector3(prefabLength * platformsGenerated, 0, 0);
+        level.transform.position = activeChunks[activeChunks.Count - 1].GetComponent<EndlessLevel>().nextLevelTransform.position;
         level.SetActive(true);
         activeChunks.Add(level);
         platformsGenerated++;
         OnLevelAdded?.Invoke(level);
+    }
+
+    private void InitializeLevels()
+    {
+        GameObject level = GetNewLevel();
+        level.transform.position = Vector3.zero;
+        level.SetActive(true);
+        activeChunks.Add(level);
+        platformsGenerated++;
+        OnLevelAdded?.Invoke(level);
+        AddLevel();
+        AddLevel();
     }
 
     private GameObject GetNewLevel() => ObjectPool.Instance.GetLevelFromPool(currentLevel);
