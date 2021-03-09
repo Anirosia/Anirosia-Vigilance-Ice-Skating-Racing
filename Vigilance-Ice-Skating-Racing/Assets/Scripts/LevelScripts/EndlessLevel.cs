@@ -6,9 +6,17 @@ public class EndlessLevel : MonoBehaviour
 {
     [Header("Assignables")]
     public Transform nextLevelTransform;
-    public GameObject[] coinSpawnPoints;
-    public GameObject[] variance;
+    
+    //public GameObject c
+    
+    
+    private GameObject[] coinSpawnPoints;
+    private GameObject[] variance;
 
+    private void Start()
+    {
+        
+    }
     private void OnDrawGizmos()
     {
         Gizmos.color = Color.green;
@@ -30,7 +38,7 @@ public class EndlessLevel : MonoBehaviour
 
         if (chance > 0.2f * difficulty) return;
 
-        var randomIndex = Random.Range(0, variance.Length);
+        int randomIndex = Random.Range(0, variance.Length);
 
         variance[randomIndex].SetActive(true);
     }
@@ -42,7 +50,7 @@ public class EndlessLevel : MonoBehaviour
 
         if (chance > 0.2f) return;
 
-        var randomIndex = Random.Range(0, coinSpawnPoints.Length);
+        int randomIndex = Random.Range(0, coinSpawnPoints.Length);
 
         coinSpawnPoints[randomIndex].SetActive(true);
     }

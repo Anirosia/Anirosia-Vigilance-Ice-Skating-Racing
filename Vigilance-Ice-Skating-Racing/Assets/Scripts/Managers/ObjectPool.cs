@@ -10,15 +10,13 @@ public class ObjectPool : MonoBehaviour
     [Header("GameObjects to be Pooled")] public GameObjectToBePooled[] gameObjectsToBePooled;
     [Header("Levels to be Pooled")] public LevelInformation[] levelsToBePooled;
 
-    private List<GameObject> pooledGameObjects = new List<GameObject>();
-    private List<GameObject> pooledLevels = new List<GameObject>();
-    private List<GameObject> levelPrefabs = new List<GameObject>();
+    private List<GameObject> _pooledGameObjects = new List<GameObject>();
+    private List<GameObject> _pooledLevels = new List<GameObject>();
+    private List<GameObject> _levelPrefabs = new List<GameObject>();
 
-    private float debugTimer;
+    private float _debugTimer;
 
-    private int previousLevel;
-
-    private bool isInitialized = false;
+    private bool _isInitialized = false;
 
     #endregion
 
@@ -38,12 +36,12 @@ public class ObjectPool : MonoBehaviour
     #endregion
 
     #region Initialize Pool
-
     public void InitializePool()
     {
-        if (debug) { print("Pooling has started"); debugTimer = Time.realtimeSinceStartup; }
+       Log("Pooling has started"); 
+        _debugTimer = Time.realtimeSinceStartup;
 
-        if (levelPrefabs.Count == 0)
+        if (_levelPrefabs.Count == 0)
         {
             LoadAssets();
         }
@@ -51,7 +49,7 @@ public class ObjectPool : MonoBehaviour
         StartCoroutine(LoadGameObjects());
         StartCoroutine(LoadLevels());
 
-        isInitialized = true;
+        _isInitialized = true;
     }
 
     IEnumerator LoadGameObjects()
@@ -65,25 +63,25 @@ public class ObjectPool : MonoBehaviour
                     GameObject go = Instantiate(gameObjectsToBePooled[i].gameObjectToBePooled);
                     go.SetActive(false);
                     go.transform.SetParent(transform);
-                    pooledGameObjects.Add(go);
+                    _pooledGameObjects.Add(go);
                 }
                 yield return 0;
             }
         }
-        if (debug) { print("Pooling has ended, " + pooledGameObjects.Count + " Pooled Objects"); print("Generating Pool Took " + (Time.realtimeSinceStartup - debugTimer)); }
+        if (debug) { print("Pooling has ended, " + _pooledGameObjects.Count + " Pooled Objects"); print("Generating Pool Took " + (Time.realtimeSinceStartup - _debugTimer)); }
         yield return null;
     }
     IEnumerator LoadLevels()
     {
-        for (int i = 0; i < levelPrefabs.Count; i++)
+        for (int i = 0; i < _levelPrefabs.Count; i++)
         {
-            GameObject go = Instantiate(levelPrefabs[i]);
+            GameObject go = Instantiate(_levelPrefabs[i]);
             go.SetActive(false);
             go.transform.SetParent(transform);
-            pooledLevels.Add(go);
+            _pooledLevels.Add(go);
             yield return 0;
         }
-        if (debug) { print("Level Pooling has ended, " + pooledLevels.Count + " Pooled Levels"); print("Generating Pool Took " + (Time.realtimeSinceStartup - debugTimer)); }
+        if (debug) { print("Level Pooling has ended, " + _pooledLevels.Count + " Pooled Levels"); print("Generating Pool Took " + (Time.realtimeSinceStartup - _debugTimer)); }
         yield return null;
     }
     public void LoadAssets()
@@ -96,7 +94,7 @@ public class ObjectPool : MonoBehaviour
             int count = 0;
             foreach (var item in loadedLevelPrefabs)
             {
-                levelPrefabs.Add(item);
+                _levelPrefabs.Add(item);
                 count++;
             }
 
@@ -108,10 +106,29 @@ public class ObjectPool : MonoBehaviour
     }
     #endregion
 
+    #region Public Functions
+    #region Set in Pool
+    public void SetObjectInPool(GameObject go)
+    {
+        go.SetActive(false);
+        go.transform.position = Vector3.zero;
+    }
+    public void SetLevelInPool(GameObject level)
+    {
+        //Transform variance = level.transform.GetChild(1);
+        //Make Variance in level false
+        //for (int i = 0; i < level.transform.GetChild(1).childCount; i++)
+        //{
+        //level.transform.GetChild(1).GetChild(i).gameObject.SetActive(false);
+        //}
+        level.SetActive(false);
+    }
+    #endregion
+
     #region Get from Pool
     public GameObject GetObjectFromPool(string name)
     {
-        if (!isInitialized) InitializePool();
+        if (!_isInitialized) InitializePool();
 
         int startPosInList = 0;
         int index = 0;
@@ -130,29 +147,31 @@ public class ObjectPool : MonoBehaviour
 
         for (int i = startPosInList; i < startPosInList + gameObjectsToBePooled[index].amountToBePooled; i++)
         {
-            if (!pooledGameObjects[i].activeSelf) return pooledGameObjects[i];
+            if (!_pooledGameObjects[i].activeSelf) return _pooledGameObjects[i];
         }
 
-        if (debug) print("No Objects Ready in Pool " + gameObjectsToBePooled[index].name);
+        Log("No Objects Ready in Pool " + gameObjectsToBePooled[index].name);
 
         if (gameObjectsToBePooled[index].loadMoreIfNoneLeft)
         {
-            if (debug) print("Added Object in Pool " + gameObjectsToBePooled[index].name);
-            pooledGameObjects.Insert(startPosInList + gameObjectsToBePooled[index].amountToBePooled, gameObjectsToBePooled[index].gameObjectToBePooled);
+            Log("Added Object in Pool " + gameObjectsToBePooled[index].name);
+            _pooledGameObjects.Insert(startPosInList + gameObjectsToBePooled[index].amountToBePooled, gameObjectsToBePooled[index].gameObjectToBePooled);
             gameObjectsToBePooled[index].amountToBePooled++;
-            return pooledGameObjects[startPosInList + gameObjectsToBePooled[index].amountToBePooled - 1];
+            return _pooledGameObjects[startPosInList + gameObjectsToBePooled[index].amountToBePooled - 1];
         }
+
+        LogError("No Objects Left in Pool");
         return null;
     }
 
     public GameObject GetLevelFromPool(int currentLevel)
     {
-        if (!isInitialized) InitializePool();
+        if (!_isInitialized) InitializePool();
         string name = GameManager.Instance.GetLevelName;
         int startPosInList = -1;
         int index = 0;
 
-        for (int i = 0; i < pooledLevels.Count; i++)
+        for (int i = 0; i < _pooledLevels.Count; i++)
         {
             if (!levelsToBePooled[i].folderName.StartsWith(name))
             {
@@ -176,45 +195,49 @@ public class ObjectPool : MonoBehaviour
 
         for (int i = 0; i < 10; i++)
         {
-            int randomIndex = UnityEngine.Random.Range(0, pooledLevels.Count);
+            int randomIndex = UnityEngine.Random.Range(0, _pooledLevels.Count);
 
-            if (!pooledLevels[randomIndex].activeSelf)
+            if (!_pooledLevels[randomIndex].activeSelf)
             {
                 //Apply Variance
-                return pooledLevels[randomIndex];
+                return _pooledLevels[randomIndex];
             }
         }
 
-        for (int i = 0; i < pooledLevels.Count; i++)
+        for (int i = 0; i < _pooledLevels.Count; i++)
         {
-            if (!pooledLevels[i].activeSelf)
+            if (!_pooledLevels[i].activeSelf)
             {
                 //Apply Variance
-                return pooledLevels[i];
+                return _pooledLevels[i];
             }
         }
-        
+
 
         return null;
-            
+
     }
     #endregion
+    #endregion
 
-    #region Set in Pool
-    public void SetObjectInPool(GameObject go)
+    #region Private Functions
+    private void Log(string msg)
     {
-        go.SetActive(false);
-        go.transform.position = Vector3.zero;
+        if (!debug) return;
+
+        Debug.Log("[OBJECTPOOL]: " + msg);
     }
-    public void SetLevelInPool(GameObject level)
+    private void LogWarning(string msg)
     {
-        //Transform variance = level.transform.GetChild(1);
-        //Make Variance in level false
-        //for (int i = 0; i < level.transform.GetChild(1).childCount; i++)
-        //{
-            //level.transform.GetChild(1).GetChild(i).gameObject.SetActive(false);
-        //}
-        level.SetActive(false);
+        if (!debug) return;
+
+        Debug.LogWarning("[OBJECTPOOL]: " + msg);
+    }
+    private void LogError(string msg)
+    {
+        if (!debug) return;
+
+        Debug.LogError("[OBJECTPOOL]: " + msg);
     }
     #endregion
 }

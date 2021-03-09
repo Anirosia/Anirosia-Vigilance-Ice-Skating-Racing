@@ -15,8 +15,6 @@ public class EndlessLevelManager : MonoBehaviour
     [Header("Variables")]
     [SerializeField] private int maxChunks = 3;
 
-    //Length of Prefabs
-    private float prefabLength = 12;
     //Platforms Generated
     private int platformsGenerated = 0;
     //Current Level Index
@@ -25,7 +23,7 @@ public class EndlessLevelManager : MonoBehaviour
     public int[] difficultyDistance = new int[] { 200, 500, 1000 };
     //List of Active Chunks
     private List<GameObject> activeChunks = new List<GameObject>();
-
+    //When A Level is Added Callback
     public static Action<GameObject> OnLevelAdded;
     #endregion
 
@@ -34,14 +32,14 @@ public class EndlessLevelManager : MonoBehaviour
         InitializeLevels();
     }
 
-    void FixedUpdate()
+    private void FixedUpdate()
     {
         CalculateLevelDifficulty();
         CalculateChunks();
         CheckLevelPosition();
     }
 
-    public void CheckLevelPosition()
+    private void CheckLevelPosition()
     {
         if (activeChunks.Count > 0 && activeChunks[0].transform.position.x > 1000) ResetLevelPosition();
     }
