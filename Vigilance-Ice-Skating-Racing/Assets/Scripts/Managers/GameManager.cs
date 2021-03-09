@@ -54,7 +54,7 @@ public class GameManager : MonoBehaviour
     {
         //Application Settings
         Application.targetFrameRate = 60;
-
+        // QualitySettings.vSyncCount = 1;
         // When Game starts load the menu:
         ChangeGameState(GameState.inMenu);
 
