@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using UnityEngine;
 using Vector2 = UnityEngine.Vector2;
 
@@ -13,20 +14,37 @@ public class CharacterController : MonoBehaviour
 	private Vector2 touchDelta;
 	[SerializeField] private bool isPressed;
 	[SerializeField] private double deadZone = 125;
+	private bool isDragged;
 
-	public float speed = 20f;
+	[Header("Base Values")] [SerializeField]
+	private float baseSpeed = 20f;
+
+	[SerializeField] private float baseJumpMultiplier;
+
+	[Header("Current Values")] public float speed;
 	public float jumpMultiplier;
+
 	public float fallMultiplier;
 
 	public bool isGrounded;
 	public LayerMask layer;
 
+
+	public double holdTime;
+	public double time;
+
 	private Rigidbody2D rb;
 	private BoxCollider2D boxCollider2D;
+
+	public Camera cam;
+	private float cameraOriginalPos;
+	public float cameraZoomDist;
 
 	private void Start() {
 		rb = GetComponent<Rigidbody2D>();
 		boxCollider2D = GetComponent<BoxCollider2D>();
+		cameraOriginalPos = cam.orthographicSize;
+		Reset();
 	}
 
 	void Update() {
@@ -41,7 +59,7 @@ public class CharacterController : MonoBehaviour
 	void UserInput() {
 		if (Input.touchCount > 0) {
 			touch = Input.GetTouch(0);
-
+			time += Time.deltaTime;
 
 			if (touch.phase == TouchPhase.Began) {
 				startTouchPos = touch.position;
@@ -50,7 +68,7 @@ public class CharacterController : MonoBehaviour
 
 			if (touch.phase == TouchPhase.Moved && isPressed) {
 				touchDelta = touch.position - startTouchPos;
-
+				isDragged = true;
 				if (touchDelta.magnitude > deadZone) {
 					var x = touchDelta.x;
 					var y = touchDelta.y;
@@ -68,11 +86,12 @@ public class CharacterController : MonoBehaviour
 					else {
 						if (y > 0) {
 							Debug.Log("Swipe Up");
-							Jump();
+							if (isGrounded) Jump();
 							isPressed = false;
 						}
 						else {
 							Debug.Log("Swipe Down");
+							StartCoroutine(Slide());
 							isPressed = false;
 						}
 					}
@@ -80,13 +99,26 @@ public class CharacterController : MonoBehaviour
 				else Debug.Log("tap");
 			}
 
-			if (touch.phase == TouchPhase.Stationary) {
+			if (touch.phase == TouchPhase.Stationary && time > holdTime && !isDragged) {
+				Debug.Log("Hold");
+				Focus();
 				//tuck down method 
 			}
 
-			// if (touch.phase == TouchPhase.Ended)
-			// 	isPressed = false;
+			if (touch.phase == TouchPhase.Ended) TouchReset();
 		}
+	}
+
+	private void TouchReset() {
+		time = 0;
+		isDragged = false;
+		isPressed = false;
+		StartCoroutine(CameraZoomOut());
+	}
+
+	private void Reset() {
+		speed = baseSpeed;
+		jumpMultiplier = baseJumpMultiplier;
 	}
 
 	private void ApplyGravity() {
@@ -103,9 +135,38 @@ public class CharacterController : MonoBehaviour
 	}
 
 	private void Jump() {
-		if (isGrounded) {
-			Debug.Log("Jumped");
-			rb.velocity = Vector2.up * jumpMultiplier;
-		}
+		Debug.Log("Jumped");
+		rb.velocity = Vector2.up * jumpMultiplier;
 	}
+
+	private void Focus() {
+		StartCoroutine(CameraZoomIn());
+	}
+
+
+	#region Coroutine Methods
+
+	private IEnumerator CameraZoomIn() {
+		while (cam.orthographicSize <= cameraZoomDist)
+			cam.orthographicSize -= Time.deltaTime;
+		yield return null;
+	}
+
+	private IEnumerator CameraZoomOut() {
+		while (cam.orthographicSize >= cameraZoomDist)
+			cam.orthographicSize += Time.deltaTime;
+		cam.orthographicSize = cameraOriginalPos;
+		yield return null;
+	}
+
+	private IEnumerator Slide() {
+		var size = boxCollider2D.size;
+		var originalSize = size;
+		boxCollider2D.size = new Vector2(size.x, size.y / 2);
+		yield return new WaitForSeconds(1f);
+		size = originalSize;
+		boxCollider2D.size = size;
+	}
+
+	#endregion
 }
