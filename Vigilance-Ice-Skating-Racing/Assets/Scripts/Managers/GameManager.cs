@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 using UnityEngine.SceneManagement;
 
 public class GameManager : MonoBehaviour
@@ -9,14 +10,20 @@ public class GameManager : MonoBehaviour
     public enum GameState { inMenu,inPaused, inRaceMode, inEndlessMode };
     public GameState gameState;
 
-
     #region Variables
     //----------------Public----------------
     [Header("Script References")]
     public MenuManager menuManager;
+    public AudioManager audioManager;
     
     [Header("Level References")]
     public string[] levelNames;
+
+    [Header("Image References")]
+    public Sprite audioOnSprite;
+    public Sprite audioOffSprite;
+    public Image musicToggleSprite;
+    public Image sfxToggleSprite;
 
     //----------------Private----------------
     private int[] _distanceLevels = new int[] { 200, 500, 1000 };
@@ -25,6 +32,9 @@ public class GameManager : MonoBehaviour
     private bool loadEndlessScene = false;
 
     public static event Action OnGameStateChanged;
+
+    private bool musicOn;
+    private bool sfxOn;
     #endregion
 
     #region Mutators
@@ -57,8 +67,11 @@ public class GameManager : MonoBehaviour
         // QualitySettings.vSyncCount = 1;
         // When Game starts load the menu:
         ChangeGameState(GameState.inMenu);
+        musicOn = true;
+        sfxOn = true;
 
         ObjectPool.Instance.InitializePool();
+        audioManager = gameObject.GetComponent<AudioManager>();
     }
     #endregion
 
@@ -109,7 +122,7 @@ public class GameManager : MonoBehaviour
     }
 
     #endregion
-    
+
     #region Menu Methods
     //private void PreloadScences()
     //{
@@ -138,6 +151,38 @@ public class GameManager : MonoBehaviour
 
     //    yield break;
     //}
+
+    public void MusicToggle()
+    {
+        if (musicOn) // turn music off and switch sprite
+        {
+            //audioManager.StopAudio()
+            musicToggleSprite.sprite = audioOffSprite;
+            musicOn = false;
+        }
+        else // turn music on and switch sprite
+        {
+            //audioManager.PlayAudio()
+            musicToggleSprite.sprite = audioOnSprite;
+            musicOn = true;
+        }
+    }
+
+    public void SFXToggle()
+    {
+        if (sfxOn)
+        {
+            //audioManager.StopAudio()
+            sfxToggleSprite.sprite = audioOffSprite;
+            sfxOn = false;
+        }
+        else
+        {
+            //audioManager.PlayAudio()
+            sfxToggleSprite.sprite = audioOnSprite;
+            sfxOn = true;
+        }
+    }
     #endregion
 
     public int GetDifficultyLevel(int level) => _distanceLevels[level];
