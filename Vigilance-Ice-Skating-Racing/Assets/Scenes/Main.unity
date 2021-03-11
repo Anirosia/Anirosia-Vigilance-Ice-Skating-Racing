@@ -699,31 +699,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
-    - target: {fileID: 4450797512046670648, guid: 11d76109c67ea544aa0c2619dec39e30,
-        type: 3}
-      propertyPath: m_IsActive
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 4450797512662435565, guid: 11d76109c67ea544aa0c2619dec39e30,
-        type: 3}
-      propertyPath: m_IsActive
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 4450797512954583862, guid: 11d76109c67ea544aa0c2619dec39e30,
-        type: 3}
-      propertyPath: m_IsActive
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 4450797513073588365, guid: 11d76109c67ea544aa0c2619dec39e30,
-        type: 3}
-      propertyPath: m_IsActive
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 4450797513426280601, guid: 11d76109c67ea544aa0c2619dec39e30,
-        type: 3}
-      propertyPath: m_IsActive
-      value: 0
-      objectReference: {fileID: 0}
     - target: {fileID: 4450797513439504097, guid: 11d76109c67ea544aa0c2619dec39e30,
         type: 3}
       propertyPath: m_RootOrder
@@ -783,11 +758,6 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: GameManager
-      objectReference: {fileID: 0}
-    - target: {fileID: 4450797514173914621, guid: 11d76109c67ea544aa0c2619dec39e30,
-        type: 3}
-      propertyPath: m_IsActive
-      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 11d76109c67ea544aa0c2619dec39e30, type: 3}
