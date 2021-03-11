@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class AudioManager : MonoBehaviour
 {
+    #region Variables
     [Header("Settings")]
     public bool debug = false;
 
@@ -12,6 +13,7 @@ public class AudioManager : MonoBehaviour
 
     private Hashtable _audioTable; //Relation between Audio Types (Key) and Audio Tracks (Value)
     private Hashtable _jobTable; //Relation between Audio Types (Key) and Jobs (Value)
+    #endregion
 
     #region Unity Functions
 
@@ -54,7 +56,7 @@ public class AudioManager : MonoBehaviour
     }
     #endregion
 
-    #region Private Functions
+    #region Setup/Destroy Functions
     private void Configure()
     {
         _audioTable = new Hashtable();
@@ -71,6 +73,9 @@ public class AudioManager : MonoBehaviour
         }
     }
 
+    #endregion
+
+    #region AudioJob 
     private void PopulateAudioTable()
     {
         foreach (var track in tracks) {
@@ -166,7 +171,9 @@ public class AudioManager : MonoBehaviour
         StopCoroutine(runningJob);
         _jobTable.Remove(type);
     }
+    #endregion
 
+    #region Logging Functions
     private void Log(string msg)
     {
         if (!debug) return;

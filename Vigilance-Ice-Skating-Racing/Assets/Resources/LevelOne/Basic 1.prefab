@@ -4685,6 +4685,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   nextLevelTransform: {fileID: 8209671077260745736}
+  coinSpawnPointParent: {fileID: 5530914821966384382}
+  varianceParent: {fileID: 6588901820509453158}
 --- !u!1 &8292651609816831766
 GameObject:
   m_ObjectHideFlags: 0

@@ -263,7 +263,7 @@ public struct LevelInformation
     /// Folder Name located under the Assets/Resources/folderName
     /// </summary>
     public string folderName;
-    public int levelIndex;
+    [HideInInspector] public int levelIndex;
     [HideInInspector] public int listIndex;
     [HideInInspector] public int amountOfLevels;
     [HideInInspector] public int amountOfLoadedLevels;
