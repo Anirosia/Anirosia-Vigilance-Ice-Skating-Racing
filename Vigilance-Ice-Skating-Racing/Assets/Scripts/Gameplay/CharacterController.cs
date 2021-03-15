@@ -1,8 +1,10 @@
 using System;
 using System.Collections;
+using System.Net.Http.Headers;
 using DefaultNamespace;
 using TMPro;
 using Unity.Collections;
+using Unity.Mathematics;
 using UnityEngine;
 using Vector2 = UnityEngine.Vector2;
 
@@ -16,52 +18,69 @@ namespace Gameplay
 		private float displayTime = .5f;
 		private Vector2 startTouchPos;
 		private Vector2 touchDelta;
-		private bool isPressed;
+		[ReadOnlyInspector] [SerializeField] private bool isPressed;
+		[ReadOnlyInspector] [SerializeField] private bool isHeld;
+		[ReadOnlyInspector] [SerializeField] private bool isDragged;
 		private double deadZone = 125;
-		private bool isDragged;
+
 		public double holdTime;
-		[ReadOnlyInspector] public double time;
+		[ReadOnlyInspector] public double currentHoldTime;
 
 		[Header("Base Values")] [SerializeField]
 		private float baseSpeed;
 
 		[SerializeField] private float baseJumpMultiplier;
+		[Range(-45, 0)] [SerializeField] private double slopeAngle;
+		[SerializeField] private float slopeSpeedIncrease;
 
 		[Header("Physics")] public float fallMultiplier;
 		public bool isGrounded;
 		public LayerMask layer;
 		private Rigidbody2D rb;
-		public float timeZeroToMax;
+		[SerializeField] private float timeZeroToMax;
+		[SerializeField] private float timeMaxToZero;
 		private float forwardVelocity;
 		private float accelerationRatePerSec;
 
-		[Header("Current Values")] [ReadOnlyInspector] public Vector2 currentSpeedVelocity;
+		[Header("Current Values")] [ReadOnlyInspector]
+		public Vector2 currentSpeedVelocity;
+
 		public float maxSpeed;
+
 		public float maxJump;
-		
 
+		//for value reset
+		private float speedHolder;
+
+		// private float jumpHolder;
+		private bool focusActionReset;
+		private bool isSliding;
+		private Vector2 colliderOriginalHeight;
+
+
+		public CameraFollow cameraFollow;
 		private CapsuleCollider2D col2D;
-
-		public Camera cam;
-		private float cameraOriginalPos;
-		public float cameraZoomDist;
-
 		private Vector2 groundNormal;
 		private SwipeDirection swipeDirection;
 
-		private void Start() {
+
+		private void Awake() {
 			rb = GetComponent<Rigidbody2D>();
 			col2D = GetComponent<CapsuleCollider2D>();
-			accelerationRatePerSec = baseSpeed / timeZeroToMax;
-			// cameraOriginalPos = cam.orthographicSize;
-			Reset();
 		}
 
+		private void Start() {
+			focusActionReset = false;
+			accelerationRatePerSec = baseSpeed / timeZeroToMax;
+			colliderOriginalHeight = col2D.size;
+			BaseReset();
+		}
 
 		void Update() {
 			ApplyGravity();
 			RelativeToGround();
 			UserInput();
+			cameraFollow.CameraWork(isGrounded);
 		}
 
 		private void FixedUpdate() {
@@ -71,7 +90,8 @@ namespace Gameplay
 		void UserInput() {
 			if (Input.touchCount > 0) {
 				touch = Input.GetTouch(0);
-				time += Time.deltaTime;
+
+				if (!isHeld) currentHoldTime += Time.deltaTime;
 
 				if (touch.phase == TouchPhase.Began) {
 					startTouchPos = touch.position;
@@ -85,19 +105,7 @@ namespace Gameplay
 						var x = touchDelta.x;
 						var y = touchDelta.y;
 
-						if (Mathf.Abs(x) > Mathf.Abs(y)) {
-							if (x > 0) {
-								swipeDirection.SwipeRight = true;
-								Debug.Log("Swipe Right");
-								isPressed = false;
-							}
-							else {
-								swipeDirection.SwipeLeft = true;
-								Debug.Log("Swipe Left");
-								isPressed = false;
-							}
-						}
-						else {
+						if (Mathf.Abs(x) < Mathf.Abs(y)) {
 							if (y > 0) {
 								swipeDirection.SwipeUp = true;
 								Debug.Log("Swipe Up");
@@ -107,7 +115,7 @@ namespace Gameplay
 							else {
 								swipeDirection.SwipeDown = true;
 								Debug.Log("Swipe Down");
-								StartCoroutine(Slide());
+								if (!isSliding) StartCoroutine(Slide());
 								isPressed = false;
 							}
 						}
@@ -115,28 +123,39 @@ namespace Gameplay
 					else Debug.Log("tap");
 				}
 
-				if (touch.phase == TouchPhase.Stationary && time > holdTime && !isDragged) {
+				if (touch.phase == TouchPhase.Stationary && currentHoldTime > holdTime && !isDragged) {
 					Debug.Log("Hold");
 					Focus();
 					//tuck down method 
 				}
 
-				if (touch.phase == TouchPhase.Ended) TouchReset();
+				if (touch.phase == TouchPhase.Ended) {
+					if (isHeld) cameraFollow.StartCoroutine(cameraFollow.CameraZoomReset());
+					TouchReset();
+					ValueReset();
+				}
 			}
 		}
 
 		private void TouchReset() {
-			time = 0;
+			currentHoldTime = 0;
 			isDragged = false;
 			isPressed = false;
-
+			isHeld = false;
+			swipeDirection.SwipeUp = false;
+			swipeDirection.SwipeDown = false;
 			// StartCoroutine(CameraZoomOut());
 		}
 
-		private void Reset() {
+		private void BaseReset() {
 			maxSpeed = baseSpeed;
 			maxJump = baseJumpMultiplier;
 			rb.gravityScale = fallMultiplier;
+		}
+
+		private void ValueReset() {
+			maxSpeed = speedHolder;
+			// maxJump = jumpHolder;
 		}
 
 		private void ApplyGravity() {
@@ -148,65 +167,97 @@ namespace Gameplay
 		}
 
 		private void RelativeToGround() {
-			var origin = transform.localPosition;
-			var dir = -transform.up;
-			var dist = 1.5f;
-			if (isGrounded) {
-				RaycastHit2D hit = new RaycastHit2D();
-				hit = (Physics2D.Raycast(origin, dir, dist, layer));
-				groundNormal = hit.normal;
-				Debug.DrawRay(origin, dir * dist);
-
-				Quaternion toRotation = Quaternion.FromToRotation(transform.up, groundNormal) * transform.rotation;
-				transform.rotation = toRotation;
+			Vector3 origin = transform.localPosition;
+			Vector2 dir = Vector2.down;
+			float dist = 10f;
+			Quaternion targetRotation;
+			RaycastHit2D hit = new RaycastHit2D();
+			hit = (Physics2D.Raycast(origin, dir, dist, layer));
+			groundNormal = hit.normal;
+			Quaternion groundRotation = Quaternion.FromToRotation(transform.up, groundNormal) * transform.rotation;
+			if (isGrounded) transform.rotation = groundRotation;
+			else if (!isGrounded && hit) {
+				targetRotation = Quaternion.Slerp(transform.rotation, groundRotation, Time.deltaTime * 2f);
+				transform.rotation = targetRotation;
 			}
 			else {
-				transform.rotation = Quaternion.Euler(Vector3.zero);
+				targetRotation = Quaternion.Slerp(transform.rotation, quaternion.identity, Time.deltaTime * 2f);
+				transform.rotation = targetRotation;
 			}
+
+			Debug.DrawRay(origin, dir * dist);
 		}
 
 		private void ApplyMovement() {
-			forwardVelocity += accelerationRatePerSec * Time.deltaTime;
-			forwardVelocity = Mathf.Min(forwardVelocity, maxSpeed);
+			var velocity = rb.velocity;
+			var decelerationRate = -maxSpeed / timeMaxToZero;
 
-			rb.velocity = new Vector2(forwardVelocity, rb.velocity.y);
+			if (forwardVelocity > maxSpeed) {
+				forwardVelocity += decelerationRate * Time.deltaTime;
+				forwardVelocity = Mathf.Max(forwardVelocity, maxSpeed);
+			}
+			else {
+				forwardVelocity += accelerationRatePerSec * Time.deltaTime;
+				forwardVelocity = Mathf.Min(forwardVelocity, maxSpeed);
+			}
+
+			velocity = new Vector2(forwardVelocity, velocity.y);
+			rb.velocity = velocity;
 			//other value management
-			currentSpeedVelocity = rb.velocity;
+			currentSpeedVelocity = velocity;
 		}
 
 		private void Jump() {
+			StopCoroutine(Slide());
+			isSliding = false;
+			col2D.size = colliderOriginalHeight;
 			Debug.Log("Jumped");
 			rb.velocity = new Vector2(rb.velocity.x, maxJump);
 			// rb.velocity = Vector2.up * jumpMultiplier;
 		}
 
 		private void Focus() {
-			// StartCoroutine(CameraZoomIn());
+			float speedIncrease = maxSpeed;
+			var angle = transform.eulerAngles.z;
+			if (angle > 180) angle -= 360;
+			Debug.Log($"Player angle {angle}");
+			if (angle < slopeAngle) {
+				if (!isHeld) {
+					speedHolder = maxSpeed;
+					speedIncrease += slopeSpeedIncrease;
+					cameraFollow.StopAllCoroutines();
+					cameraFollow.StartCoroutine(cameraFollow.CameraZoomIn(xOffset: 2, camLock: true));
+					maxSpeed = speedIncrease;
+					isHeld = true;
+					focusActionReset = false;
+				}
+			}
+			else {
+				if (isHeld && !focusActionReset) {
+					if (maxSpeed <= speedHolder || maxSpeed >= speedHolder) {
+						Debug.Log($"Focus Reset");
+						cameraFollow.StartCoroutine(cameraFollow.CameraZoomReset());
+						maxSpeed = speedHolder;
+					}
+
+					focusActionReset = true;
+				}
+			}
+		}
+
+		void SlideCancel() {
 		}
 
 		#region Coroutine Methods
 
-		// private IEnumerator CameraZoomIn() {
-		// 	while (cam.orthographicSize <= cameraZoomDist)
-		// 		cam.orthographicSize -= Time.deltaTime;
-		// 	yield return null;
-		// }
-		//
-		// private IEnumerator CameraZoomOut() {
-		// 	while (cam.orthographicSize >= cameraZoomDist)
-		// 		cam.orthographicSize += Time.deltaTime;
-		// 	cam.orthographicSize = cameraOriginalPos;
-		// 	yield return null;
-		// }
-
 		private IEnumerator Slide() {
 			var size = col2D.size;
-			var originalSize = size;
 			col2D.size = new Vector2(size.x, size.y / 2);
 			if (!isGrounded) rb.gravityScale *= 2;
+			isSliding = true;
 			yield return new WaitForSeconds(1.5f);
-			size = originalSize;
-			col2D.size = size;
+			isSliding = false;
+			col2D.size = colliderOriginalHeight;
 			rb.gravityScale = fallMultiplier;
 		}
 
