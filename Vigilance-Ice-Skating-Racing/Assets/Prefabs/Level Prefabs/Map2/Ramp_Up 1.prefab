@@ -42,6 +42,7 @@ GameObject:
   m_Component:
   - component: {fileID: 5790731907817279736}
   - component: {fileID: 8556562976262585673}
+  - component: {fileID: 2861645424333215176}
   m_Layer: 0
   m_Name: Glacier_TileSheet_New_13
   m_TagString: Untagged
@@ -115,6 +116,39 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
+--- !u!60 &2861645424333215176
+PolygonCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5235183870721768741}
+  m_Enabled: 1
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_UsedByEffector: 0
+  m_UsedByComposite: 0
+  m_Offset: {x: 0, y: 0}
+  m_SpriteTilingProperty:
+    border: {x: 0, y: 0, z: 0, w: 0}
+    pivot: {x: 0.5, y: 0.5}
+    oldSize: {x: 1.75, y: 1.76}
+    newSize: {x: 1.74, y: 1.76}
+    adaptiveTilingThreshold: 0.5
+    drawMode: 0
+    adaptiveTiling: 0
+  m_AutoTiling: 0
+  m_Points:
+    m_Paths:
+    - - {x: 0.8400713, y: 0.8495728}
+      - {x: 0.6999526, y: 0.7087776}
+      - {x: -0.19342895, y: -0.19605292}
+      - {x: -0.875, y: -0.84}
+      - {x: -0.875, y: -0.88}
+      - {x: 0.865, y: -0.88}
+      - {x: 0.875, y: 0.69}
+      - {x: 0.875, y: 0.88}
 --- !u!1 &6357239737997157740
 GameObject:
   m_ObjectHideFlags: 0
@@ -125,6 +159,7 @@ GameObject:
   m_Component:
   - component: {fileID: 6127991409621560186}
   - component: {fileID: 8239569244810053423}
+  - component: {fileID: 6763638118481090022}
   m_Layer: 0
   m_Name: Glacier_TileSheet_New_17
   m_TagString: Untagged
@@ -198,3 +233,29 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
+--- !u!61 &6763638118481090022
+BoxCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6357239737997157740}
+  m_Enabled: 1
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_UsedByEffector: 0
+  m_UsedByComposite: 0
+  m_Offset: {x: 0, y: 0}
+  m_SpriteTilingProperty:
+    border: {x: 0, y: 0, z: 0, w: 0}
+    pivot: {x: 0.5, y: 0.5}
+    oldSize: {x: 1.76, y: 1.74}
+    newSize: {x: 1.74, y: 1.74}
+    adaptiveTilingThreshold: 0.5
+    drawMode: 0
+    adaptiveTiling: 0
+  m_AutoTiling: 0
+  serializedVersion: 2
+  m_Size: {x: 1.76, y: 1.74}
+  m_EdgeRadius: 0

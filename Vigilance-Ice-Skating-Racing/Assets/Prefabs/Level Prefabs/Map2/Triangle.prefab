@@ -10,6 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 913829411235235219}
   - component: {fileID: 3169610721981589958}
+  - component: {fileID: 7061462221859909109}
   m_Layer: 0
   m_Name: Glacier_TileSheet_New_13 (1)
   m_TagString: Untagged
@@ -83,6 +84,38 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
+--- !u!60 &7061462221859909109
+PolygonCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 116283689327463301}
+  m_Enabled: 1
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_UsedByEffector: 0
+  m_UsedByComposite: 0
+  m_Offset: {x: 0, y: 0}
+  m_SpriteTilingProperty:
+    border: {x: 0, y: 0, z: 0, w: 0}
+    pivot: {x: 0.5, y: 0.5}
+    oldSize: {x: 1.75, y: 1.76}
+    newSize: {x: 1.74, y: 1.74}
+    adaptiveTilingThreshold: 0.5
+    drawMode: 0
+    adaptiveTiling: 0
+  m_AutoTiling: 0
+  m_Points:
+    m_Paths:
+    - - {x: 0.8545076, y: 0.8790079}
+      - {x: 0.7256962, y: 0.73758775}
+      - {x: -0.875, y: -0.84}
+      - {x: -0.875, y: -0.88}
+      - {x: 0.865, y: -0.88}
+      - {x: 0.8502607, y: 0.66575897}
+      - {x: 0.8539254, y: 0.84615666}
 --- !u!1 &1225954659410236364
 GameObject:
   m_ObjectHideFlags: 0
@@ -93,6 +126,7 @@ GameObject:
   m_Component:
   - component: {fileID: 718503667617005073}
   - component: {fileID: 3394421140854903712}
+  - component: {fileID: 6853566787784905038}
   m_Layer: 0
   m_Name: Glacier_TileSheet_New_13
   m_TagString: Untagged
@@ -166,6 +200,38 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
+--- !u!60 &6853566787784905038
+PolygonCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1225954659410236364}
+  m_Enabled: 1
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_UsedByEffector: 0
+  m_UsedByComposite: 0
+  m_Offset: {x: 0, y: 0}
+  m_SpriteTilingProperty:
+    border: {x: 0, y: 0, z: 0, w: 0}
+    pivot: {x: 0.5, y: 0.5}
+    oldSize: {x: 1.75, y: 1.76}
+    newSize: {x: 1.74, y: 1.76}
+    adaptiveTilingThreshold: 0.5
+    drawMode: 0
+    adaptiveTiling: 0
+  m_AutoTiling: 0
+  m_Points:
+    m_Paths:
+    - - {x: -0.82036746, y: 0.84608006}
+      - {x: -0.85377324, y: 0.87970614}
+      - {x: -0.875, y: -0.26}
+      - {x: -0.865, y: -0.88}
+      - {x: 0.875, y: -0.88}
+      - {x: 0.875, y: -0.84}
+      - {x: 0.85499996, y: -0.79999995}
 --- !u!1 &2147514118858758518
 GameObject:
   m_ObjectHideFlags: 0
