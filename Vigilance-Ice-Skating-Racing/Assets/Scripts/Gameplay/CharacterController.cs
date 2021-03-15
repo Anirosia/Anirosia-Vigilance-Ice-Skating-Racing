@@ -211,6 +211,7 @@ namespace Gameplay
 			StopCoroutine(Slide());
 			isSliding = false;
 			col2D.size = colliderOriginalHeight;
+			rb.gravityScale = fallMultiplier;
 			Debug.Log("Jumped");
 			rb.velocity = new Vector2(rb.velocity.x, maxJump);
 			// rb.velocity = Vector2.up * jumpMultiplier;
@@ -243,9 +244,6 @@ namespace Gameplay
 					focusActionReset = true;
 				}
 			}
-		}
-
-		void SlideCancel() {
 		}
 
 		#region Coroutine Methods
