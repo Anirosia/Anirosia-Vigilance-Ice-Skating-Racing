@@ -10,7 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 8876203551655139338}
   - component: {fileID: 4641791454439745337}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Mountain_TileSheet_New_2 (2)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -93,7 +93,7 @@ GameObject:
   m_Component:
   - component: {fileID: 6804851557435616660}
   - component: {fileID: 2498370371493541188}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Mountain_TileSheet_New_2
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -176,7 +176,7 @@ GameObject:
   m_Component:
   - component: {fileID: 2139836157297472651}
   - component: {fileID: 7976012165578647551}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Mountain_TileSheet_New_2 (5)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -259,7 +259,7 @@ GameObject:
   m_Component:
   - component: {fileID: 148971486548211467}
   - component: {fileID: 4991526013666844856}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Mountain_TileSheet_New_2 (4)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -341,7 +341,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 3181222825603624672}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Triple_jump
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -378,7 +378,7 @@ GameObject:
   m_Component:
   - component: {fileID: 3737585918552143898}
   - component: {fileID: 8754466577635930784}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Mountain_TileSheet_New_2 (1)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -461,7 +461,7 @@ GameObject:
   m_Component:
   - component: {fileID: 7608400094196336464}
   - component: {fileID: 9021744654224294015}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Mountain_TileSheet_New_2 (3)
   m_TagString: Untagged
   m_Icon: {fileID: 0}

@@ -10,7 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 2875855265386039341}
   - component: {fileID: 52701838465950840}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Mountain_TileSheet_New_17
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -92,7 +92,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 3649039233094316759}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Ramp_Up
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -125,7 +125,7 @@ GameObject:
   m_Component:
   - component: {fileID: 2503763233007924143}
   - component: {fileID: 314385736751455774}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Mountain_TileSheet_New_13
   m_TagString: Untagged
   m_Icon: {fileID: 0}

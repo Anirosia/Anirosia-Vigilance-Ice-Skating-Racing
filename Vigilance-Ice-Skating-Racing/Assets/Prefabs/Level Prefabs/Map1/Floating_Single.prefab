@@ -10,7 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 7019909950883905881}
   - component: {fileID: 1472458264549694430}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Mountain_TileSheet_New_0
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -92,7 +92,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 3145775912689419914}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Floating_Single
   m_TagString: Untagged
   m_Icon: {fileID: 0}

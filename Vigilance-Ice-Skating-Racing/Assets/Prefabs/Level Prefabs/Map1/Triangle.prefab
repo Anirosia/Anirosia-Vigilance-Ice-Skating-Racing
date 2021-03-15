@@ -9,7 +9,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 5151525364904027280}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Triangle
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -42,7 +42,7 @@ GameObject:
   m_Component:
   - component: {fileID: 6296383825485686248}
   - component: {fileID: 8179369213594241113}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Mountain_TileSheet_New_13
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -125,7 +125,7 @@ GameObject:
   m_Component:
   - component: {fileID: 5924221425409695338}
   - component: {fileID: 8459207972974621247}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Mountain_TileSheet_New_13 (1)
   m_TagString: Untagged
   m_Icon: {fileID: 0}

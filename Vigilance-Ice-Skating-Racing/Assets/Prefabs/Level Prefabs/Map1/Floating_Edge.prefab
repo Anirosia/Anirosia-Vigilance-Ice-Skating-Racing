@@ -10,7 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 731345391424671199}
   - component: {fileID: 612948513846326493}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Mountain_TileSheet_New_5 (1)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -93,7 +93,7 @@ GameObject:
   m_Component:
   - component: {fileID: 7152665491612071089}
   - component: {fileID: 1479001746724699954}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Mountain_TileSheet_New_5
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -176,7 +176,7 @@ GameObject:
   m_Component:
   - component: {fileID: 7067256333188272111}
   - component: {fileID: 1997939919102454128}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Mountain_TileSheet_New_2
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -258,7 +258,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 96766699318551675}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Floating_Edge
   m_TagString: Untagged
   m_Icon: {fileID: 0}
