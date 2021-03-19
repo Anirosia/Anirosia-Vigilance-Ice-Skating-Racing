@@ -15,7 +15,7 @@ GameObject:
   - component: {fileID: 6949406009600723491}
   - component: {fileID: 848860736}
   m_Layer: 0
-  m_Name: Temp Player
+  m_Name: Mouse
   m_TagString: Mouse
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -121,20 +121,24 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   holdTime: 0.75
-  time: 0
+  currentHoldTime: 0
+  isPressed: 0
+  isHeld: 0
+  isDragged: 0
   baseSpeed: 10
-  baseJumpMultiplier: 7
-  fallMultiplier: 1.5
-  isGrounded: 0
+  baseJumpMultiplier: 12
+  slopeAngle: -15
+  slopeSpeedIncrease: 5
+  fallMultiplier: 2.5
   layer:
     serializedVersion: 2
     m_Bits: 64
   timeZeroToMax: 2.5
+  timeMaxToZero: 0
   currentSpeedVelocity: {x: 0, y: 0}
   maxSpeed: 0
   maxJump: 0
-  cam: {fileID: 0}
-  cameraZoomDist: 0
+  cameraFollow: {fileID: 0}
 --- !u!70 &6949406009600723491
 CapsuleCollider2D:
   m_ObjectHideFlags: 0
