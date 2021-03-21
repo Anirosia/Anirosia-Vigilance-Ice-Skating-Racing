@@ -6,16 +6,32 @@ public class EndlessLevel : MonoBehaviour
 {
     [Header("Assignables")]
     public Transform nextLevelTransform;
-    
-    //public GameObject c
-    
-    
+    public GameObject coinSpawnPointParent;
+    public GameObject varianceParent;
+    //--------------------Private--------------------
     private GameObject[] coinSpawnPoints;
     private GameObject[] variance;
 
     private void Start()
     {
-        
+        if (coinSpawnPointParent.transform.childCount != 0)
+        {
+            coinSpawnPoints = new GameObject[coinSpawnPointParent.transform.childCount];
+
+            for (int i = 0; i < coinSpawnPointParent.transform.childCount; i++)
+            {
+                coinSpawnPoints[i] = coinSpawnPointParent.transform.GetChild(i).gameObject;
+            }
+        }
+        if (varianceParent.transform.childCount != 0)
+        {
+            variance = new GameObject[varianceParent.transform.childCount];
+
+            for (int i = 0; i < varianceParent.transform.childCount; i++)
+            {
+                variance[i] = varianceParent.transform.GetChild(i).gameObject;
+            }
+        }
     }
     private void OnDrawGizmos()
     {
