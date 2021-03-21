@@ -8,7 +8,8 @@ namespace Gameplay
 {
 	public class CameraFollow : MonoBehaviour
 	{
-		[Header("Camera Settings")] public float cameraSmoothing;
+		[Header("Camera Settings")] [ReadOnlyInspector] [SerializeReference]
+		private float cameraSmoothing = 0.1f;
 		public Vector3 offset;
 		public Transform target;
 		[SerializeField] [Range(0, 1)] private float zoomSmoothSpeed;
