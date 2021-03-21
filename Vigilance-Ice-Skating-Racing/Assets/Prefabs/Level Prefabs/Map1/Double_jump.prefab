@@ -210,7 +210,8 @@ GameObject:
   m_Component:
   - component: {fileID: 1948371287177366820}
   - component: {fileID: 2327914584018727447}
-  m_Layer: 6
+  - component: {fileID: 1990130116603077343}
+  m_Layer: 0
   m_Name: Mountain_TileSheet_New_2 (2)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -283,6 +284,32 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
+--- !u!61 &1990130116603077343
+BoxCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7004215137851686225}
+  m_Enabled: 1
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_UsedByEffector: 0
+  m_UsedByComposite: 0
+  m_Offset: {x: 0.84264374, y: 0}
+  m_SpriteTilingProperty:
+    border: {x: 0, y: 0, z: 0, w: 0}
+    pivot: {x: 0.5, y: 0.5}
+    oldSize: {x: 1.76, y: 1.74}
+    newSize: {x: 1.76, y: 1.74}
+    adaptiveTilingThreshold: 0.5
+    drawMode: 0
+    adaptiveTiling: 0
+  m_AutoTiling: 0
+  serializedVersion: 2
+  m_Size: {x: 3.4452877, y: 1.74}
+  m_EdgeRadius: 0
 --- !u!1 &8510632687246845759
 GameObject:
   m_ObjectHideFlags: 0
@@ -293,7 +320,8 @@ GameObject:
   m_Component:
   - component: {fileID: 4488731167491012794}
   - component: {fileID: 4796161921806737514}
-  m_Layer: 6
+  - component: {fileID: 9173266707649446216}
+  m_Layer: 0
   m_Name: Mountain_TileSheet_New_2
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -366,3 +394,29 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
+--- !u!61 &9173266707649446216
+BoxCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8510632687246845759}
+  m_Enabled: 1
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_UsedByEffector: 0
+  m_UsedByComposite: 0
+  m_Offset: {x: 0.8473668, y: 0}
+  m_SpriteTilingProperty:
+    border: {x: 0, y: 0, z: 0, w: 0}
+    pivot: {x: 0.5, y: 0.5}
+    oldSize: {x: 1.76, y: 1.74}
+    newSize: {x: 1.76, y: 1.74}
+    adaptiveTilingThreshold: 0.5
+    drawMode: 0
+    adaptiveTiling: 0
+  m_AutoTiling: 0
+  serializedVersion: 2
+  m_Size: {x: 3.4547338, y: 1.74}
+  m_EdgeRadius: 0

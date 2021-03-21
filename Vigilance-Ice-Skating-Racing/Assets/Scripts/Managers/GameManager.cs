@@ -13,8 +13,7 @@ public class GameManager : MonoBehaviour
     #region Variables
     //----------------Public----------------
     [Header("Script References")]
-    public MenuManager menuManager;
-    public AudioManager audioManager;
+    public MenuManager menuManager;    
     
     [Header("Level References")]
     public string[] levelNames;
@@ -24,6 +23,10 @@ public class GameManager : MonoBehaviour
     public Sprite audioOffSprite;
     public Image musicToggleSprite;
     public Image sfxToggleSprite;
+
+    [Header("UI References")]
+    public GameObject raceModePanel;
+    public GameObject endlessModePanel;
 
     //----------------Private----------------
     private int[] _distanceLevels = new int[] { 200, 500, 1000 };
@@ -71,7 +74,6 @@ public class GameManager : MonoBehaviour
         sfxOn = true;
 
         ObjectPool.Instance.InitializePool();
-        audioManager = gameObject.GetComponent<AudioManager>();
     }
     #endregion
 
@@ -102,10 +104,12 @@ public class GameManager : MonoBehaviour
     #endregion
 
     #region Switching Game States
-    public void loadRaceMode()
+    public void loadRaceMode(int mapNumber)
     {
         // For now this is just to switch UI
         ChangeGameState(GameState.inRaceMode);
+        SceneManager.LoadScene("Map-" + mapNumber + "-Level-1");
+        raceModePanel.SetActive(true);
     }
 
     public void loadEndlessMode()
@@ -113,6 +117,7 @@ public class GameManager : MonoBehaviour
         // For now this is just to switch UI
         ChangeGameState(GameState.inEndlessMode);
         SceneManager.LoadScene("EndlessRunner");
+        endlessModePanel.SetActive(true);
     }
 
     private void ChangeGameState(GameState state)
