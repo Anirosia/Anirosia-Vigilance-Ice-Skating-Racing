@@ -46,6 +46,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4923870889985139705}
   - component: {fileID: 4967183921115253078}
+  - component: {fileID: 8220637082512762288}
   m_Layer: 0
   m_Name: Glacier_TileSheet_New_3
   m_TagString: Untagged
@@ -119,6 +120,32 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
+--- !u!61 &8220637082512762288
+BoxCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3098307648960607141}
+  m_Enabled: 1
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_UsedByEffector: 0
+  m_UsedByComposite: 0
+  m_Offset: {x: 0, y: 0}
+  m_SpriteTilingProperty:
+    border: {x: 0, y: 0, z: 0, w: 0}
+    pivot: {x: 0.5, y: 0.5}
+    oldSize: {x: 1.75, y: 1}
+    newSize: {x: 1.75, y: 1}
+    adaptiveTilingThreshold: 0.5
+    drawMode: 0
+    adaptiveTiling: 0
+  m_AutoTiling: 0
+  serializedVersion: 2
+  m_Size: {x: 1.75, y: 1}
+  m_EdgeRadius: 0
 --- !u!1 &3376176170829343544
 GameObject:
   m_ObjectHideFlags: 0
@@ -129,6 +156,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1729119318466584398}
   - component: {fileID: 2730600639879518079}
+  - component: {fileID: 8950368703224500750}
   m_Layer: 0
   m_Name: Glacier_TileSheet_New_7
   m_TagString: Untagged
@@ -202,6 +230,32 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
+--- !u!61 &8950368703224500750
+BoxCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3376176170829343544}
+  m_Enabled: 1
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_UsedByEffector: 0
+  m_UsedByComposite: 0
+  m_Offset: {x: 0, y: 0}
+  m_SpriteTilingProperty:
+    border: {x: 0, y: 0, z: 0, w: 0}
+    pivot: {x: 0.5, y: 0.5}
+    oldSize: {x: 1.74, y: 1.74}
+    newSize: {x: 1.74, y: 1.74}
+    adaptiveTilingThreshold: 0.5
+    drawMode: 0
+    adaptiveTiling: 0
+  m_AutoTiling: 0
+  serializedVersion: 2
+  m_Size: {x: 1.74, y: 1.74}
+  m_EdgeRadius: 0
 --- !u!1 &3405750534199070897
 GameObject:
   m_ObjectHideFlags: 0
@@ -382,6 +436,7 @@ GameObject:
   m_Component:
   - component: {fileID: 916799756078419074}
   - component: {fileID: 6230446176115088921}
+  - component: {fileID: 1490552850571970008}
   m_Layer: 0
   m_Name: Glacier_TileSheet_New_5
   m_TagString: Untagged
@@ -455,6 +510,32 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
+--- !u!61 &1490552850571970008
+BoxCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7273233146756667903}
+  m_Enabled: 1
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_UsedByEffector: 0
+  m_UsedByComposite: 0
+  m_Offset: {x: 0, y: 0}
+  m_SpriteTilingProperty:
+    border: {x: 0, y: 0, z: 0, w: 0}
+    pivot: {x: 0.5, y: 0.5}
+    oldSize: {x: 1.74, y: 1.75}
+    newSize: {x: 1.74, y: 1.75}
+    adaptiveTilingThreshold: 0.5
+    drawMode: 0
+    adaptiveTiling: 0
+  m_AutoTiling: 0
+  serializedVersion: 2
+  m_Size: {x: 1.74, y: 1.75}
+  m_EdgeRadius: 0
 --- !u!1 &7889831620016624087
 GameObject:
   m_ObjectHideFlags: 0
@@ -500,6 +581,7 @@ GameObject:
   m_Component:
   - component: {fileID: 195808946418290339}
   - component: {fileID: 2632458820502893927}
+  - component: {fileID: 3872360417725358513}
   m_Layer: 0
   m_Name: Glacier_TileSheet_New_7
   m_TagString: Untagged
@@ -573,6 +655,32 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
+--- !u!61 &3872360417725358513
+BoxCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9096041411955003527}
+  m_Enabled: 1
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_UsedByEffector: 0
+  m_UsedByComposite: 0
+  m_Offset: {x: 0, y: 0}
+  m_SpriteTilingProperty:
+    border: {x: 0, y: 0, z: 0, w: 0}
+    pivot: {x: 0.5, y: 0.5}
+    oldSize: {x: 1.74, y: 1.74}
+    newSize: {x: 1.74, y: 1.74}
+    adaptiveTilingThreshold: 0.5
+    drawMode: 0
+    adaptiveTiling: 0
+  m_AutoTiling: 0
+  serializedVersion: 2
+  m_Size: {x: 1.74, y: 1.74}
+  m_EdgeRadius: 0
 --- !u!1001 &354047733850181199
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1375,6 +1483,11 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 3405750535928870697}
     m_Modifications:
+    - target: {fileID: 5357513595000642221, guid: 11cb3a5b9b383314292a86da71913cf1,
+        type: 3}
+      propertyPath: m_SpriteTilingProperty.oldSize.x
+      value: 1.76
+      objectReference: {fileID: 0}
     - target: {fileID: 5922594036583090514, guid: 11cb3a5b9b383314292a86da71913cf1,
         type: 3}
       propertyPath: m_RootOrder

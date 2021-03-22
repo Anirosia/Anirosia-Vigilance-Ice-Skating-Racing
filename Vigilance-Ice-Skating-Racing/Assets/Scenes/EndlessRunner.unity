@@ -198,6 +198,12 @@ Transform:
     type: 3}
   m_PrefabInstance: {fileID: 499046527}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &499046529 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 5947987212110920734, guid: 122e1ec9921153c4ba86485d5f1cb6f9,
+    type: 3}
+  m_PrefabInstance: {fileID: 499046527}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1206146005
 GameObject:
   m_ObjectHideFlags: 0
@@ -336,7 +342,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   debug: 1
-  player: {fileID: 0}
+  player: {fileID: 499046529}
   maxChunks: 4
   difficultyDistance: c8000000f4010000e8030000
 --- !u!4 &1803709925
