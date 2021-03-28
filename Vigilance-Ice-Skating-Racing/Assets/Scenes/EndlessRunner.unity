@@ -135,16 +135,6 @@ PrefabInstance:
       propertyPath: m_Name
       value: Player (1)
       objectReference: {fileID: 0}
-    - target: {fileID: 5947987212110920800, guid: 122e1ec9921153c4ba86485d5f1cb6f9,
-        type: 3}
-      propertyPath: baseSpeed
-      value: 6
-      objectReference: {fileID: 0}
-    - target: {fileID: 5947987212110920800, guid: 122e1ec9921153c4ba86485d5f1cb6f9,
-        type: 3}
-      propertyPath: baseJumpMultiplier
-      value: 8
-      objectReference: {fileID: 0}
     - target: {fileID: 5947987212110920805, guid: 122e1ec9921153c4ba86485d5f1cb6f9,
         type: 3}
       propertyPath: m_RootOrder
@@ -205,6 +195,12 @@ PrefabInstance:
 --- !u!4 &499046528 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 5947987212110920805, guid: 122e1ec9921153c4ba86485d5f1cb6f9,
+    type: 3}
+  m_PrefabInstance: {fileID: 499046527}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1 &499046529 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 5947987212110920734, guid: 122e1ec9921153c4ba86485d5f1cb6f9,
     type: 3}
   m_PrefabInstance: {fileID: 499046527}
   m_PrefabAsset: {fileID: 0}
@@ -304,9 +300,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e3b9c846d6bc4cbcac1a6160ed127406, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  smooth: 0.1
+  cameraSmoothing: 0.1
   offset: {x: 5, y: 0, z: -10}
   target: {fileID: 499046528}
+  zoomSmoothSpeed: 0
+  viewDist: 0
+  smooth: 0.1
+  setOffsetSpeed: 17
+  setZoomSpeed: 10
+  setLockSpeed: 4.5
+  offsetSpeed: 0.017
+  zoomSpeed: 0.01
+  lockSpeed: 0.0045
 --- !u!1 &1803709923
 GameObject:
   m_ObjectHideFlags: 0
@@ -337,7 +342,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   debug: 1
-  player: {fileID: 0}
+  player: {fileID: 499046529}
   maxChunks: 4
   difficultyDistance: c8000000f4010000e8030000
 --- !u!4 &1803709925

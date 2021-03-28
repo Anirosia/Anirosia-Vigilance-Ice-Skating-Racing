@@ -10,6 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 5150900936774300584}
   - component: {fileID: 6929217068301082621}
+  - component: {fileID: 5357513595000642221}
   m_Layer: 0
   m_Name: Glacier_TileSheet_New_17
   m_TagString: Untagged
@@ -24,13 +25,13 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5352564959561301438}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0.859, y: -0.86910003, z: 0}
-  m_LocalScale: {x: 1, y: 0.99126935, z: 1}
+  m_LocalRotation: {x: -0, y: -0, z: 0.001875623, w: 0.9999982}
+  m_LocalPosition: {x: -1.712, y: -0.01, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 5922594036583090514}
   m_RootOrder: 1
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0.215}
 --- !u!212 &6929217068301082621
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -83,6 +84,32 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
+--- !u!61 &5357513595000642221
+BoxCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5352564959561301438}
+  m_Enabled: 1
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_UsedByEffector: 0
+  m_UsedByComposite: 0
+  m_Offset: {x: 0, y: 0}
+  m_SpriteTilingProperty:
+    border: {x: 0, y: 0, z: 0, w: 0}
+    pivot: {x: 0.5, y: 0.5}
+    oldSize: {x: 1.72, y: 1.74}
+    newSize: {x: 1.74, y: 1.74}
+    adaptiveTilingThreshold: 0.5
+    drawMode: 0
+    adaptiveTiling: 0
+  m_AutoTiling: 0
+  serializedVersion: 2
+  m_Size: {x: 1.72, y: 1.74}
+  m_EdgeRadius: 0
 --- !u!1 &6203918115683037005
 GameObject:
   m_ObjectHideFlags: 0
@@ -125,6 +152,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4768640589899221034}
   - component: {fileID: 7263837899587069339}
+  - component: {fileID: 5267822150841955585}
   m_Layer: 0
   m_Name: Glacier_TileSheet_New_13
   m_TagString: Untagged
@@ -139,13 +167,13 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6545499763363702263}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 2.58, y: -0.869, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalRotation: {x: -0, y: -0, z: 0.00071811874, w: 0.9999998}
+  m_LocalPosition: {x: -0.015, y: 0.0033, z: 0}
+  m_LocalScale: {x: 1, y: 0.99898154, z: 1}
   m_Children: []
   m_Father: {fileID: 5922594036583090514}
   m_RootOrder: 0
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0.082}
 --- !u!212 &7263837899587069339
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -186,10 +214,10 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
-  m_Sprite: {fileID: -4880791314150342400, guid: 2ee768b4127120e45b52741f91cbd23e,
+  m_Sprite: {fileID: -9063240687203831331, guid: 2ee768b4127120e45b52741f91cbd23e,
     type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
-  m_FlipX: 1
+  m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
   m_Size: {x: 1.74, y: 1.76}
@@ -198,3 +226,35 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
+--- !u!60 &5267822150841955585
+PolygonCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6545499763363702263}
+  m_Enabled: 1
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_UsedByEffector: 0
+  m_UsedByComposite: 0
+  m_Offset: {x: 0, y: 0}
+  m_SpriteTilingProperty:
+    border: {x: 0, y: 0, z: 0, w: 0}
+    pivot: {x: 0.5, y: 0.5}
+    oldSize: {x: 1.75, y: 1.76}
+    newSize: {x: 1.74, y: 1.76}
+    adaptiveTilingThreshold: 0.5
+    drawMode: 0
+    adaptiveTiling: 0
+  m_AutoTiling: 0
+  m_Points:
+    m_Paths:
+    - - {x: -0.835, y: 0.88}
+      - {x: -0.875, y: 0.88}
+      - {x: -0.875, y: -0.26}
+      - {x: -0.865, y: -0.88}
+      - {x: 0.875, y: -0.88}
+      - {x: 0.875, y: -0.84}
+      - {x: 0.85499996, y: -0.79999995}

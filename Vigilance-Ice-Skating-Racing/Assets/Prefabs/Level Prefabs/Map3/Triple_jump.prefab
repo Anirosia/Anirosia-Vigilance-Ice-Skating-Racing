@@ -212,6 +212,7 @@ GameObject:
   m_Component:
   - component: {fileID: 7471593623717221844}
   - component: {fileID: 2370116477762716263}
+  - component: {fileID: 8690304108961624323}
   m_Layer: 0
   m_Name: Harbor_TileSheet_New_2 (4)
   m_TagString: Untagged
@@ -285,6 +286,32 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
+--- !u!61 &8690304108961624323
+BoxCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6128470300695532559}
+  m_Enabled: 1
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_UsedByEffector: 0
+  m_UsedByComposite: 0
+  m_Offset: {x: 0.8506503, y: 0}
+  m_SpriteTilingProperty:
+    border: {x: 0, y: 0, z: 0, w: 0}
+    pivot: {x: 0.5, y: 0.5}
+    oldSize: {x: 1.76, y: 1.74}
+    newSize: {x: 1.76, y: 1.74}
+    adaptiveTilingThreshold: 0.5
+    drawMode: 0
+    adaptiveTiling: 0
+  m_AutoTiling: 0
+  serializedVersion: 2
+  m_Size: {x: 3.4613008, y: 1.74}
+  m_EdgeRadius: 0
 --- !u!1 &7257071273728215712
 GameObject:
   m_ObjectHideFlags: 0
@@ -295,6 +322,7 @@ GameObject:
   m_Component:
   - component: {fileID: 2202174514875611861}
   - component: {fileID: 2723510830161200614}
+  - component: {fileID: 5652778514929351416}
   m_Layer: 0
   m_Name: Harbor_TileSheet_New_2 (2)
   m_TagString: Untagged
@@ -368,6 +396,32 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
+--- !u!61 &5652778514929351416
+BoxCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7257071273728215712}
+  m_Enabled: 1
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_UsedByEffector: 0
+  m_UsedByComposite: 0
+  m_Offset: {x: 0.8572192, y: 0}
+  m_SpriteTilingProperty:
+    border: {x: 0, y: 0, z: 0, w: 0}
+    pivot: {x: 0.5, y: 0.5}
+    oldSize: {x: 1.76, y: 1.74}
+    newSize: {x: 1.76, y: 1.74}
+    adaptiveTilingThreshold: 0.5
+    drawMode: 0
+    adaptiveTiling: 0
+  m_AutoTiling: 0
+  serializedVersion: 2
+  m_Size: {x: 3.4744387, y: 1.74}
+  m_EdgeRadius: 0
 --- !u!1 &8331206342370791630
 GameObject:
   m_ObjectHideFlags: 0
@@ -378,6 +432,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4309556060954660683}
   - component: {fileID: 5119133218403555227}
+  - component: {fileID: 1674241572660040987}
   m_Layer: 0
   m_Name: Harbor_TileSheet_New_2
   m_TagString: Untagged
@@ -451,6 +506,32 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
+--- !u!61 &1674241572660040987
+BoxCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8331206342370791630}
+  m_Enabled: 1
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_UsedByEffector: 0
+  m_UsedByComposite: 0
+  m_Offset: {x: 0.8605046, y: 0}
+  m_SpriteTilingProperty:
+    border: {x: 0, y: 0, z: 0, w: 0}
+    pivot: {x: 0.5, y: 0.5}
+    oldSize: {x: 1.76, y: 1.74}
+    newSize: {x: 1.76, y: 1.74}
+    adaptiveTilingThreshold: 0.5
+    drawMode: 0
+    adaptiveTiling: 0
+  m_AutoTiling: 0
+  serializedVersion: 2
+  m_Size: {x: 3.4810095, y: 1.74}
+  m_EdgeRadius: 0
 --- !u!1 &9116890277486343599
 GameObject:
   m_ObjectHideFlags: 0

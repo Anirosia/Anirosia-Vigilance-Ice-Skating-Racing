@@ -13,18 +13,20 @@ namespace Gameplay
 	[RequireComponent(typeof(Rigidbody2D))]
 	public class CharacterController : MonoBehaviour
 	{
-		[Header("Touch Information")] private Touch touch;
-		private float timeTouchEnded;
-		private float displayTime = .5f;
-		private Vector2 startTouchPos;
-		private Vector2 touchDelta;
+		#region Fields
+
+		[Header("Touch Information")] [SerializeField]
+		private double holdTime;
+
+		[ReadOnlyInspector] [SerializeField] private double currentHoldTime;
 		[ReadOnlyInspector] [SerializeField] private bool isPressed;
 		[ReadOnlyInspector] [SerializeField] private bool isHeld;
 		[ReadOnlyInspector] [SerializeField] private bool isDragged;
-		private double deadZone = 125;
 
-		public double holdTime;
-		[ReadOnlyInspector] public double currentHoldTime;
+		private Touch touch;
+		private Vector2 startTouchPos;
+		private Vector2 touchDelta;
+		private double deadZone = 125;
 
 		[Header("Base Values")] [SerializeField]
 		private float baseSpeed;
@@ -34,39 +36,35 @@ namespace Gameplay
 		[SerializeField] private float slopeSpeedIncrease;
 
 		[Header("Physics")] public float fallMultiplier;
-		public bool isGrounded;
-		public LayerMask layer;
-		private Rigidbody2D rb;
+		[SerializeField] private LayerMask layer;
 		[SerializeField] private float timeZeroToMax;
 		[SerializeField] private float timeMaxToZero;
 		private float forwardVelocity;
 		private float accelerationRatePerSec;
+		private bool isSliding;
+		private Rigidbody2D rb;
 
-		[Header("Current Values")] [ReadOnlyInspector]
-		public Vector2 currentSpeedVelocity;
+		[Header("Current Values")] [ReadOnlyInspector] [SerializeField]
+		private Vector2 currentSpeedVelocity;
 
-		public float maxSpeed;
-
-		public float maxJump;
+		[ReadOnlyInspector] public float maxSpeed;
+		[ReadOnlyInspector] public float maxJump;
 
 		//for value reset
 		private float speedHolder;
-
-		// private float jumpHolder;
 		private bool focusActionReset;
-		private bool isSliding;
 		private Vector2 colliderOriginalHeight;
 
-
-		public CameraFollow cameraFollow;
+		[SerializeField] private CameraFollow cameraFollow;
 		private CapsuleCollider2D col2D;
 		private Vector2 groundNormal;
-		private SwipeDirection swipeDirection;
 
+		#endregion
 
 		private void Awake() {
 			rb = GetComponent<Rigidbody2D>();
 			col2D = GetComponent<CapsuleCollider2D>();
+			if (cameraFollow == null) cameraFollow = FindObjectOfType<CameraFollow>();
 		}
 
 		private void Start() {
@@ -77,10 +75,9 @@ namespace Gameplay
 		}
 
 		void Update() {
-			ApplyGravity();
 			RelativeToGround();
 			UserInput();
-			cameraFollow.CameraWork(isGrounded);
+			cameraFollow.CameraWork(isGrounded());
 		}
 
 		private void FixedUpdate() {
@@ -107,13 +104,11 @@ namespace Gameplay
 
 						if (Mathf.Abs(x) < Mathf.Abs(y)) {
 							if (y > 0) {
-								swipeDirection.SwipeUp = true;
 								Debug.Log("Swipe Up");
-								if (isGrounded) Jump();
+								if (isGrounded()) Jump();
 								isPressed = false;
 							}
 							else {
-								swipeDirection.SwipeDown = true;
 								Debug.Log("Swipe Down");
 								if (!isSliding) StartCoroutine(Slide());
 								isPressed = false;
@@ -142,13 +137,13 @@ namespace Gameplay
 			isDragged = false;
 			isPressed = false;
 			isHeld = false;
-			swipeDirection.SwipeUp = false;
-			swipeDirection.SwipeDown = false;
+
 			// StartCoroutine(CameraZoomOut());
 		}
 
 		private void BaseReset() {
 			maxSpeed = baseSpeed;
+			speedHolder = baseSpeed;
 			maxJump = baseJumpMultiplier;
 			rb.gravityScale = fallMultiplier;
 		}
@@ -158,13 +153,8 @@ namespace Gameplay
 			// maxJump = jumpHolder;
 		}
 
-		private void ApplyGravity() {
-			// if (rb.velocity.y < 0) {
-			// 	rb.velocity += Vector2.up * (Physics.gravity.y * (fallMultiplier - 1) * Time.deltaTime);
-			// }
-			var box = col2D.bounds;
-			isGrounded = Physics2D.BoxCast(box.center, box.size, 0f, Vector2.down, 0.01f, layer);
-		}
+		private bool isGrounded() =>
+			Physics2D.BoxCast(col2D.bounds.center, col2D.bounds.size, 0f, Vector2.down, 0.01f, layer);
 
 		private void RelativeToGround() {
 			Vector3 origin = transform.localPosition;
@@ -175,8 +165,8 @@ namespace Gameplay
 			hit = (Physics2D.Raycast(origin, dir, dist, layer));
 			groundNormal = hit.normal;
 			Quaternion groundRotation = Quaternion.FromToRotation(transform.up, groundNormal) * transform.rotation;
-			if (isGrounded) transform.rotation = groundRotation;
-			else if (!isGrounded && hit) {
+			if (isGrounded()) transform.rotation = groundRotation;
+			else if (!isGrounded() && hit) {
 				targetRotation = Quaternion.Slerp(transform.rotation, groundRotation, Time.deltaTime * 2f);
 				transform.rotation = targetRotation;
 			}
@@ -251,7 +241,7 @@ namespace Gameplay
 		private IEnumerator Slide() {
 			var size = col2D.size;
 			col2D.size = new Vector2(size.x, size.y / 2);
-			if (!isGrounded) rb.gravityScale *= 2;
+			if (!isGrounded()) rb.gravityScale *= 2;
 			isSliding = true;
 			yield return new WaitForSeconds(1.5f);
 			isSliding = false;
@@ -260,10 +250,5 @@ namespace Gameplay
 		}
 
 		#endregion
-	}
-
-	struct SwipeDirection
-	{
-		public bool SwipeUp, SwipeDown, SwipeLeft, SwipeRight;
 	}
 }

@@ -43,6 +43,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1244226253748707314}
   - component: {fileID: 7386262041841259633}
+  - component: {fileID: 4739362290961097950}
   m_Layer: 0
   m_Name: Glacier_TileSheet_New_5
   m_TagString: Untagged
@@ -116,6 +117,32 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
+--- !u!61 &4739362290961097950
+BoxCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3118333150757816052}
+  m_Enabled: 1
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_UsedByEffector: 0
+  m_UsedByComposite: 0
+  m_Offset: {x: 1.701714, y: 0.409927}
+  m_SpriteTilingProperty:
+    border: {x: 0, y: 0, z: 0, w: 0}
+    pivot: {x: 0.5, y: 0.5}
+    oldSize: {x: 1.74, y: 1.75}
+    newSize: {x: 1.74, y: 1.75}
+    adaptiveTilingThreshold: 0.5
+    drawMode: 0
+    adaptiveTiling: 0
+  m_AutoTiling: 0
+  serializedVersion: 2
+  m_Size: {x: 5.143428, y: 0.930146}
+  m_EdgeRadius: 0
 --- !u!1 &3202625877882154997
 GameObject:
   m_ObjectHideFlags: 0
@@ -126,6 +153,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1158777783481164972}
   - component: {fileID: 7619287602205540915}
+  - component: {fileID: 923025748015824047}
   m_Layer: 0
   m_Name: Glacier_TileSheet_New_2
   m_TagString: Untagged
@@ -199,6 +227,32 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
+--- !u!61 &923025748015824047
+BoxCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3202625877882154997}
+  m_Enabled: 1
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_UsedByEffector: 0
+  m_UsedByComposite: 0
+  m_Offset: {x: -0.024154603, y: 0}
+  m_SpriteTilingProperty:
+    border: {x: 0, y: 0, z: 0, w: 0}
+    pivot: {x: 0.5, y: 0.5}
+    oldSize: {x: 1.76, y: 1.74}
+    newSize: {x: 1.76, y: 1.74}
+    adaptiveTilingThreshold: 0.5
+    drawMode: 0
+    adaptiveTiling: 0
+  m_AutoTiling: 0
+  serializedVersion: 2
+  m_Size: {x: 2.8987083, y: 1.74}
+  m_EdgeRadius: 0
 --- !u!1 &6288289881162151510
 GameObject:
   m_ObjectHideFlags: 0
