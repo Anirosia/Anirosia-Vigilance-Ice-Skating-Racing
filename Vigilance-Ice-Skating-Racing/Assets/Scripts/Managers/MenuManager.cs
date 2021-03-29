@@ -1,15 +1,31 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class MenuManager : MonoBehaviour
 {
+    #region  Variables
     public UIPanel[] UIPanels;
+
+    [Header("Image References")]
+    public Sprite audioOnSprite;
+    public Sprite audioOffSprite;
+    public Image musicToggleSprite;
+    public Image sfxToggleSprite;
+
+    [Header("UI References")]
+    public Text endlessDistanceText;
+    public Text endlessCoinsText;
+    public Text resultsDistanceText;
+    public Text resultsCoinsText;
 
     //Reference to the Previously active panel
     private GameObject previousPanel;
+    private bool _musicOn = true;
+    private bool _sfxOn = true;
 
-    #region OnEnable/OnDisable
+    #endregion
+
+    #region Unity Messages
     private void OnEnable()
     {
         GameManager.OnGameStateChanged += SwitchPanel;
@@ -19,12 +35,32 @@ public class MenuManager : MonoBehaviour
     {
         GameManager.OnGameStateChanged -= SwitchPanel;
     }
+    public void Update()
+    {
+        switch (GameManager.Instance.gameState)
+        {
+            case GameManager.GameState.inMenu:
+                break;
+            case GameManager.GameState.inPaused:
+                break;
+            case GameManager.GameState.inEndlessMode:
+                endlessDistanceText.text = "Dist: " + GameManager.Instance.CurrentDistance;
+                endlessCoinsText.text = "Coins: " + GameManager.Instance.CurrentCoins;
+                break;
+            case GameManager.GameState.Results:
+                resultsDistanceText.text = "Dist: " + GameManager.Instance.CurrentDistance;
+                resultsCoinsText.text = "Coins: " + GameManager.Instance.CurrentCoins;
+                break;
+            case GameManager.GameState.Dead:
+                break;
+        }
+    }
     #endregion
 
     #region UI Switching
     public void SwitchPanel()
     {
-        if(previousPanel != null) previousPanel.SetActive(false);
+        if (previousPanel != null) previousPanel.SetActive(false);
 
         for (int i = 0; i < UIPanels.Length; i++)
         {
@@ -35,6 +71,39 @@ public class MenuManager : MonoBehaviour
                 break;
             }
         }
+    }
+    #endregion
+
+    #region Audio
+    public void MusicToggle()
+    {
+        if (_musicOn) // turn music off and switch sprite
+        {
+            _musicOn = false;
+            musicToggleSprite.sprite = audioOffSprite;
+
+        }
+        else // turn music on and switch sprite
+        {
+            _musicOn = true;
+            musicToggleSprite.sprite = audioOnSprite;
+        }
+        AudioManager.Instance.MuteTrack(AudioTrackType.Music, _musicOn);
+    }
+
+    public void SFXToggle()
+    {
+        if (_sfxOn)
+        {
+            _sfxOn = false;
+            sfxToggleSprite.sprite = audioOffSprite;
+        }
+        else
+        {
+            _sfxOn = true;
+            sfxToggleSprite.sprite = audioOnSprite;
+        }
+        AudioManager.Instance.MuteTrack(AudioTrackType.SFX, _sfxOn);
     }
     #endregion
 }

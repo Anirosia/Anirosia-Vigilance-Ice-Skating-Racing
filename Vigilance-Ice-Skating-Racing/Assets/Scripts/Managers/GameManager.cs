@@ -1,50 +1,39 @@
 using System;
-using System.Collections;
-using System.Collections.Generic;
+using DefaultNamespace;
 using UnityEngine;
-using UnityEngine.UI;
 using UnityEngine.SceneManagement;
 
 public class GameManager : MonoBehaviour
 {
-    public enum GameState { inMenu,inPaused, inRaceMode, inEndlessMode };
-    public GameState gameState;
+    public enum GameState { inMenu,inPaused, inEndlessMode, Results, Dead };
+    [ReadOnlyInspector] public GameState gameState;
 
     #region Variables
-    //----------------Public----------------
     [Header("Script References")]
     public MenuManager menuManager;    
     
     [Header("Level References")]
     public string[] levelNames;
 
-    [Header("Image References")]
-    public Sprite audioOnSprite;
-    public Sprite audioOffSprite;
-    public Image musicToggleSprite;
-    public Image sfxToggleSprite;
-
-    [Header("UI References")]
-    public GameObject raceModePanel;
-    public GameObject endlessModePanel;
-
-    //----------------Private----------------
-    private int[] _distanceLevels = new int[] { 200, 500, 1000 };
-
     private bool scenesHaveBeenPreloaded = false;
     private bool loadEndlessScene = false;
 
+    private int _currentDistance = 0;
+    private int _currentCoins = 0;
+    private int _totalCoins = 0;
+
+    private int _currentLevel = 0;
+
     public static event Action OnGameStateChanged;
 
-    private bool musicOn;
-    private bool sfxOn;
     #endregion
 
     #region Mutators
-    public string GetLevelName
-    {
-        get { return "LevelOne"; }
-    }
+    public int CurrentDiffucultyIndex { get { return _currentLevel; } }
+    public string CurrentLevelFolderName { get { return levelNames[_currentLevel]; } }
+    public int AllCoins { get { return _totalCoins; } }
+    public int CurrentCoins { get { return _currentCoins; } }
+    public int CurrentDistance { get { return _currentDistance; } set { _currentDistance = value; } }
     #endregion
 
     #region Singleton
@@ -62,7 +51,7 @@ public class GameManager : MonoBehaviour
     }
     #endregion
 
-    #region Start
+    #region Unity Messages
     void Start()
     {
         //Application Settings
@@ -70,19 +59,26 @@ public class GameManager : MonoBehaviour
         // QualitySettings.vSyncCount = 1;
         // When Game starts load the menu:
         ChangeGameState(GameState.inMenu);
-        musicOn = true;
-        sfxOn = true;
-
+        
         ObjectPool.Instance.InitializePool();
     }
-    #endregion
 
-    #region Update
+    private void OnEnable()
+    {
+        OnGameStateChanged += OnStateChanged;
+    }
+
+    private void OnDisable()
+    {
+        OnGameStateChanged -= OnStateChanged;
+    }
     void Update()
     {
         GameStateManager();
     }
+    #endregion
 
+    #region Update
     void GameStateManager() // Use these states to determine the actions of other scripts based on where the player/user is in the game.
     {
         switch (gameState)
@@ -93,31 +89,55 @@ public class GameManager : MonoBehaviour
             case GameState.inPaused:
 
                 break;
-            case GameState.inRaceMode:
+            case GameState.inEndlessMode:
                 
                 break;
-            case GameState.inEndlessMode:
+            case GameState.Dead:
+                OnDeath();
+                break;
+            case GameState.Results:
                 
                 break;
         }
     }
     #endregion
 
-    #region Switching Game States
-    public void loadRaceMode(int mapNumber)
+    #region Game States
+    public void OnDeath()
     {
-        // For now this is just to switch UI
-        ChangeGameState(GameState.inRaceMode);
-        SceneManager.LoadScene("Map-" + mapNumber + "-Level-1");
-        raceModePanel.SetActive(true);
+        //Save Score
+        ChangeGameState(GameState.Results);
     }
-
-    public void loadEndlessMode()
+    public void OnStateChanged()
     {
-        // For now this is just to switch UI
+        switch (gameState)
+        {
+            case GameState.inMenu:
+                AudioManager.Instance.PlayAudio(AudioTypes.TRACK_MENU);
+                break;
+            case GameState.inPaused:
+                break;
+            case GameState.inEndlessMode:
+                AudioManager.Instance.PlayAudio(AudioTypes.TRACK_GAME);
+                break;
+            case GameState.Results:
+                break;
+            case GameState.Dead:
+                AudioManager.Instance.PlayAudio(AudioTypes.SFX_GAMEOVER);
+                break;
+            default:
+                break;
+        }
+    }
+    #endregion
+
+    #region Switching Game States
+
+    public void loadEndlessMode(int i)
+    {
+        _currentLevel = i;
         ChangeGameState(GameState.inEndlessMode);
         SceneManager.LoadScene("EndlessRunner");
-        endlessModePanel.SetActive(true);
     }
 
     private void ChangeGameState(GameState state)
@@ -128,67 +148,10 @@ public class GameManager : MonoBehaviour
 
     #endregion
 
-    #region Menu Methods
-    //private void PreloadScences()
-    //{
-    //    if (scenesHaveBeenPreloaded) return;
-
-    //    StartCoroutine(PreloadScenes());
-
-
-    //    scenesHaveBeenPreloaded = true;
-    //}
-
-    //IEnumerator PreloadScenes()
-    //{
-    //    AsyncOperation operation = SceneManager.LoadSceneAsync("EndlessRunner");
-    //    operation.allowSceneActivation = false;
-
-    //    while (!operation.isDone)
-    //    {
-    //        float progress = Mathf.Clamp01(operation.progress / 0.9f) * 100;
-    //        print(progress);
-    //        //slider.value = progress;
-    //        //text.text = progress + "%";
-    //        operation.allowSceneActivation = loadEndlessScene;
-    //        yield return null;
-    //    }
-
-    //    yield break;
-    //}
-
-    public void MusicToggle()
+    #region Game Events
+    public void OnCoinCollected()
     {
-        if (musicOn) // turn music off and switch sprite
-        {
-            //audioManager.StopAudio()
-            musicToggleSprite.sprite = audioOffSprite;
-            musicOn = false;
-        }
-        else // turn music on and switch sprite
-        {
-            //audioManager.PlayAudio()
-            musicToggleSprite.sprite = audioOnSprite;
-            musicOn = true;
-        }
-    }
-
-    public void SFXToggle()
-    {
-        if (sfxOn)
-        {
-            //audioManager.StopAudio()
-            sfxToggleSprite.sprite = audioOffSprite;
-            sfxOn = false;
-        }
-        else
-        {
-            //audioManager.PlayAudio()
-            sfxToggleSprite.sprite = audioOnSprite;
-            sfxOn = true;
-        }
+        _currentCoins++;
     }
     #endregion
-
-    public int GetDifficultyLevel(int level) => _distanceLevels[level];
 }

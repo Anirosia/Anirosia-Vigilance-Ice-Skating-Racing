@@ -76,6 +76,7 @@ public class AudioManager : MonoBehaviour
     #endregion
 
     #region AudioJob 
+    //Registers Audio with the track it will be played on
     private void PopulateAudioTable()
     {
         foreach (var track in tracks) {
@@ -88,6 +89,7 @@ public class AudioManager : MonoBehaviour
         }
     }
 
+    //Adds an AudioJob to the JobTable, this prevents tracks from conflicting and 
     private void AddJob(AudioJob job)
     {
         RemoveConflictingJobs(type: job.type);
@@ -149,15 +151,16 @@ public class AudioManager : MonoBehaviour
 
             if (currentAudioTrack.source == audioTrackNeeded.source)
             {
-                //Can't Remove Element while Iterating thru
-                conflictAudio = audioType;
+                RemoveJob(type: conflictAudio);
+                Log("Removed Conflicting Job Type [" + conflictAudio + "]");
+                break;
             }
         }
 
-        if (conflictAudio != AudioTypes.None)
-        {
-            RemoveJob(type: conflictAudio);
-        }
+        //if (conflictAudio != AudioTypes.None)
+        //{
+        //    RemoveJob(type: conflictAudio);
+        //}
     }
 
     private void RemoveJob(AudioTypes type)
@@ -170,6 +173,12 @@ public class AudioManager : MonoBehaviour
         IEnumerator runningJob = (IEnumerator)_jobTable[type];
         StopCoroutine(runningJob);
         _jobTable.Remove(type);
+    }
+    public void MuteTrack(AudioTrackType audioTrackType, bool isMute)
+    {
+        foreach (var track in tracks)
+            if (track.trackType == audioTrackType)
+                track.source.mute = !isMute;
     }
     #endregion
 
@@ -188,13 +197,14 @@ public class AudioManager : MonoBehaviour
     }
     #endregion
 }
-
+  
 #region Structs
 [System.Serializable]
 public struct AudioTrack
 {
     public AudioSource source;
     public AudioObject[] audio;
+    public AudioTrackType trackType;
 }
 
 [System.Serializable]
@@ -202,6 +212,13 @@ public struct AudioObject
 {
     public AudioTypes type;
     public AudioClip clip;
+}
+[System.Serializable]
+public enum AudioTrackType
+{
+    SFX,
+    Music,
+    Menus
 }
 [System.Serializable]
 public struct AudioJob
