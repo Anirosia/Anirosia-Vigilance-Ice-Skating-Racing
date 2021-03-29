@@ -13,7 +13,7 @@ public class EndlessLevelManager : MonoBehaviour
     public GameObject player;
 
     [Header("Variables")]
-    [SerializeField] private int maxChunks = 3;
+    private int maxChunks = 3;
 
     //Platforms Generated
     private int platformsGenerated = 0;
@@ -23,22 +23,35 @@ public class EndlessLevelManager : MonoBehaviour
     public int[] difficultyDistance = new int[] { 200, 500, 1000 };
     //List of Active Chunks
     private List<GameObject> activeChunks = new List<GameObject>();
+    //Start Position of the Player
+    private float playerStartPosX = 0;
+    //If the level position is reset to Zero, add the previous position to account for that in the total distance
+    private float offset = 0;
     //When A Level is Added Callback
-    public static Action<GameObject> OnLevelAdded;
+    public static event Action<GameObject> OnLevelAdded;
     #endregion
 
+    #region Mutators
+
+    #endregion
+
+    #region Unity Messages
     private void Start()
     {
+        playerStartPosX = player.transform.position.x;
         InitializeLevels();
     }
 
     private void FixedUpdate()
     {
-        CalculateLevelDifficulty();
+        //CalculateLevelDifficulty();
         CalculateChunks();
         CheckLevelPosition();
+        GameManager.Instance.CurrentDistance = (int)(player.transform.position.x - playerStartPosX + offset);
     }
+    #endregion
 
+    #region Distance Checks
     private void CheckLevelPosition()
     {
         if (activeChunks.Count > 0 && activeChunks[0].transform.position.x > 1000) ResetLevelPosition();
@@ -52,9 +65,11 @@ public class EndlessLevelManager : MonoBehaviour
 
     private void CalculateLevelDifficulty()
     {
-        if (player.transform.position.x > GameManager.Instance.GetDifficultyLevel(currentLevel)) currentLevel++;
+        //if (player.transform.position.x > GameManager.Instance.GetDifficultyLevel(currentLevel)) currentLevel++;
     }
+    #endregion
 
+    #region Chunk Management
     private void CalculateChunks()
     {
         if (player.transform.position.x > activeChunks[activeChunks.Count - 1].transform.position.x - 20)
@@ -83,6 +98,7 @@ public class EndlessLevelManager : MonoBehaviour
         platformsGenerated++;
         OnLevelAdded?.Invoke(level);
     }
+    #endregion
 
     private void InitializeLevels()
     {
