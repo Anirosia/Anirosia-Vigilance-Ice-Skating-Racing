@@ -110,6 +110,36 @@ BoxCollider2D:
   serializedVersion: 2
   m_Size: {x: 1.74, y: 1.75}
   m_EdgeRadius: 0
+--- !u!1 &524810563693225193
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 5093196012392977061}
+  m_Layer: 0
+  m_Name: CheckPoint
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &5093196012392977061
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 524810563693225193}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 2.3055725, y: 1.9203644, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 7438460913819917176}
+  m_RootOrder: 1
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &895099792057038869
 GameObject:
   m_ObjectHideFlags: 0
@@ -599,7 +629,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &7679151334351519022
 Transform:
   m_ObjectHideFlags: 0
@@ -855,7 +885,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &8154314525529408820
 Transform:
   m_ObjectHideFlags: 0
@@ -1035,7 +1065,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &7438460912683098146
 Transform:
   m_ObjectHideFlags: 0
@@ -1050,7 +1080,7 @@ Transform:
   - {fileID: 8154314525529408820}
   - {fileID: 7679151334351519022}
   m_Father: {fileID: 7438460913819917176}
-  m_RootOrder: 2
+  m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &7438460913819917177
 GameObject:
@@ -1061,6 +1091,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 7438460913819917176}
+  - component: {fileID: 2130650457477808614}
   m_Layer: 0
   m_Name: Basic 3
   m_TagString: Untagged
@@ -1080,12 +1111,28 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 7438460914101084223}
+  - {fileID: 5093196012392977061}
   - {fileID: 7438460914412554171}
   - {fileID: 7438460912683098146}
   - {fileID: 7438460914171535349}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &2130650457477808614
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7438460913819917177}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ee4a859df250cde41b43e85f3c7718ac, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  nextLevelTransform: {fileID: 7438460914101084223}
+  coinSpawnPointParent: {fileID: 7438460912683098147}
+  varianceParent: {fileID: 7438460914171535346}
 --- !u!1 &7438460914101084220
 GameObject:
   m_ObjectHideFlags: 0
@@ -1110,7 +1157,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7438460914101084220}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: 43.805573, y: -3.9796295, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 7438460913819917176}
@@ -1131,7 +1178,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &7438460914171535349
 Transform:
   m_ObjectHideFlags: 0
@@ -1146,7 +1193,7 @@ Transform:
   - {fileID: 5492677853082694272}
   - {fileID: 4167687860097187676}
   m_Father: {fileID: 7438460913819917176}
-  m_RootOrder: 3
+  m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &7438460914412554168
 GameObject:
@@ -1188,7 +1235,7 @@ Transform:
   - {fileID: 1756819992853689949}
   - {fileID: 4752970025082334434}
   m_Father: {fileID: 7438460913819917176}
-  m_RootOrder: 1
+  m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &8270816997074351015
 GameObject:
