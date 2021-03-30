@@ -1,5 +1,6 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
+<<<<<<< HEAD:Vigilance-Ice-Skating-Racing/Assets/Resources/LevelTwo/Basic 2_Zach.prefab
 --- !u!1 &1975876927611350615
 GameObject:
   m_ObjectHideFlags: 0
@@ -34,6 +35,8 @@ Transform:
   m_Father: {fileID: 3405750535939207015}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+=======
+>>>>>>> parent of 1ea4842 (Creating Basic 3 for Map 2):Vigilance-Ice-Skating-Racing/Assets/Resources/LevelTwo/Basic 2.prefab
 --- !u!1 &2139916910755632513
 GameObject:
   m_ObjectHideFlags: 0
@@ -440,8 +443,15 @@ Transform:
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
+<<<<<<< HEAD:Vigilance-Ice-Skating-Racing/Assets/Resources/LevelTwo/Basic 2_Zach.prefab
   - {fileID: 7676509101665881701}
   - {fileID: 1211856509957152168}
+=======
+  - {fileID: 195808946418290339}
+  - {fileID: 1729119318466584398}
+  - {fileID: 916799756078419074}
+  - {fileID: 4923870889985139705}
+>>>>>>> parent of 1ea4842 (Creating Basic 3 for Map 2):Vigilance-Ice-Skating-Racing/Assets/Resources/LevelTwo/Basic 2.prefab
   m_Father: {fileID: 3405750535319448554}
   m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -2036,11 +2046,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 3405750535928870697}
     m_Modifications:
-    - target: {fileID: 5357513595000642221, guid: 11cb3a5b9b383314292a86da71913cf1,
-        type: 3}
-      propertyPath: m_SpriteTilingProperty.oldSize.x
-      value: 1.76
-      objectReference: {fileID: 0}
     - target: {fileID: 5922594036583090514, guid: 11cb3a5b9b383314292a86da71913cf1,
         type: 3}
       propertyPath: m_RootOrder
