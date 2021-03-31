@@ -146,6 +146,11 @@ public class GameManager : MonoBehaviour
         OnGameStateChanged?.Invoke();
     }
 
+    public void loadScene(int i) // TEMP - playtesting {ZB}
+    {
+        SceneManager.LoadScene(i);
+    }
+
     #endregion
 
     #region Game Events
