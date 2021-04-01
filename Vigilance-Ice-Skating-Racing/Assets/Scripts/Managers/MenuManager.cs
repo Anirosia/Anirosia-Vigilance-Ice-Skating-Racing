@@ -136,9 +136,9 @@ public class MenuManager : MonoBehaviour
 
     public void UnlockMap(int index)
     {
-        if (GameManager.Instance.AllCoins >= GameManager.Instance.costOfLevels[index])
+        if (GameManager.Instance.Coins >= GameManager.Instance.costOfLevels[index])
         {
-            GameManager.Instance.AllCoins -= GameManager.Instance.costOfLevels[index];
+            GameManager.Instance.Coins -= GameManager.Instance.costOfLevels[index];
             mapPanels[index].notUnlockedUI.SetActive(false);
         }
     }

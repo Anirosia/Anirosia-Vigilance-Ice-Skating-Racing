@@ -57,7 +57,6 @@ public class DataManager
             var temp = lines.Split(';');
 
             GameManager.Instance.menuManager.SetAudioSettings(int.Parse(temp[0]) == 1, int.Parse(temp[1]) == 1);
-
         }
 
         return true;

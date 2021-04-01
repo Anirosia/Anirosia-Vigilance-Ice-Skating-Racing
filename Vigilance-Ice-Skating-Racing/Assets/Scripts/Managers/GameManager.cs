@@ -5,6 +5,8 @@ using UnityEngine.SceneManagement;
 
 public class GameManager : MonoBehaviour
 {
+    [Header("Settings")]
+    [SerializeField] private bool debug = false;
     public enum GameState { inMenu,inPaused, inEndlessMode, Results, Dead };
     [ReadOnlyInspector] public GameState gameState;
 
@@ -18,13 +20,12 @@ public class GameManager : MonoBehaviour
 
     [Space]
 
-    [SerializeField] private bool debug = false;
+
 
     private bool scenesHaveBeenPreloaded = false;
     private bool loadEndlessScene = false;
 
     private int _currentDistance = 0;
-    private int _currentCoins = 0;
     private int _totalCoins = 0;
 
     private int _currentLevel = 0;
@@ -36,8 +37,7 @@ public class GameManager : MonoBehaviour
     #region Mutators
     public int CurrentDiffucultyIndex { get { return _currentLevel; } }
     public string CurrentLevelFolderName { get { return levelNames[_currentLevel]; } }
-    public int AllCoins { get { return _totalCoins; } set { _totalCoins = value; } }
-    public int CurrentCoins { get { return _currentCoins; } }
+    public int Coins { get { return _totalCoins; } set { _totalCoins = value; } }
     public int CurrentDistance { get { return _currentDistance; } set { _currentDistance = value; } }
     #endregion
 
