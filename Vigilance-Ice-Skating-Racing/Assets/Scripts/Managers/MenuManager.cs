@@ -1,11 +1,12 @@
 using UnityEngine;
 using UnityEngine.UI;
+using System.Collections.Generic;
 
 public class MenuManager : MonoBehaviour
 {
     #region  Variables
     public UIPanel[] UIPanels;
-
+    public MapPanel[] mapPanels;
     [Header("Image References")]
     public Sprite audioOnSprite;
     public Sprite audioOffSprite;
@@ -17,12 +18,14 @@ public class MenuManager : MonoBehaviour
     public Text endlessCoinsText;
     public Text resultsDistanceText;
     public Text resultsCoinsText;
-
+   
     //Reference to the Previously active panel
     private GameObject previousPanel;
     private bool _musicOn = true;
     private bool _sfxOn = true;
 
+    public bool IsMusicMuted { get { return _musicOn; } }
+    public bool IsSFXMuted { get { return _sfxOn; } }
     #endregion
 
     #region Unity Messages
@@ -105,6 +108,41 @@ public class MenuManager : MonoBehaviour
         }
         AudioManager.Instance.MuteTrack(AudioTrackType.SFX, _sfxOn);
     }
+    public void SetAudioSettings(bool isMusicMuted, bool isSFXMuted)
+    {
+        _sfxOn = isSFXMuted;
+        _musicOn = isMusicMuted;
+
+        if (_sfxOn)
+            sfxToggleSprite.sprite = audioOffSprite;
+        else
+            sfxToggleSprite.sprite = audioOnSprite;
+        if (_musicOn)
+            musicToggleSprite.sprite = audioOffSprite;
+        else
+            musicToggleSprite.sprite = audioOnSprite;
+
+        AudioManager.Instance.MuteTrack(AudioTrackType.Music, _musicOn);
+        AudioManager.Instance.MuteTrack(AudioTrackType.SFX, _sfxOn);
+    }
+    #endregion
+
+    #region Menu Locking/Unlocking
+    public void SetMapStats(uint ID, bool isUnlocked, uint bestDistance)
+    {
+        mapPanels[ID].notUnlockedUI.SetActive(!isUnlocked);
+        mapPanels[ID].bestDistance.text = "Best: " + bestDistance + "M";
+    }
+
+    public void UnlockMap(int index)
+    {
+        if (GameManager.Instance.AllCoins >= GameManager.Instance.costOfLevels[index])
+        {
+            GameManager.Instance.AllCoins -= GameManager.Instance.costOfLevels[index];
+            mapPanels[index].notUnlockedUI.SetActive(false);
+        }
+    }
+
     #endregion
 }
 
@@ -116,5 +154,11 @@ public struct UIPanel
     public GameObject uiPanel;
     //The State that the UIPanel will be active for
     public GameManager.GameState stateForUI;
+}
+[System.Serializable]
+public struct MapPanel
+{
+    public GameObject notUnlockedUI;
+    public Text bestDistance;
 }
 #endregion

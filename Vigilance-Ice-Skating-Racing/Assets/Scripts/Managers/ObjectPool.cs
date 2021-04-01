@@ -68,6 +68,7 @@ public class ObjectPool : MonoBehaviour
                 yield return 0;
             }
         }
+
         Log("Pooling has ended, " + _pooledGameObjects.Count + " Pooled Objects");
         Log("Generating Pool Took " + (Time.realtimeSinceStartup - _debugTimer));
         yield return null;
@@ -82,6 +83,7 @@ public class ObjectPool : MonoBehaviour
             _pooledLevels.Add(go);
             yield return 0;
         }
+
         Log("Level Pooling has ended, " + _pooledLevels.Count + " Pooled Levels");
         Log("Generating Pool Took " + (Time.realtimeSinceStartup - _debugTimer));
         yield return null;
@@ -170,8 +172,8 @@ public class ObjectPool : MonoBehaviour
     {
         if (!_isInitialized) InitializePool();
         string name = GameManager.Instance.CurrentLevelFolderName;
-        int startPosInList = -1;
-        int index = 0;
+        int startPosInList = 0;
+        int endPointInList = 0;
 
         for (int i = 0; i < _pooledLevels.Count; i++)
         {
@@ -181,8 +183,7 @@ public class ObjectPool : MonoBehaviour
             }
             else
             {
-                startPosInList = 0;
-                index = i;
+                endPointInList = startPosInList + levelsToBePooled[i].amountOfLevels;
                 break;
             }
         }
@@ -195,9 +196,12 @@ public class ObjectPool : MonoBehaviour
             return null;
         }
 
-        for (int i = 0; i < 10; i++)
+        int iss = 0;
+        
+        while (iss < 200)
         {
-            int randomIndex = UnityEngine.Random.Range(0, _pooledLevels.Count);
+            iss++;
+            int randomIndex = UnityEngine.Random.Range(startPosInList, endPointInList);
 
             if (!_pooledLevels[randomIndex].activeSelf)
             {
@@ -222,7 +226,7 @@ public class ObjectPool : MonoBehaviour
     #endregion
     #endregion
 
-    #region Private Functions
+    #region Logging Functions
     private void Log(string msg)
     {
         if (!debug) return;
