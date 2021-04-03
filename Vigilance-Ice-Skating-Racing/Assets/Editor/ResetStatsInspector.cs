@@ -10,6 +10,6 @@ public class ResetStatsInspector : UnityEditor.Editor
 
         GameManager gameManager = (GameManager)target;
         if (GUILayout.Button("Reset Stats"))
-            gameManager.ResetStats();
+            gameManager.ResetSave();
     }
 }

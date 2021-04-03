@@ -173,7 +173,10 @@ public class GameManager : MonoBehaviour
         Log("Save has been loaded");
     }
 
-    public void ResetStats()
+    /// <summary>
+    /// Permanently Deletes Save Files
+    /// </summary>
+    public void ResetSave()
     {
         DataManager.ResetData();
     }
