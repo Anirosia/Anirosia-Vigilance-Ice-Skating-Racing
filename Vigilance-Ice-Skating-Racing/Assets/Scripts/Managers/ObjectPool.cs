@@ -68,7 +68,7 @@ public class ObjectPool : MonoBehaviour
                 yield return 0;
             }
         }
-
+        
         Log("Pooling has ended, " + _pooledGameObjects.Count + " Pooled Objects");
         Log("Generating Pool Took " + (Time.realtimeSinceStartup - _debugTimer));
         yield return null;
@@ -174,6 +174,7 @@ public class ObjectPool : MonoBehaviour
         string name = GameManager.Instance.CurrentLevelFolderName;
         int startPosInList = 0;
         int endPointInList = 0;
+
 
         for (int i = 0; i < _pooledLevels.Count; i++)
         {

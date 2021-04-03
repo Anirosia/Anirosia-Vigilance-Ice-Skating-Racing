@@ -7,6 +7,7 @@ public class GameManager : MonoBehaviour
 {
     [Header("Settings")]
     [SerializeField] private bool debug = false;
+
     public enum GameState { inMenu,inPaused, inEndlessMode, Results, Dead };
     [ReadOnlyInspector] public GameState gameState;
 
@@ -17,10 +18,6 @@ public class GameManager : MonoBehaviour
     [Header("Level References")]
     public string[] levelNames;
     public int[] costOfLevels;
-
-    [Space]
-
-
 
     private bool scenesHaveBeenPreloaded = false;
     private bool loadEndlessScene = false;

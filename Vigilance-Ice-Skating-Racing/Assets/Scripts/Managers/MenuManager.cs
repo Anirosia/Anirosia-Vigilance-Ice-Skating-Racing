@@ -18,7 +18,7 @@ public class MenuManager : MonoBehaviour
     public Text endlessCoinsText;
     public Text resultsDistanceText;
     public Text resultsCoinsText;
-   
+
     //Reference to the Previously active panel
     private GameObject previousPanel;
     private bool _musicOn = true;
@@ -161,7 +161,6 @@ public class MenuManager : MonoBehaviour
         //    mapPanels[index].notUnlockedUI.SetActive(false);
         //}
     }
-
     #endregion
 }
 
