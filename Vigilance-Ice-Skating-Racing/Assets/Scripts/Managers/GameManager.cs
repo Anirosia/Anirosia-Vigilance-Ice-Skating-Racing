@@ -26,7 +26,6 @@ public class GameManager : MonoBehaviour
     private bool loadEndlessScene = false;
 
     private int _currentDistance = 0;
-    private int _totalCoins = 0;
 
     private int _currentLevel = 0;
 
@@ -37,7 +36,6 @@ public class GameManager : MonoBehaviour
     #region Mutators
     public int CurrentDiffucultyIndex { get { return _currentLevel; } }
     public string CurrentLevelFolderName { get { return levelNames[_currentLevel]; } }
-    public int Coins { get { return _totalCoins; } set { _totalCoins = value; } }
     public int CurrentDistance { get { return _currentDistance; } set { _currentDistance = value; } }
     #endregion
 
@@ -158,31 +156,14 @@ public class GameManager : MonoBehaviour
     #region Game Events
     public void OnCoinCollected()
     {
-        _currentCoins++;
+        StatsAndAchievements.Coins++;
     }
     #endregion
 
     #region Saving and Loading
     public void Save()
     {
-        SaveData data = new SaveData(
-            new MapData[] { new MapData(0, true, 11), new MapData(1, false, 0), new MapData(2, false, 0) },
-            new CharacterData[] { new CharacterData(0, true), new CharacterData(1, false) },
-            new SettingsData(menuManager.IsMusicMuted, menuManager.IsSFXMuted),
-            new StatsData(_totalCoins)
-        );
-
-        DataManager.SaveData(data);
-    }
-
-    public void SetMapStats(uint ID, bool isUnlocked, uint bestDistance)
-    {
-        Log("Loaded Map with ID: " + ID + ", Is Unlocked: " + isUnlocked + ", Best Distance: " + bestDistance);
-        menuManager.SetMapStats(ID, isUnlocked, bestDistance);
-    }
-    public void SetCurrency(int score)
-    {
-        _totalCoins = score; 
+        DataManager.SaveData(StatsAndAchievements.GetSaveData());
     }
 
     private void LoadSave()
@@ -190,6 +171,11 @@ public class GameManager : MonoBehaviour
         if (!DataManager.LoadData()) { LogError("Load File was unable to be read"); return; }
         
         Log("Save has been loaded");
+    }
+
+    public void ResetStats()
+    {
+        DataManager.ResetData();
     }
 
     private void OnApplicationQuit()

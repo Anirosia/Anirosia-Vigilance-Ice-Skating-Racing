@@ -24,8 +24,6 @@ public class MenuManager : MonoBehaviour
     private bool _musicOn = true;
     private bool _sfxOn = true;
 
-    public bool IsMusicMuted { get { return _musicOn; } }
-    public bool IsSFXMuted { get { return _sfxOn; } }
     #endregion
 
     #region Unity Messages
@@ -48,11 +46,11 @@ public class MenuManager : MonoBehaviour
                 break;
             case GameManager.GameState.inEndlessMode:
                 endlessDistanceText.text = "Dist: " + GameManager.Instance.CurrentDistance;
-                endlessCoinsText.text = "Coins: " + GameManager.Instance.CurrentCoins;
+                //endlessCoinsText.text = "Coins: " + GameManager.Instance.CurrentCoins;
                 break;
             case GameManager.GameState.Results:
                 resultsDistanceText.text = "Dist: " + GameManager.Instance.CurrentDistance;
-                resultsCoinsText.text = "Coins: " + GameManager.Instance.CurrentCoins;
+                //resultsCoinsText.text = "Coins: " + GameManager.Instance.CurrentCoins;
                 break;
             case GameManager.GameState.Dead:
                 break;
@@ -128,19 +126,40 @@ public class MenuManager : MonoBehaviour
     #endregion
 
     #region Menu Locking/Unlocking
-    public void SetMapStats(uint ID, bool isUnlocked, uint bestDistance)
+    public void UpdateMap(uint ID)
     {
-        mapPanels[ID].notUnlockedUI.SetActive(!isUnlocked);
-        mapPanels[ID].bestDistance.text = "Best: " + bestDistance + "M";
+        MapData data = StatsAndAchievements.GetMapData(ID);
+        
+        if (data.ID == uint.MaxValue) { Debug.LogError("Invalid Map Data"); return; }
+
+        mapPanels[ID].notUnlockedUI.SetActive(!data.isUnlocked);
+        mapPanels[ID].bestDistance.text = "Best: " + data.bestDistance + "m";
     }
 
     public void UnlockMap(int index)
     {
-        if (GameManager.Instance.Coins >= GameManager.Instance.costOfLevels[index])
+        if (StatsAndAchievements.Purchase(GameManager.Instance.costOfLevels[index]))
         {
-            GameManager.Instance.Coins -= GameManager.Instance.costOfLevels[index];
-            mapPanels[index].notUnlockedUI.SetActive(false);
+            StatsAndAchievements.UnlockMap(index);
+            UpdateMap((uint)index);
         }
+    }
+    public void UpdateCharacter(uint ID)
+    {
+        MapData data = StatsAndAchievements.GetMapData(ID);
+
+        if (data.ID == uint.MaxValue) { return; }
+
+        mapPanels[ID].notUnlockedUI.SetActive(!data.isUnlocked);
+        mapPanels[ID].bestDistance.text = "Best: " + data.bestDistance + "m";
+    }
+
+    public void UnlockCharacter(int index)
+    {
+        //if(StatsAndAchievements.Purchase(GameManager.Instance.costOfLevels[index]))
+        //{
+        //    mapPanels[index].notUnlockedUI.SetActive(false);
+        //}
     }
 
     #endregion
