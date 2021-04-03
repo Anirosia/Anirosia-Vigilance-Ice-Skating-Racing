@@ -1,11 +1,12 @@
 using UnityEngine;
 using UnityEngine.UI;
+using System.Collections.Generic;
 
 public class MenuManager : MonoBehaviour
 {
     #region  Variables
     public UIPanel[] UIPanels;
-
+    public MapPanel[] mapPanels;
     [Header("Image References")]
     public Sprite audioOnSprite;
     public Sprite audioOffSprite;
@@ -45,11 +46,11 @@ public class MenuManager : MonoBehaviour
                 break;
             case GameManager.GameState.inEndlessMode:
                 endlessDistanceText.text = "Dist: " + GameManager.Instance.CurrentDistance;
-                endlessCoinsText.text = "Coins: " + GameManager.Instance.CurrentCoins;
+                //endlessCoinsText.text = "Coins: " + GameManager.Instance.CurrentCoins;
                 break;
             case GameManager.GameState.Results:
                 resultsDistanceText.text = "Dist: " + GameManager.Instance.CurrentDistance;
-                resultsCoinsText.text = "Coins: " + GameManager.Instance.CurrentCoins;
+                //resultsCoinsText.text = "Coins: " + GameManager.Instance.CurrentCoins;
                 break;
             case GameManager.GameState.Dead:
                 break;
@@ -105,6 +106,61 @@ public class MenuManager : MonoBehaviour
         }
         AudioManager.Instance.MuteTrack(AudioTrackType.SFX, _sfxOn);
     }
+    public void SetAudioSettings(bool isMusicMuted, bool isSFXMuted)
+    {
+        _sfxOn = isSFXMuted;
+        _musicOn = isMusicMuted;
+
+        if (_sfxOn)
+            sfxToggleSprite.sprite = audioOffSprite;
+        else
+            sfxToggleSprite.sprite = audioOnSprite;
+        if (_musicOn)
+            musicToggleSprite.sprite = audioOffSprite;
+        else
+            musicToggleSprite.sprite = audioOnSprite;
+
+        AudioManager.Instance.MuteTrack(AudioTrackType.Music, _musicOn);
+        AudioManager.Instance.MuteTrack(AudioTrackType.SFX, _sfxOn);
+    }
+    #endregion
+
+    #region Menu Locking/Unlocking
+    public void UpdateMap(uint ID)
+    {
+        MapData data = StatsAndAchievements.GetMapData(ID);
+        
+        if (data.ID == uint.MaxValue) { Debug.LogError("Invalid Map Data"); return; }
+
+        mapPanels[ID].notUnlockedUI.SetActive(!data.isUnlocked);
+        mapPanels[ID].bestDistance.text = "Best: " + data.bestDistance + "m";
+    }
+
+    public void UnlockMap(int index)
+    {
+        if (StatsAndAchievements.Purchase(GameManager.Instance.costOfLevels[index]))
+        {
+            StatsAndAchievements.UnlockMap(index);
+            UpdateMap((uint)index);
+        }
+    }
+    public void UpdateCharacter(uint ID)
+    {
+        MapData data = StatsAndAchievements.GetMapData(ID);
+
+        if (data.ID == uint.MaxValue) { return; }
+
+        mapPanels[ID].notUnlockedUI.SetActive(!data.isUnlocked);
+        mapPanels[ID].bestDistance.text = "Best: " + data.bestDistance + "m";
+    }
+
+    public void UnlockCharacter(int index)
+    {
+        //if(StatsAndAchievements.Purchase(GameManager.Instance.costOfLevels[index]))
+        //{
+        //    mapPanels[index].notUnlockedUI.SetActive(false);
+        //}
+    }
     #endregion
 }
 
@@ -116,5 +172,11 @@ public struct UIPanel
     public GameObject uiPanel;
     //The State that the UIPanel will be active for
     public GameManager.GameState stateForUI;
+}
+[System.Serializable]
+public struct MapPanel
+{
+    public GameObject notUnlockedUI;
+    public Text bestDistance;
 }
 #endregion

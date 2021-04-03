@@ -5,6 +5,9 @@ using UnityEngine.SceneManagement;
 
 public class GameManager : MonoBehaviour
 {
+    [Header("Settings")]
+    [SerializeField] private bool debug = false;
+
     public enum GameState { inMenu,inPaused, inEndlessMode, Results, Dead };
     [ReadOnlyInspector] public GameState gameState;
 
@@ -14,13 +17,12 @@ public class GameManager : MonoBehaviour
     
     [Header("Level References")]
     public string[] levelNames;
+    public int[] costOfLevels;
 
     private bool scenesHaveBeenPreloaded = false;
     private bool loadEndlessScene = false;
 
     private int _currentDistance = 0;
-    private int _currentCoins = 0;
-    private int _totalCoins = 0;
 
     private int _currentLevel = 0;
 
@@ -31,8 +33,6 @@ public class GameManager : MonoBehaviour
     #region Mutators
     public int CurrentDiffucultyIndex { get { return _currentLevel; } }
     public string CurrentLevelFolderName { get { return levelNames[_currentLevel]; } }
-    public int AllCoins { get { return _totalCoins; } }
-    public int CurrentCoins { get { return _currentCoins; } }
     public int CurrentDistance { get { return _currentDistance; } set { _currentDistance = value; } }
     #endregion
 
@@ -61,6 +61,8 @@ public class GameManager : MonoBehaviour
         ChangeGameState(GameState.inMenu);
         
         ObjectPool.Instance.InitializePool();
+        
+        LoadSave();
     }
 
     private void OnEnable()
@@ -146,17 +148,56 @@ public class GameManager : MonoBehaviour
         OnGameStateChanged?.Invoke();
     }
 
-    public void loadScene(int i) // TEMP - playtesting {ZB}
-    {
-        SceneManager.LoadScene(i);
-    }
-
     #endregion
 
     #region Game Events
     public void OnCoinCollected()
     {
-        _currentCoins++;
+        StatsAndAchievements.Coins++;
+    }
+    #endregion
+
+    #region Saving and Loading
+    public void Save()
+    {
+        DataManager.SaveData(StatsAndAchievements.GetSaveData());
+    }
+
+    private void LoadSave()
+    {
+        if (!DataManager.LoadData()) { LogError("Load File was unable to be read"); return; }
+        
+        Log("Save has been loaded");
+    }
+
+    /// <summary>
+    /// Permanently Deletes Save Files
+    /// </summary>
+    public void ResetSave()
+    {
+        DataManager.ResetData();
+    }
+
+    private void OnApplicationQuit()
+    {
+        Save();
+    }
+    #endregion
+
+    #region Logging Functions
+    private void Log(string msg)
+    {
+        if (!debug) return;
+
+        Debug.Log("[GAMEMANAGER]: " + msg);
+    }
+    private void LogWarning(string msg)
+    {
+        Debug.LogWarning("[GAMEMANAGER]: " + msg);
+    }
+    private void LogError(string msg)
+    {
+        Debug.LogError("[GAMEMANAGER]: " + msg);
     }
     #endregion
 }
