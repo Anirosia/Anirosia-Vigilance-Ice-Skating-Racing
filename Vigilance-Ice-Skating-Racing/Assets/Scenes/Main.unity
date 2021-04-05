@@ -124,12 +124,6 @@ NavMeshSettings:
     debug:
       m_Flags: 0
   m_NavMeshData: {fileID: 0}
---- !u!82 &258777422 stripped
-AudioSource:
-  m_CorrespondingSourceObject: {fileID: 686476530, guid: 11d76109c67ea544aa0c2619dec39e30,
-    type: 3}
-  m_PrefabInstance: {fileID: 4450797512970284718}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1 &368275990
 GameObject:
   m_ObjectHideFlags: 0
@@ -213,18 +207,6 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!82 &670340133 stripped
-AudioSource:
-  m_CorrespondingSourceObject: {fileID: 1944075235, guid: 11d76109c67ea544aa0c2619dec39e30,
-    type: 3}
-  m_PrefabInstance: {fileID: 4450797512970284718}
-  m_PrefabAsset: {fileID: 0}
---- !u!82 &1023880513 stripped
-AudioSource:
-  m_CorrespondingSourceObject: {fileID: 1638102940, guid: 11d76109c67ea544aa0c2619dec39e30,
-    type: 3}
-  m_PrefabInstance: {fileID: 4450797512970284718}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1054933133
 GameObject:
   m_ObjectHideFlags: 0
@@ -291,12 +273,6 @@ MonoBehaviour:
     listIndex: 0
     amountOfLevels: 0
     amountOfLoadedLevels: 0
---- !u!82 &1707648310 stripped
-AudioSource:
-  m_CorrespondingSourceObject: {fileID: 1176942650, guid: 11d76109c67ea544aa0c2619dec39e30,
-    type: 3}
-  m_PrefabInstance: {fileID: 4450797512970284718}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1959670423 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 8542352957115569631, guid: 11d76109c67ea544aa0c2619dec39e30,
@@ -309,52 +285,12 @@ MonoBehaviour:
     type: 3}
   m_PrefabInstance: {fileID: 4450797512970284718}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2053624338}
+  m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: e025245f771bcd246b33eebae8e026f2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!1 &2053624338 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 4450797513439504099, guid: 11d76109c67ea544aa0c2619dec39e30,
-    type: 3}
-  m_PrefabInstance: {fileID: 4450797512970284718}
-  m_PrefabAsset: {fileID: 0}
---- !u!114 &2053624339
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2053624338}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: fee04812e3886fb498cd75903ad03017, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  debug: 0
-  tracks:
-  - source: {fileID: 1707648310}
-    audio:
-    - type: 1
-      clip: {fileID: 8300000, guid: 4d50b4d8ba4bcff4fa91c526e1c73642, type: 3}
-    - type: 2
-      clip: {fileID: 8300000, guid: 867c5ee2024137249b0af46fa9f935a2, type: 3}
-    trackType: 1
-  - source: {fileID: 258777422}
-    audio:
-    - type: 7
-      clip: {fileID: 8300000, guid: 3f2e3558a40c6b64182d73bd765c3d81, type: 3}
-    trackType: 0
-  - source: {fileID: 1023880513}
-    audio:
-    - type: 3
-      clip: {fileID: 8300000, guid: 6d933e9512af5994d94bfec055605dc4, type: 3}
-    trackType: 0
-  - source: {fileID: 670340133}
-    audio: []
-    trackType: 2
 --- !u!1001 &4450797512970284718
 PrefabInstance:
   m_ObjectHideFlags: 0

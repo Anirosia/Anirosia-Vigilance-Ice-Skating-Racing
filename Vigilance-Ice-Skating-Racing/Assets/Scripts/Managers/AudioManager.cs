@@ -243,6 +243,7 @@ public enum AudioTypes
     None,
     TRACK_MENU,
     TRACK_GAME,
+    SFX_MENU,
     SFX_SKATE,
     SFX_JUMP,
     SFX_SLIDE,
