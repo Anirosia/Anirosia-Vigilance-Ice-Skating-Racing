@@ -1,16 +1,11 @@
-using System;
 using System.Collections;
-using System.Net.Http.Headers;
 using DefaultNamespace;
-using TMPro;
-using Unity.Collections;
 using Unity.Mathematics;
 using UnityEngine;
-using Vector2 = UnityEngine.Vector2;
 
 namespace Gameplay
 {
-	[RequireComponent(typeof(Rigidbody2D))]
+	[RequireComponent(typeof(Rigidbody2D)), RequireComponent(typeof(InputHandler))]
 	public class CharacterController : MonoBehaviour
 	{
 		#region Fields
@@ -23,10 +18,12 @@ namespace Gameplay
 		[ReadOnlyInspector] [SerializeField] private bool isHeld;
 		[ReadOnlyInspector] [SerializeField] private bool isDragged;
 
-		private Touch touch;
-		private Vector2 startTouchPos;
-		private Vector2 touchDelta;
-		private double deadZone = 125;
+		// private Touch touch;
+		// private Vector2 startTouchPos;
+		// private Vector2 touchDelta;
+		// private double deadZone = 125;
+
+		private InputHandler playerInput;
 
 		[Header("Base Values")] [SerializeField]
 		private float baseSpeed;
@@ -62,6 +59,7 @@ namespace Gameplay
 		#endregion
 
 		private void Awake() {
+			playerInput = GetComponent<InputHandler>();
 			rb = GetComponent<Rigidbody2D>();
 			col2D = GetComponent<CapsuleCollider2D>();
 			if (cameraFollow == null) cameraFollow = FindObjectOfType<CameraFollow>();
@@ -85,60 +83,17 @@ namespace Gameplay
 		}
 
 		void UserInput() {
-			if (Input.touchCount > 0) {
-				touch = Input.GetTouch(0);
-
-				if (!isHeld) currentHoldTime += Time.deltaTime;
-
-				if (touch.phase == TouchPhase.Began) {
-					startTouchPos = touch.position;
-					isPressed = true;
-				}
-
-				if (touch.phase == TouchPhase.Moved && isPressed) {
-					touchDelta = touch.position - startTouchPos;
-					isDragged = true;
-					if (touchDelta.magnitude > deadZone) {
-						var x = touchDelta.x;
-						var y = touchDelta.y;
-
-						if (Mathf.Abs(x) < Mathf.Abs(y)) {
-							if (y > 0) {
-								Debug.Log("Swipe Up");
-								if (isGrounded()) Jump();
-								isPressed = false;
-							}
-							else {
-								Debug.Log("Swipe Down");
-								if (!isSliding) StartCoroutine(Slide());
-								isPressed = false;
-							}
-						}
-					}
-					else Debug.Log("tap");
-				}
-
-				if (touch.phase == TouchPhase.Stationary && currentHoldTime > holdTime && !isDragged) {
-					Debug.Log("Hold");
-					Focus();
-					//tuck down method 
-				}
-
-				if (touch.phase == TouchPhase.Ended) {
-					if (isHeld) cameraFollow.StartCoroutine(cameraFollow.CameraZoomReset());
-					TouchReset();
-					ValueReset();
-				}
+			if (playerInput.SwipeUp) {
+				if (isGrounded()) Jump();
 			}
-		}
 
-		private void TouchReset() {
-			currentHoldTime = 0;
-			isDragged = false;
-			isPressed = false;
-			isHeld = false;
+			if (playerInput.Holding) {
+				Focus();
+			}
 
-			// StartCoroutine(CameraZoomOut());
+			if (playerInput.SwipeDown) {
+				Slide();
+			}
 		}
 
 		private void BaseReset() {
@@ -147,7 +102,6 @@ namespace Gameplay
 			maxJump = baseJumpMultiplier;
 			rb.gravityScale = fallMultiplier;
 		}
-
 		private void ValueReset() {
 			maxSpeed = speedHolder;
 			// maxJump = jumpHolder;
