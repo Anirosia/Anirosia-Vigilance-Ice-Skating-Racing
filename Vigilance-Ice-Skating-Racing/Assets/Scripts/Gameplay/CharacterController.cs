@@ -75,16 +75,16 @@ namespace Gameplay
 		void Update() {
 			RelativeToGround();
 			UserInput();
-			cameraFollow.CameraWork(isGrounded());
+			cameraFollow.CameraWork(IsGrounded());
 		}
 
 		private void FixedUpdate() {
-			ApplyMovement();
+			// ApplyMovement();
 		}
 
 		void UserInput() {
 			if (playerInput.SwipeUp) {
-				if (isGrounded()) Jump();
+				if (IsGrounded()) Jump();
 			}
 
 			if (playerInput.Holding) {
@@ -107,7 +107,7 @@ namespace Gameplay
 			// maxJump = jumpHolder;
 		}
 
-		private bool isGrounded() =>
+		private bool IsGrounded() =>
 			Physics2D.BoxCast(col2D.bounds.center, col2D.bounds.size, 0f, Vector2.down, 0.01f, layer);
 
 		private void RelativeToGround() {
@@ -119,8 +119,8 @@ namespace Gameplay
 			hit = (Physics2D.Raycast(origin, dir, dist, layer));
 			groundNormal = hit.normal;
 			Quaternion groundRotation = Quaternion.FromToRotation(transform.up, groundNormal) * transform.rotation;
-			if (isGrounded()) transform.rotation = groundRotation;
-			else if (!isGrounded() && hit) {
+			if (IsGrounded()) transform.rotation = groundRotation;
+			else if (!IsGrounded() && hit) {
 				targetRotation = Quaternion.Slerp(transform.rotation, groundRotation, Time.deltaTime * 2f);
 				transform.rotation = targetRotation;
 			}
@@ -158,7 +158,6 @@ namespace Gameplay
 			rb.gravityScale = fallMultiplier;
 			Debug.Log("Jumped");
 			rb.velocity = new Vector2(rb.velocity.x, maxJump);
-			// rb.velocity = Vector2.up * jumpMultiplier;
 		}
 
 		private void Focus() {
@@ -195,7 +194,7 @@ namespace Gameplay
 		private IEnumerator Slide() {
 			var size = col2D.size;
 			col2D.size = new Vector2(size.x, size.y / 2);
-			if (!isGrounded()) rb.gravityScale *= 2;
+			if (!IsGrounded()) rb.gravityScale *= 2;
 			isSliding = true;
 			yield return new WaitForSeconds(1.5f);
 			isSliding = false;

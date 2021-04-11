@@ -26,12 +26,11 @@ namespace Gameplay
 
 		#endregion
 
-		#region Propertys
+		#region Properties
 
 		public bool SwipeUp => swipeUp;
 		public bool SwipeDown => swipeDown;
 		public bool Holding => holding;
-
 		public bool Dragging => dragging;
 
 		#endregion
@@ -85,6 +84,7 @@ namespace Gameplay
 						}
 						else {
 							//low jump
+							
 							debugColor = Color.white;
 						}
 
