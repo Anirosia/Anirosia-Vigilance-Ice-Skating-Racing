@@ -10,19 +10,7 @@ namespace Gameplay
 	{
 		#region Fields
 
-		[Header("Touch Information")] [SerializeField]
-		private double holdTime;
-
-		[ReadOnlyInspector] [SerializeField] private double currentHoldTime;
-		[ReadOnlyInspector] [SerializeField] private bool isPressed;
-		[ReadOnlyInspector] [SerializeField] private bool isHeld;
-		[ReadOnlyInspector] [SerializeField] private bool isDragged;
-
-		// private Touch touch;
-		// private Vector2 startTouchPos;
-		// private Vector2 touchDelta;
-		// private double deadZone = 125;
-
+	
 		private InputHandler playerInput;
 
 		[Header("Base Values")] [SerializeField]
@@ -47,6 +35,7 @@ namespace Gameplay
 		[ReadOnlyInspector] public float maxSpeed;
 		[ReadOnlyInspector] public float maxJump;
 
+		[ReadOnlyInspector] [SerializeField] private bool canFocus;
 		//for value reset
 		private float speedHolder;
 		private bool focusActionReset;
@@ -102,6 +91,7 @@ namespace Gameplay
 			maxJump = baseJumpMultiplier;
 			rb.gravityScale = fallMultiplier;
 		}
+
 		private void ValueReset() {
 			maxSpeed = speedHolder;
 			// maxJump = jumpHolder;
@@ -166,18 +156,18 @@ namespace Gameplay
 			if (angle > 180) angle -= 360;
 			Debug.Log($"Player angle {angle}");
 			if (angle < slopeAngle) {
-				if (!isHeld) {
+				if (!canFocus) {
 					speedHolder = maxSpeed;
 					speedIncrease += slopeSpeedIncrease;
 					cameraFollow.StopAllCoroutines();
 					cameraFollow.StartCoroutine(cameraFollow.CameraZoomIn(xOffset: 2, camLock: true));
 					maxSpeed = speedIncrease;
-					isHeld = true;
+					canFocus = true;
 					focusActionReset = false;
 				}
 			}
 			else {
-				if (isHeld && !focusActionReset) {
+				if (canFocus && !focusActionReset) {
 					if (maxSpeed <= speedHolder || maxSpeed >= speedHolder) {
 						Debug.Log($"Focus Reset");
 						cameraFollow.StartCoroutine(cameraFollow.CameraZoomReset());
