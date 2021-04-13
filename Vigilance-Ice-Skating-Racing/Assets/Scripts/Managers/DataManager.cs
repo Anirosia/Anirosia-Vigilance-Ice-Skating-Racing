@@ -8,8 +8,9 @@ public class DataManager
     private const string statsFilePath = "/stats.txt";
     private const string settingsFilePath = "/settings.txt";
 
-    public static void SaveData(SaveData data)
+    public static void SaveData()
     {
+        SaveData data = StatsAndAchievements.GetSaveData();
         WriteToFile(mapsFilePath, data.mapInfo);
         WriteToFile(charactersFilePath, data.characterInfo);
         WriteToFile(statsFilePath, data.statsInfo);
@@ -29,6 +30,14 @@ public class DataManager
         {
             File.Delete(Application.persistentDataPath + filePath);
         }
+    }
+    private static void WriteToFile(string filePath, string stringToWrite)
+    {
+        StreamWriter sw = new StreamWriter(Application.persistentDataPath + filePath, false);
+
+        sw.Write(stringToWrite);
+
+        sw.Close();
     }
     public static bool LoadData()
     {
@@ -79,15 +88,6 @@ public class DataManager
         }
 
         return true;
-    }
-
-    private static void WriteToFile(string filePath, string stringToWrite)
-    {
-        StreamWriter sw = new StreamWriter(Application.persistentDataPath + filePath, false);
-
-        sw.Write(stringToWrite);
-
-        sw.Close();
     }
 
     private static void InitializeMap()

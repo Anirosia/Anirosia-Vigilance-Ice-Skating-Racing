@@ -47,7 +47,7 @@ public class StatsAndAchievements
             var tempData = GetMapData(i);
             tempMapData[i] = new MapData(tempData);
         }
-
+        
         CharacterData[] tempCharacterData = new CharacterData[characterData.Count];
 
         for (uint i = 0; i < characterData.Count; i++)

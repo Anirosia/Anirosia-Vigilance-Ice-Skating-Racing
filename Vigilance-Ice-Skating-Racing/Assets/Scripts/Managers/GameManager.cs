@@ -160,7 +160,7 @@ public class GameManager : MonoBehaviour
     #region Saving and Loading
     public void Save()
     {
-        DataManager.SaveData(StatsAndAchievements.GetSaveData());
+        DataManager.SaveData();
     }
 
     private void LoadSave()

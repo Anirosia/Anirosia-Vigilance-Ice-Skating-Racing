@@ -138,7 +138,7 @@ public class MenuManager : MonoBehaviour
 
     public void UnlockMap(int index)
     {
-        if (StatsAndAchievements.Purchase(GameManager.Instance.costOfLevels[index]))
+        if (StatsAndAchievements.Purchase(purchasePrice: GameManager.Instance.costOfLevels[index]))
         {
             StatsAndAchievements.UnlockMap(index);
             UpdateMap((uint)index);
