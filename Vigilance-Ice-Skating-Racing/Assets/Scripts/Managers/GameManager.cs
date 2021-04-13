@@ -5,13 +5,12 @@ using UnityEngine.SceneManagement;
 
 public class GameManager : MonoBehaviour
 {
+    #region Variables
     [Header("Settings")]
     [SerializeField] private bool debug = false;
-
     public enum GameState { inMenu,inPaused, inEndlessMode, Results, Dead };
     [ReadOnlyInspector] public GameState gameState;
-
-    #region Variables
+    
     [Header("Script References")]
     public MenuManager menuManager;    
     

@@ -76,6 +76,7 @@ public class MenuManager : MonoBehaviour
     #endregion
 
     #region Audio
+    public void PlayMenuSound() => AudioManager.Instance.PlayAudio(AudioTypes.SFX_MENU);
     public void MusicToggle()
     {
         if (_musicOn) // turn music off and switch sprite
