@@ -3807,18 +3807,6 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 1
         m_CallState: 2
-      - m_Target: {fileID: 4450797512316779037}
-        m_TargetAssemblyTypeName: MenuManager, Assembly-CSharp
-        m_MethodName: PlayMenuSound
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 1
-        m_CallState: 2
 --- !u!1 &4450797512802438777
 GameObject:
   m_ObjectHideFlags: 0
@@ -4452,7 +4440,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4450797513439504097}
   - component: {fileID: 4450797513439504096}
-  - component: {fileID: 2986376670591419265}
+  - component: {fileID: 2053624339}
   m_Layer: 0
   m_Name: GameManager
   m_TagString: Untagged
@@ -4493,11 +4481,11 @@ MonoBehaviour:
   gameState: 0
   menuManager: {fileID: 4450797512316779037}
   levelNames:
-  - LevelOne
+  - LevelOneNew
   - LevelTwo
   - LevelThree
   costOfLevels: 00000000010000000a000000
---- !u!114 &2986376670591419265
+--- !u!114 &2053624339
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -7449,7 +7437,7 @@ RectTransform:
   - {fileID: 6744330045695167863}
   - {fileID: 3445967466984253948}
   m_Father: {fileID: 4450797513073588362}
-  m_RootOrder: 4
+  m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
