@@ -6,12 +6,9 @@ using UnityEngine;
 namespace Gameplay
 {
 	[RequireComponent(typeof(Rigidbody2D)), RequireComponent(typeof(InputHandler))]
-	public class CharacterController : MonoBehaviour
+	public class PlayerController : MonoBehaviour
 	{
 		#region Fields
-
-	
-		private InputHandler playerInput;
 
 		[Header("Base Values")] [SerializeField]
 		private float baseSpeed;
@@ -24,6 +21,7 @@ namespace Gameplay
 		[SerializeField] private LayerMask layer;
 		[SerializeField] private float timeZeroToMax;
 		[SerializeField] private float timeMaxToZero;
+
 		private float forwardVelocity;
 		private float accelerationRatePerSec;
 		private bool isSliding;
@@ -34,14 +32,18 @@ namespace Gameplay
 
 		[ReadOnlyInspector] public float maxSpeed;
 		[ReadOnlyInspector] public float maxJump;
-
 		[ReadOnlyInspector] [SerializeField] private bool canFocus;
-		//for value reset
+
+		[Header("Script References")] [ReadOnlyInspector] [SerializeField]
+		private InputHandler playerInput;
+
+		[ReadOnlyInspector] [SerializeField] private CameraFollow cameraFollow;
+
+		// ======================================================================== for value reset
 		private float speedHolder;
 		private bool focusActionReset;
 		private Vector2 colliderOriginalHeight;
 
-		[SerializeField] private CameraFollow cameraFollow;
 		private CapsuleCollider2D col2D;
 		private Vector2 groundNormal;
 
@@ -49,12 +51,14 @@ namespace Gameplay
 
 		private void Awake() {
 			playerInput = GetComponent<InputHandler>();
+			
 			rb = GetComponent<Rigidbody2D>();
 			col2D = GetComponent<CapsuleCollider2D>();
 			if (cameraFollow == null) cameraFollow = FindObjectOfType<CameraFollow>();
 		}
 
 		private void Start() {
+			playerInput.Cam = cameraFollow.viewCamera;
 			focusActionReset = false;
 			accelerationRatePerSec = baseSpeed / timeZeroToMax;
 			colliderOriginalHeight = col2D.size;
@@ -74,6 +78,7 @@ namespace Gameplay
 		void UserInput() {
 			if (playerInput.SwipeUp) {
 				if (IsGrounded()) Jump();
+				playerInput.HasPerformed = true;
 			}
 
 			if (playerInput.Holding) {
@@ -81,7 +86,8 @@ namespace Gameplay
 			}
 
 			if (playerInput.SwipeDown) {
-				Slide();
+				StartCoroutine(Slide());
+				playerInput.HasPerformed = true;
 			}
 		}
 

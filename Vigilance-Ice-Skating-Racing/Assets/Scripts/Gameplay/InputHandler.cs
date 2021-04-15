@@ -1,8 +1,11 @@
 ﻿using System;
+using System.Collections;
+using System.Linq;
 using DefaultNamespace;
 using Unity.Mathematics;
 using UnityEditor;
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 namespace Gameplay
 {
@@ -11,12 +14,15 @@ namespace Gameplay
 		#region Fields
 
 		[Header("Touch Information ")] private Vector2 startTouchPos;
-		private Vector2 touchPosition;
+		private Vector2 screenTouchPosition;
 		private Vector2 touchDelta;
 		private double deadZone = 125;
-		private bool swipeUp, swipeDown, holding, dragging;
+		[ReadOnlyInspector] [SerializeField] private bool swipeUp, swipeDown, holding, dragging, isPressed;
 		private GameObject trailRef;
 		private Color debugColor;
+
+		private PlayerActions playerActions;
+		private SwipeDirections swipeDirections;
 
 		[SerializeField] private float swipeHeight = 475f;
 		[SerializeField] private double holdTime;
@@ -32,46 +38,51 @@ namespace Gameplay
 		public bool SwipeDown => swipeDown;
 		public bool Holding => holding;
 		public bool Dragging => dragging;
+		public bool HasPerformed { get; set; }
+
+		public Camera Cam {
+			set => cam = value;
+		}
 
 		#endregion
 
-		private void Update() {
-			if (Input.touchCount > 0)
-				TouchResponse(Input.GetTouch(0));
+		#region Start Up
+
+		private void Awake() => ActionSetUp();
+		private void OnEnable() => playerActions.Enable();
+		private void OnDisable() => playerActions.Disable();
+
+
+		private void ActionSetUp() {
+			playerActions = new PlayerActions();
+			playerActions.Gameplay.PrimaryContact.started += context => OnTouchBegan();
+			playerActions.Gameplay.PrimaryContact.canceled += context => OnTouchEnded();
 		}
 
-		private void TouchResponse(Touch currentTouch) {
-			touchPosition = cam.ScreenToWorldPoint(currentTouch.position);
-			if (!dragging) currentHoldTime += Time.deltaTime;
-			if (currentTouch.phase == TouchPhase.Began) {
-				startTouchPos = currentTouch.position;
-				trailRef = Instantiate(trailObject, touchPosition,
+		#endregion
+
+		#region Touch
+
+		private Vector2 TouchPosition() => playerActions.Gameplay.PrimaryPosition.ReadValue<Vector2>();
+
+		//shortcut for point conversion 
+		private Vector2 ScreenPointConvert(Vector3 position) => cam.ScreenToWorldPoint(position);
+
+		void OnTouchBegan() {
+			startTouchPos = TouchPosition();
+			if (trailRef != null)
+				trailRef = Instantiate(trailObject, startTouchPos,
 					quaternion.identity);
-				debugColor = Color.white;
-				// Debug.Log(touchPosition);
-				// Debug.Log("Touch Began");
-			}
+			StartCoroutine(TouchResponseUpdate());
+			Debug.Log($"Touch Began {startTouchPos}");
+		}
 
-			if (currentTouch.phase == TouchPhase.Moved) {
-				trailRef.transform.position = touchPosition;
-
-				touchDelta = currentTouch.position - startTouchPos;
-
-				if (touchDelta.magnitude > deadZone) {
-					dragging = true;
-					DetermineSwipe(touchDelta);
-				}
-				else debugColor = Color.red;
-			}
-
-			holding = (currentTouch.phase == TouchPhase.Stationary && currentHoldTime >= holdTime && !dragging);
-
-			if (currentTouch.phase == TouchPhase.Ended) {
-				Destroy(trailRef);
-				TouchReset();
-			}
-
-			Debug.DrawLine(cam.ScreenToWorldPoint(startTouchPos), touchPosition, debugColor);
+		private void OnTouchEnded() {
+			StopAllCoroutines();
+			if (trailRef != null) Destroy(trailRef);
+			SwipeValue();
+			StartCoroutine(Released());
+			Debug.Log("Touch Ended");
 		}
 
 		private void DetermineSwipe(Vector2 swipeDelta) {
@@ -84,23 +95,35 @@ namespace Gameplay
 						}
 						else {
 							//low jump
-							
+
 							debugColor = Color.white;
 						}
 
-						swipeUp = true;
+						swipeDirections = SwipeDirections.Up;
 						// Debug.Log($"Swiped Up");
 					}
 					else {
-						swipeDown = true;
+						swipeDirections = SwipeDirections.Down;
 						// Debug.Log($"Swiped Down");
 					}
 				}
 			}
 		}
 
+		private void SwipeValue() {
+			switch (swipeDirections) {
+				case SwipeDirections.Up:
+					swipeUp = true;
+					break;
+				case SwipeDirections.Down:
+					swipeDown = true;
+					break;
+			}
+		}
+
 
 		private void TouchReset() {
+			HasPerformed = false;
 			currentHoldTime = 0;
 			dragging = false;
 			holding = false;
@@ -108,5 +131,52 @@ namespace Gameplay
 			swipeDown = false;
 			// Debug.Log("Touch Reset");
 		}
+
+		#endregion
+
+		#region Coroutines
+
+		private IEnumerator Released() {
+			if (HasPerformed) TouchReset();
+			else {
+				yield return null; //waits an extra frame 
+				TouchReset();
+			}
+		}
+
+		private IEnumerator TouchResponseUpdate() {
+			while (true) {
+				screenTouchPosition = ScreenPointConvert(TouchPosition());
+
+				currentHoldTime += Time.deltaTime;
+
+				if (trailRef != null) trailRef.transform.position = screenTouchPosition;
+
+				holding = (currentHoldTime >= holdTime && !dragging);
+
+				touchDelta = TouchPosition() - startTouchPos;
+				if (touchDelta.magnitude > deadZone) {
+					dragging = true;
+					DetermineSwipe(touchDelta);
+				}
+				else {
+					swipeDirections = SwipeDirections.Press;
+					debugColor = Color.red;
+				}
+
+
+				Debug.DrawLine(ScreenPointConvert(startTouchPos), screenTouchPosition, debugColor);
+				yield return null; //to make it execute once per frame
+			}
+		}
+
+		#endregion
+	}
+
+	enum SwipeDirections
+	{
+		Up,
+		Down,
+		Press,
 	}
 }

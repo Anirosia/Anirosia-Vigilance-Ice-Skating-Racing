@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Collections;
+using Gameplay;
 using UnityEditor;
 using UnityEngine;
-using CharacterController = Gameplay.CharacterController;
 
 namespace DefaultNamespace
 {
@@ -32,7 +32,7 @@ namespace DefaultNamespace
 
 		#region Power Up Calling management
 
-		private CharacterController playersMovementRef;
+		private PlayerController playersMovementRef;
 
 		public enum Abilities
 		{
@@ -43,7 +43,7 @@ namespace DefaultNamespace
 
 		public void GetPowerUp(Abilities type, int typeEffect, Collider2D playerCollider) {
 			var playerObject = playerCollider.gameObject;
-			playersMovementRef = playerObject.GetComponent<CharacterController>();
+			playersMovementRef = playerObject.GetComponent<PlayerController>();
 			switch (type) {
 				case Abilities.Catnip:
 					Catnip(playerObject, typeEffect);
