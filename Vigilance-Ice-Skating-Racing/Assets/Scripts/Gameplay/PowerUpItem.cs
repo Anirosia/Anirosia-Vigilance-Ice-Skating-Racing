@@ -1,4 +1,5 @@
 ﻿using DefaultNamespace;
+using Managers;
 using UnityEngine;
 
 namespace Gameplay
@@ -11,7 +12,7 @@ namespace Gameplay
 		private void OnTriggerEnter2D(Collider2D other) {
 			PowerUpManager.PowerUp.GetPowerUp(ability, abilityEffect, other);
 			Debug.Log("Triggered");
-			Destroy(this);
+			gameObject.SetActive(false);
 		}
 			
 	}

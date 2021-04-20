@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using DefaultNamespace;
 using Unity.Mathematics;
@@ -68,11 +69,14 @@ namespace Gameplay
 		void Update() {
 			RelativeToGround();
 			UserInput();
-			cameraFollow.CameraWork(IsGrounded());
 		}
 
 		private void FixedUpdate() {
-			// ApplyMovement();
+			ApplyMovement();
+		}
+
+		private void LateUpdate() {
+			cameraFollow.CameraWork(IsGrounded());
 		}
 
 		void UserInput() {
@@ -80,11 +84,7 @@ namespace Gameplay
 				if (IsGrounded()) Jump();
 				playerInput.HasPerformed = true;
 			}
-
-			if (playerInput.Holding) {
-				Focus();
-			}
-
+				Focus(playerInput.Holding);
 			if (playerInput.SwipeDown) {
 				StartCoroutine(Slide());
 				playerInput.HasPerformed = true;
@@ -156,12 +156,12 @@ namespace Gameplay
 			rb.velocity = new Vector2(rb.velocity.x, maxJump);
 		}
 
-		private void Focus() {
+		private void Focus(bool inputValue) {
 			float speedIncrease = maxSpeed;
 			var angle = transform.eulerAngles.z;
 			if (angle > 180) angle -= 360;
 			Debug.Log($"Player angle {angle}");
-			if (angle < slopeAngle) {
+			if (angle < slopeAngle && inputValue) {
 				if (!canFocus) {
 					speedHolder = maxSpeed;
 					speedIncrease += slopeSpeedIncrease;
@@ -179,7 +179,6 @@ namespace Gameplay
 						cameraFollow.StartCoroutine(cameraFollow.CameraZoomReset());
 						maxSpeed = speedHolder;
 					}
-
 					focusActionReset = true;
 				}
 			}

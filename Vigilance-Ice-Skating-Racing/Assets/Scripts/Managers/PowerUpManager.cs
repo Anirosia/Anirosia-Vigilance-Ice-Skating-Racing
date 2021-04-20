@@ -1,10 +1,9 @@
 ﻿using System;
 using System.Collections;
 using Gameplay;
-using UnityEditor;
 using UnityEngine;
 
-namespace DefaultNamespace
+namespace Managers
 {
 	public class PowerUpManager : MonoBehaviour
 	{
@@ -61,7 +60,6 @@ namespace DefaultNamespace
 
 		#endregion
 
-
 		#region Power Ups
 
 		public void Catnip(GameObject playerType, int effect) {
@@ -84,12 +82,9 @@ namespace DefaultNamespace
 				playersMovementRef.maxSpeed = temp;
 			}
 		}
-
-		#endregion
-
-
-		IEnumerator EffectTimeLimit(int limit) {
+IEnumerator EffectTimeLimit(int limit) {
 			yield return new WaitForSeconds(limit);
 		}
+		#endregion
 	}
 }

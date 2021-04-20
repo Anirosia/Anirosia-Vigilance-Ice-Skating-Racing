@@ -89,16 +89,15 @@ namespace Gameplay
 			if (swipeDelta.magnitude > deadZone) {
 				if (Mathf.Abs(swipeDelta.x) < Mathf.Abs(swipeDelta.y)) {
 					if (swipeDelta.y > deadZone) {
-						if (swipeDelta.y > swipeHeight) {
-							//high jump
-							debugColor = Color.green;
-						}
-						else {
-							//low jump
-
-							debugColor = Color.white;
-						}
-
+						// if (swipeDelta.y > swipeHeight) {
+						// 	//high jump
+						// 	debugColor = Color.green;
+						// }
+						// else {
+						// 	//low jump
+						//
+						// 	debugColor = Color.white;
+						// }
 						swipeDirections = SwipeDirections.Up;
 						// Debug.Log($"Swiped Up");
 					}

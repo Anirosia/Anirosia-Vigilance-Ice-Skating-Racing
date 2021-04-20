@@ -3,200 +3,225 @@ using DefaultNamespace;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
-public class GameManager : MonoBehaviour
+namespace Managers
 {
-    #region Variables
-    [Header("Settings")]
-    [SerializeField] private bool debug = false;
-    public enum GameState { inMenu,inPaused, inEndlessMode, Results, Dead };
-    [ReadOnlyInspector] public GameState gameState;
-    
-    [Header("Script References")]
-    public MenuManager menuManager;    
-    
-    [Header("Level References")]
-    public string[] levelNames;
-    public int[] costOfLevels;
+	public class GameManager : MonoBehaviour
+	{
+		#region Variables
 
-    private bool scenesHaveBeenPreloaded = false;
-    private bool loadEndlessScene = false;
+		[Header("Settings")] [SerializeField] private bool debug = false;
 
-    private int _currentDistance = 0;
+		public enum GameState
+		{
+			inMenu,
+			inPaused,
+			inEndlessMode,
+			Results,
+			Dead
+		};
 
-    private int _currentLevel = 0;
+		[ReadOnlyInspector] public GameState gameState;
 
-    public static event Action OnGameStateChanged;
+		[Header("Script References")] public MenuManager menuManager;
 
-    #endregion
+		[Header("Level References")] public string[] levelNames;
+		public int[] costOfLevels;
 
-    #region Mutators
-    public int CurrentDiffucultyIndex { get { return _currentLevel; } }
-    public string CurrentLevelFolderName { get { return levelNames[_currentLevel]; } }
-    public int CurrentDistance { get { return _currentDistance; } set { _currentDistance = value; } }
-    #endregion
+		private bool scenesHaveBeenPreloaded = false;
+		private bool loadEndlessScene = false;
 
-    #region Singleton
-    //Singleton Instantiation
-    public static GameManager Instance { get; private set; }
+		private int _currentDistance = 0;
 
-    private void Awake()
-    {
-        if (Instance != null && Instance != this)
-            Destroy(this.gameObject);
-        else
-            Instance = this;
+		private int _currentLevel = 0;
 
-        DontDestroyOnLoad(this);
-    }
-    #endregion
+		public static event Action OnGameStateChanged;
 
-    #region Unity Messages
-    void Start()
-    {
-        //Application Settings
-        Application.targetFrameRate = 60;
-        // QualitySettings.vSyncCount = 1;
-        // When Game starts load the menu:
-        ChangeGameState(GameState.inMenu);
-        
-        ObjectPool.Instance.InitializePool();
-        
-        LoadSave();
-    }
+		#endregion
 
-    private void OnEnable()
-    {
-        OnGameStateChanged += OnStateChanged;
-    }
+		#region Mutators
 
-    private void OnDisable()
-    {
-        OnGameStateChanged -= OnStateChanged;
-    }
-    void Update()
-    {
-        GameStateManager();
-    }
-    #endregion
+		public int CurrentDiffucultyIndex {
+			get { return _currentLevel; }
+		}
 
-    #region Update
-    void GameStateManager() // Use these states to determine the actions of other scripts based on where the player/user is in the game.
-    {
-        switch (gameState)
-        {
-            case GameState.inMenu:
+		public string CurrentLevelFolderName {
+			get { return levelNames[_currentLevel]; }
+		}
 
-                break;
-            case GameState.inPaused:
+		public int CurrentDistance {
+			get { return _currentDistance; }
+			set { _currentDistance = value; }
+		}
 
-                break;
-            case GameState.inEndlessMode:
-                
-                break;
-            case GameState.Dead:
-                OnDeath();
-                break;
-            case GameState.Results:
-                
-                break;
-        }
-    }
-    #endregion
+		#endregion
 
-    #region Game States
-    public void OnDeath()
-    {
-        //Save Score
-        ChangeGameState(GameState.Results);
-    }
-    public void OnStateChanged()
-    {
-        switch (gameState)
-        {
-            case GameState.inMenu:
-                AudioManager.Instance.PlayAudio(AudioTypes.TRACK_MENU);
-                break;
-            case GameState.inPaused:
-                break;
-            case GameState.inEndlessMode:
-                AudioManager.Instance.PlayAudio(AudioTypes.TRACK_GAME);
-                break;
-            case GameState.Results:
-                break;
-            case GameState.Dead:
-                AudioManager.Instance.PlayAudio(AudioTypes.SFX_GAMEOVER);
-                break;
-            default:
-                break;
-        }
-    }
-    #endregion
+		#region Singleton
 
-    #region Switching Game States
+		//Singleton Instantiation
+		public static GameManager Instance { get; private set; }
 
-    public void loadEndlessMode(int i)
-    {
-        _currentLevel = i;
-        ChangeGameState(GameState.inEndlessMode);
-        SceneManager.LoadScene("EndlessRunner");
-    }
+		private void Awake() {
+			if (Instance != null && Instance != this)
+				Destroy(this.gameObject);
+			else
+				Instance = this;
 
-    private void ChangeGameState(GameState state)
-    {
-        gameState = state;
-        OnGameStateChanged?.Invoke();
-    }
+			DontDestroyOnLoad(this);
+		}
 
-    #endregion
+		#endregion
 
-    #region Game Events
-    public void OnCoinCollected()
-    {
-        StatsAndAchievements.Coins++;
-    }
-    #endregion
+		#region Unity Messages
 
-    #region Saving and Loading
-    public void Save()
-    {
-        DataManager.SaveData(StatsAndAchievements.GetSaveData());
-    }
+		void Start() {
+			//Application Settings
+			Application.targetFrameRate = 60;
+			// QualitySettings.vSyncCount = 1;
+			// When Game starts load the menu:
+			ChangeGameState(GameState.inMenu);
 
-    private void LoadSave()
-    {
-        if (!DataManager.LoadData()) { LogError("Load File was unable to be read"); return; }
-        
-        Log("Save has been loaded");
-    }
+			ObjectPool.Instance.InitializePool();
 
-    /// <summary>
-    /// Permanently Deletes Save Files
-    /// </summary>
-    public void ResetSave()
-    {
-        DataManager.ResetData();
-    }
+			LoadSave();
+		}
 
-    private void OnApplicationQuit()
-    {
-        Save();
-    }
-    #endregion
+		private void OnEnable() {
+			OnGameStateChanged += OnStateChanged;
+		}
 
-    #region Logging Functions
-    private void Log(string msg)
-    {
-        if (!debug) return;
+		private void OnDisable() {
+			OnGameStateChanged -= OnStateChanged;
+		}
 
-        Debug.Log("[GAMEMANAGER]: " + msg);
-    }
-    private void LogWarning(string msg)
-    {
-        Debug.LogWarning("[GAMEMANAGER]: " + msg);
-    }
-    private void LogError(string msg)
-    {
-        Debug.LogError("[GAMEMANAGER]: " + msg);
-    }
-    #endregion
+		void Update() {
+			GameStateManager();
+		}
+
+		#endregion
+
+		#region Update
+
+		void
+			GameStateManager() // Use these states to determine the actions of other scripts based on where the player/user is in the game.
+		{
+			switch (gameState) {
+				case GameState.inMenu:
+
+					break;
+				case GameState.inPaused:
+
+					break;
+				case GameState.inEndlessMode:
+
+					break;
+				case GameState.Dead:
+					OnDeath();
+					break;
+				case GameState.Results:
+
+					break;
+			}
+		}
+
+		#endregion
+
+		#region Game States
+
+		public void OnDeath() {
+			//Save Score
+			ChangeGameState(GameState.Results);
+		}
+
+
+		public void OnStateChanged() {
+			switch (gameState) {
+				case GameState.inMenu:
+					AudioManager.Instance.PlayAudio(AudioTypes.TRACK_MENU);
+					break;
+				case GameState.inPaused:
+					break;
+				case GameState.inEndlessMode:
+					AudioManager.Instance.PlayAudio(AudioTypes.TRACK_GAME);
+					break;
+				case GameState.Results:
+					break;
+				case GameState.Dead:
+					AudioManager.Instance.PlayAudio(AudioTypes.SFX_GAMEOVER);
+					break;
+				default:
+					break;
+			}
+		}
+
+		#endregion
+
+		#region Switching Game States
+
+		public void loadEndlessMode(int i) {
+			_currentLevel = i;
+			ChangeGameState(GameState.inEndlessMode);
+			SceneManager.LoadScene("EndlessRunner");
+		}
+
+		private void ChangeGameState(GameState state) {
+			gameState = state;
+			OnGameStateChanged?.Invoke();
+		}
+
+		#endregion
+
+		#region Game Events
+
+		public void OnCoinCollected() {
+			StatsAndAchievements.Coins++;
+		}
+
+		#endregion
+
+		#region Saving and Loading
+
+		public void Save() {
+			DataManager.SaveData(StatsAndAchievements.GetSaveData());
+		}
+
+		private void LoadSave() {
+			if (!DataManager.LoadData()) {
+				LogError("Load File was unable to be read");
+				return;
+			}
+
+			Log("Save has been loaded");
+		}
+
+		/// <summary>
+		/// Permanently Deletes Save Files
+		/// </summary>
+		public void ResetSave() {
+			DataManager.ResetData();
+		}
+
+		private void OnApplicationQuit() {
+			Save();
+		}
+
+		#endregion
+
+		#region Logging Functions
+
+		private void Log(string msg) {
+			if (!debug) return;
+
+			Debug.Log("[GAMEMANAGER]: " + msg);
+		}
+
+		private void LogWarning(string msg) {
+			Debug.LogWarning("[GAMEMANAGER]: " + msg);
+		}
+
+		private void LogError(string msg) {
+			Debug.LogError("[GAMEMANAGER]: " + msg);
+		}
+
+		#endregion
+	}
 }
