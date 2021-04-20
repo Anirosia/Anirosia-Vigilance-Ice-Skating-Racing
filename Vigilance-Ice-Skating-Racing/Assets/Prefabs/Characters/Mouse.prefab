@@ -120,11 +120,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2ab9023c1ae22b3408315dff9d15d005, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  holdTime: 0.75
-  currentHoldTime: 0
-  isPressed: 0
-  isHeld: 0
-  isDragged: 0
   baseSpeed: 10
   baseJumpMultiplier: 12
   slopeAngle: -15
@@ -138,6 +133,8 @@ MonoBehaviour:
   currentSpeedVelocity: {x: 0, y: 0}
   maxSpeed: 0
   maxJump: 0
+  canFocus: 0
+  playerInput: {fileID: 0}
   cameraFollow: {fileID: 0}
 --- !u!70 &6949406009600723491
 CapsuleCollider2D:
