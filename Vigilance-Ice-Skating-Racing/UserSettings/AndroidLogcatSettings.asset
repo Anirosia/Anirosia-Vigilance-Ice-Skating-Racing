@@ -1,5 +1,5 @@
 {
-    "m_SelectedDeviceId": "",
+    "m_SelectedDeviceId": "PT99621BA1A80401661",
     "m_SelectedPackage": {
         "deviceId": "",
         "name": "",
@@ -7,7 +7,74 @@
         "exited": false
     },
     "m_SelectedPriority": 0,
-    "m_KnownPackagesForSerialization": [],
+    "m_KnownPackagesForSerialization": [
+        {
+            "deviceId": "PT99621BA1A80401661",
+            "name": "com.DefaultCompany.com.unity.template.mobile2D",
+            "processId": 30652,
+            "exited": true
+        },
+        {
+            "deviceId": "PT99621BA1A80401661",
+            "name": "com.DefaultCompany.com.unity.template.mobile2D",
+            "processId": 30996,
+            "exited": true
+        },
+        {
+            "deviceId": "PT99621BA1A80401661",
+            "name": "com.DefaultCompany.com.unity.template.mobile2D",
+            "processId": 31476,
+            "exited": true
+        },
+        {
+            "deviceId": "PT99621BA1A80401661",
+            "name": "com.DefaultCompany.com.unity.template.mobile2D",
+            "processId": 31900,
+            "exited": true
+        },
+        {
+            "deviceId": "PT99621BA1A80401661",
+            "name": "com.android.launcher3",
+            "processId": 2514,
+            "exited": false
+        },
+        {
+            "deviceId": "PT99621BA1A80401661",
+            "name": "com.DefaultCompany.com.unity.template.mobile2D",
+            "processId": 32234,
+            "exited": false
+        },
+        {
+            "deviceId": "PT99621BA1A80401661",
+            "name": "com.DefaultCompany.com.unity.template.mobile2D",
+            "processId": 32534,
+            "exited": false
+        },
+        {
+            "deviceId": "PT99621BA1A80401661",
+            "name": "com.DefaultCompany.com.unity.template.mobile2D",
+            "processId": 1653,
+            "exited": false
+        },
+        {
+            "deviceId": "PT99621BA1A80401661",
+            "name": "com.DefaultCompany.com.unity.template.mobile2D",
+            "processId": 23054,
+            "exited": false
+        },
+        {
+            "deviceId": "PT99621BA1A80401661",
+            "name": "com.DefaultCompany.com.unity.template.mobile2D",
+            "processId": 24235,
+            "exited": false
+        },
+        {
+            "deviceId": "PT99621BA1A80401661",
+            "name": "com.DefaultCompany.com.unity.template.mobile2D",
+            "processId": 24573,
+            "exited": false
+        }
+    ],
     "m_Tags": {
         "m_Entries": [
             {
@@ -41,9 +108,20 @@
         ]
     },
     "m_MemoryViewerState": {
-        "MemoryWindowHeight": 0.0,
-        "MemoryWindowWidth": 0.0,
-        "MemoryTypeEnabled": [],
+        "MemoryWindowHeight": 300.0,
+        "MemoryWindowWidth": 170.0,
+        "MemoryTypeEnabled": [
+            true,
+            true,
+            true,
+            true,
+            true,
+            true,
+            true,
+            true,
+            true,
+            true
+        ],
         "MemoryGroup": 2,
         "Behavior": 0
     },

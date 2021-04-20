@@ -19,7 +19,7 @@ namespace Gameplay
 		private int desiredZoomInDistance = 3;
 		private int desiredZoomOutDistance = 8;
 		private bool isTargetNotNull;
-		private Camera viewCamera;
+		[HideInInspector]public Camera viewCamera;
 		private Vector3 savedOffset;
 		private float cameraLock = 1;
 

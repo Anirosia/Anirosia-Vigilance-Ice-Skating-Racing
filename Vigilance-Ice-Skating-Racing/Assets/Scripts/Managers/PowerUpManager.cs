@@ -1,10 +1,9 @@
 ﻿using System;
 using System.Collections;
-using UnityEditor;
+using Gameplay;
 using UnityEngine;
-using CharacterController = Gameplay.CharacterController;
 
-namespace DefaultNamespace
+namespace Managers
 {
 	public class PowerUpManager : MonoBehaviour
 	{
@@ -32,7 +31,7 @@ namespace DefaultNamespace
 
 		#region Power Up Calling management
 
-		private CharacterController playersMovementRef;
+		private PlayerController playersMovementRef;
 
 		public enum Abilities
 		{
@@ -43,7 +42,7 @@ namespace DefaultNamespace
 
 		public void GetPowerUp(Abilities type, int typeEffect, Collider2D playerCollider) {
 			var playerObject = playerCollider.gameObject;
-			playersMovementRef = playerObject.GetComponent<CharacterController>();
+			playersMovementRef = playerObject.GetComponent<PlayerController>();
 			switch (type) {
 				case Abilities.Catnip:
 					Catnip(playerObject, typeEffect);
@@ -60,7 +59,6 @@ namespace DefaultNamespace
 		}
 
 		#endregion
-
 
 		#region Power Ups
 
@@ -84,12 +82,9 @@ namespace DefaultNamespace
 				playersMovementRef.maxSpeed = temp;
 			}
 		}
-
-		#endregion
-
-
-		IEnumerator EffectTimeLimit(int limit) {
+IEnumerator EffectTimeLimit(int limit) {
 			yield return new WaitForSeconds(limit);
 		}
+		#endregion
 	}
 }
