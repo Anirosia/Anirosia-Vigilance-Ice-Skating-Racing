@@ -125,44 +125,6 @@ public class MenuManager : MonoBehaviour
         AudioManager.Instance.MuteTrack(AudioTrackType.SFX, _sfxOn);
     }
     #endregion
-
-    #region Menu Locking/Unlocking
-    public void UpdateMap(uint ID)
-    {
-        MapData data = StatsAndAchievements.GetMapData(ID);
-        
-        if (data.ID == uint.MaxValue) { Debug.LogError("Invalid Map Data"); return; }
-
-        mapPanels[ID].notUnlockedUI.SetActive(!data.isUnlocked);
-        mapPanels[ID].bestDistance.text = "Best: " + data.bestDistance + "m";
-    }
-
-    public void UnlockMap(int index)
-    {
-        if (StatsAndAchievements.Purchase(purchasePrice: GameManager.Instance.costOfLevels[index]))
-        {
-            StatsAndAchievements.UnlockMap(index);
-            UpdateMap((uint)index);
-        }
-    }
-    public void UpdateCharacter(uint ID)
-    {
-        MapData data = StatsAndAchievements.GetMapData(ID);
-
-        if (data.ID == uint.MaxValue) { return; }
-
-        mapPanels[ID].notUnlockedUI.SetActive(!data.isUnlocked);
-        mapPanels[ID].bestDistance.text = "Best: " + data.bestDistance + "m";
-    }
-
-    public void UnlockCharacter(int index)
-    {
-        //if(StatsAndAchievements.Purchase(GameManager.Instance.costOfLevels[index]))
-        //{
-        //    mapPanels[index].notUnlockedUI.SetActive(false);
-        //}
-    }
-    #endregion
 }
 
 #region Structs

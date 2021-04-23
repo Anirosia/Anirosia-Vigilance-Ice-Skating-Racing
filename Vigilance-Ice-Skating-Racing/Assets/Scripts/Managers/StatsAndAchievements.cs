@@ -13,17 +13,19 @@ public class StatsAndAchievements
     public static int Coins { get { return statsData.coins; } set { statsData.coins = value; } }
 
     #region Data Management
-    public static void LoadMapData(uint ID, bool isUnlocked, uint bestDistance)
+    public static void LoadMapData(uint id, bool isUnlocked, uint bestDistance)
     {
-        mapData.Add(new MapData(ID, isUnlocked, bestDistance));
-        GameManager.Instance.menuManager.UpdateMap(ID);
+        mapData.Add(new MapData(id, isUnlocked, bestDistance));
+        if (isUnlocked)
+            GameManager.Instance.shopManager.shopsInformation[0].shopGameObjects[id].GetComponent<ShopItem>().Unlock();
     }
 
-    public static MapData GetMapData(uint ID) => mapData.Count > ID ? mapData[(int)ID] : new MapData(uint.MaxValue, false, 0);
-    public static void LoadCharacterData(uint ID, bool isUnlocked)
+    public static MapData GetMapData(uint id) => mapData.Count > id ? mapData[(int)id] : new MapData(uint.MaxValue, false, 0);
+    public static void LoadCharacterData(uint id, bool isUnlocked)
     {
-        characterData.Add(new CharacterData(ID, isUnlocked));
-        GameManager.Instance.menuManager.UpdateCharacter(ID);
+        characterData.Add(new CharacterData(id, isUnlocked));
+        if (isUnlocked)
+            GameManager.Instance.shopManager.shopsInformation[1].shopGameObjects[id].GetComponent<ShopItem>().Unlock();
     }
     public static CharacterData GetCharacterData(uint ID) => characterData.Count > ID ? characterData[(int)ID] : new CharacterData(uint.MaxValue, false);
     public static void LoadSettingsData(bool isMusicMuted, bool isSFXMuted)
@@ -65,7 +67,7 @@ public class StatsAndAchievements
     #endregion
 
     #region Coin Modifying
-    public static bool Purchase(int purchasePrice)
+    public static bool CanPurchase(int purchasePrice)
     {
         if (Coins >= purchasePrice)
         {
