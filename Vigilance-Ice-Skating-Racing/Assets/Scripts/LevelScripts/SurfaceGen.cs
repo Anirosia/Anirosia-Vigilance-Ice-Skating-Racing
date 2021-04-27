@@ -1,6 +1,7 @@
 using System;
 using System;
 using System.Collections.Generic;
+using DefaultNamespace;
 using UnityEngine;
 using UnityEngine.SubsystemsImplementation;
 using Random = UnityEngine.Random;
@@ -13,6 +14,12 @@ namespace LevelScripts
 		private List<Vector3[]> m_curves = new List<Vector3[]>();
 		private List<Vector3> m_vertices = new List<Vector3>();
 		private List<int> m_triangles = new List<int>();
+		public int mapLength = 10;
+		private List<Vector2> topVeticePoints = new List<Vector2>();
+		[ReadOnlyInspector] [SerializeField] private float f = 0;
+		[ReadOnlyInspector] [SerializeField] private float c = 0;
+		[Range(.5f, 1f)] public float step;
+		[SerializeField]int m_resolution = 20;
 
 		private void Start() {
 			var filter = GetComponent<MeshFilter>();
@@ -20,7 +27,7 @@ namespace LevelScripts
 			m_mesh.Clear();
 
 			var xPos = 0f;
-			for (int c = 0; c < 10; c++) {
+			for (int c = 0; c < mapLength; c++) {
 				var curve = new Vector3[4];
 				for (int i = 0; i < curve.Length; i++) {
 					Vector3[] prev = null;
@@ -37,7 +44,8 @@ namespace LevelScripts
 					}
 					else curve[i] = new Vector3(xPos, Random.Range(1f, 2f), 0f);
 
-					xPos += 0.5f;
+					xPos += step;
+					// xPos += 0.5f;
 				}
 
 				m_curves.Add(curve);
@@ -45,26 +53,31 @@ namespace LevelScripts
 
 
 			foreach (var curve in m_curves) {
-				int m_resolution = 20;
 				for (int i = 0; i < m_resolution; i++) {
 					float t = (float) i / (float) (m_resolution - 1);
 					Vector3 p = BézierPoint(t, curve[0], curve[1], curve[2], curve[3]);
-					AddTerrainPoint(p);
+					AddTerrainPoint(p, i);
+					Debug.Log(i);
 				}
 			}
 
 			m_mesh.vertices = m_vertices.ToArray();
 			m_mesh.triangles = m_triangles.ToArray();
 
-			Destroy(GetComponent<MeshCollider>());
-			MeshCollider collider = gameObject.AddComponent<MeshCollider>();
-			collider.sharedMesh = null;
-			collider.sharedMesh = m_mesh;
+			m_mesh.RecalculateBounds();
+			m_mesh.RecalculateNormals();
+
+			EdgeCollider2D collider = gameObject.AddComponent<EdgeCollider2D>();
+			collider.points = topVeticePoints.ToArray();
 		}
 
-		private void AddTerrainPoint(Vector3 point) {
-			m_vertices.Add(new Vector3(point.x, 0f, 0f));
+
+		private void AddTerrainPoint(Vector3 point, int a) {
+			m_vertices.Add(new Vector3(point.x, -f, 0f));
+			point.y -= f;
 			m_vertices.Add(point);
+			topVeticePoints.Add(point);
+
 			if (m_vertices.Count >= 4) {
 				int start = m_vertices.Count - 4;
 				m_triangles.Add(start        + 0);
@@ -74,21 +87,12 @@ namespace LevelScripts
 				m_triangles.Add(start        + 3);
 				m_triangles.Add(start        + 2);
 			}
+
+			if (a != m_resolution - 1) f += 0.05f;
 		}
 
 		private Vector3 BézierPoint(float t, Vector3 p0, Vector3 p1, Vector3 p2, Vector3 p3) {
 			//Huh
-			// float u = 1 - t;
-			// float tt = t   * t;
-			// float uu = u   * u;
-			// float uuu = uu * u;
-			// float ttt = tt * t;
-			//
-			// Vector3 p = uuu * p0;
-			// p += 3   * uu * t * p1;
-			// p += 3   * u  * t * p2;
-			// p += ttt * p3;
-
 			float u = 1 - t;
 			float tt = t   * t;
 			float uu = u   * u;

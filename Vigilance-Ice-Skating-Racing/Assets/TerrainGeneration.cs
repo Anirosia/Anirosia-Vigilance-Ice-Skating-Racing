@@ -8,7 +8,9 @@ public class TerrainGeneration : MonoBehaviour
 	private Mesh m_mesh;
 
 	//Bézier curve
-	private Vector3[] m_curve = new Vector3[4];
+	[Range(0,50)]
+	public int value;
+	private Vector3[] m_curve;
 
 	private List<Vector3> m_vertices = new List<Vector3>();
 	private List<int> m_triangles = new List<int>();
@@ -19,31 +21,32 @@ public class TerrainGeneration : MonoBehaviour
 		var filter = GetComponent<MeshFilter>();
 		m_mesh = filter.mesh;
 		m_mesh.Clear();
-
+		m_curve = new Vector3[value];
 
 		var xP = 0f;
 		for (int i = 0; i < m_curve.Length; i++) {
 			var point = new Vector3(xP, Random.Range(1f, 2f), 0);
 			m_curve[i] = point;
-			// AddTerrainPoint(point);
-			xP += .5f;
+			// AddTerrainPoint(point, i);
+			// xP += .5f;
+			xP++;
 		}
 
 		for (int i = 0; i < m_resolution; i++) {
 			float t = (float) i / (float) (m_resolution - 1);
 			Vector3 p = BézierPoint(t, m_curve[0], m_curve[1], m_curve[2], m_curve[3]);
-			AddTerrainPoint(p);
+			AddTerrainPoint(p, i);
 		}
 
 		m_mesh.vertices = m_vertices.ToArray();
 		m_mesh.triangles = m_triangles.ToArray();
 	}
 
-	private void AddTerrainPoint(Vector3 point) {
-		m_vertices.Add(new Vector3(point.x, 0f, 0f));
+	private void AddTerrainPoint(Vector3 point, int a) {
+		m_vertices.Add(new Vector3(point.x,  Random.Range(-.5f,.5f), 0f));
 		m_vertices.Add(point);
-		if (m_vertices.Count >= 4) {
-			int start = m_vertices.Count - 4;
+		if (m_vertices.Count >= 8) {
+			int start = m_vertices.Count - 8;
 			m_triangles.Add(start        + 0);
 			m_triangles.Add(start        + 1);
 			m_triangles.Add(start        + 2);
