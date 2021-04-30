@@ -1,15 +1,20 @@
 using System;
 using System;
 using System.Collections.Generic;
+using System.Numerics;
 using DefaultNamespace;
 using UnityEngine;
 using UnityEngine.SubsystemsImplementation;
 using Random = UnityEngine.Random;
+using Vector2 = UnityEngine.Vector2;
+using Vector3 = UnityEngine.Vector3;
 
 namespace LevelScripts
 {
 	public class SurfaceGen : MonoBehaviour
 	{
+		public GameObject foreground;
+
 		private Mesh m_mesh;
 		private List<Vector3[]> m_curves = new List<Vector3[]>();
 		private List<Vector3> m_vertices = new List<Vector3>();
@@ -19,7 +24,7 @@ namespace LevelScripts
 		[ReadOnlyInspector] [SerializeField] private float f = 0;
 		[ReadOnlyInspector] [SerializeField] private float c = 0;
 		[Range(.5f, 1f)] public float step;
-		[SerializeField]int m_resolution = 20;
+		[SerializeField] int m_resolution = 20;
 
 		private void Start() {
 			var filter = GetComponent<MeshFilter>();
@@ -64,11 +69,15 @@ namespace LevelScripts
 			m_mesh.vertices = m_vertices.ToArray();
 			m_mesh.triangles = m_triangles.ToArray();
 
+			foreground.GetComponent<MeshFilter>().mesh = m_mesh;
+
 			m_mesh.RecalculateBounds();
 			m_mesh.RecalculateNormals();
 
 			EdgeCollider2D collider = gameObject.AddComponent<EdgeCollider2D>();
 			collider.points = topVeticePoints.ToArray();
+			
+			
 		}
 
 
@@ -91,87 +100,16 @@ namespace LevelScripts
 			if (a != m_resolution - 1) f += 0.05f;
 		}
 
+
 		private Vector3 BézierPoint(float t, Vector3 p0, Vector3 p1, Vector3 p2, Vector3 p3) {
-			//Huh
-			float u = 1 - t;
-			float tt = t   * t;
-			float uu = u   * u;
-			float uuu = uu * u;
-			float ttt = tt * t;
+			Vector3 a = Vector3.Lerp(p0, p1, t);
+			Vector3 b = Vector3.Lerp(p1, p2, t);
+			Vector3 c = Vector3.Lerp(p2, p3, t);
+			
+			Vector3 d = Vector3.Lerp(a, b, t);
+			Vector3 e = Vector3.Lerp(b, c, t);
 
-			Vector3 p = uuu * p0;
-			p += 3   * uu * t  * p1;
-			p += 3   * u  * tt * p2;
-			p += ttt * p3;
-
-			return p;
+			return Vector3.Lerp(d, e, t);
 		}
-
-
-		// public bool generateContinuously = false;
-		// public bool generateCollider = false;
-		// [Range(0.1f,50.0f)]
-		// public float yScaling = 5.0f;
-		// [Range(0.1f,20.0f)]
-		// public float detailScaling = 1.0f;
-		// [HideInInspector]
-		// public Vector3[] vertices;
-		//
-		// private Mesh mesh;
-		//
-		// void Start()
-		// {
-		// 	mesh = GetComponent<MeshFilter>().mesh;
-		// 	vertices = mesh.vertices;
-		// }
-		//
-		// void Update()
-		// {
-		// 	GenerateSurface();
-		// }
-		//
-		// void GenerateSurface()
-		// {
-		// 	vertices = mesh.vertices;
-		// 	int counter = 0;
-		// 	for (int i = 0; i < 11; i++)
-		// 	{
-		// 		for (int j = 0; j < 11; j++)
-		// 		{
-		// 			MeshCalculate(counter, i);
-		// 			counter++;
-		// 		}
-		// 	}
-		//
-		// 	mesh.vertices = vertices;
-		// 	mesh.RecalculateBounds();
-		// 	mesh.RecalculateNormals();
-		//
-		// 	if (generateCollider)
-		// 	{
-		// 		Destroy(GetComponent<MeshCollider>());
-		// 		MeshCollider collider = gameObject.AddComponent<MeshCollider>();
-		// 		collider.sharedMesh = null;
-		// 		collider.sharedMesh = mesh;
-		// 	}
-		// }
-		//
-		// void MeshCalculate(int vertexIndex, int yOffset)
-		// {
-		// 	if (generateContinuously)
-		// 	{            
-		// 		vertices[vertexIndex].z = Mathf.PerlinNoise
-		// 		(Time.time    + (vertices[vertexIndex].x + transform.position.x) / detailScaling,
-		// 			Time.time + (vertices[vertexIndex].y + transform.position.y)) * yScaling;
-		// 		vertices[vertexIndex].z -= yOffset;
-		// 	}
-		// 	else
-		// 	{
-		// 		vertices[vertexIndex].z = Mathf.PerlinNoise
-		// 		((vertices[vertexIndex].x + transform.position.x) / detailScaling,
-		// 			(vertices[vertexIndex].y + transform.position.y)) * yScaling;
-		// 		vertices[vertexIndex].z -= yOffset;
-		// 	}
-		// }
 	}
 }
