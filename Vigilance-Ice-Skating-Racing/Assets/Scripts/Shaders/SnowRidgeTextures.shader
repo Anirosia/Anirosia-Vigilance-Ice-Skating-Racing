@@ -1,9 +1,9 @@
-Shader "Custom/Unlit/SnowRidge"
+Shader "Custom/Unlit/SnowRidgeTexture"
 {
     Properties
     {
-        _SnowColour("_SnowColour", COLOR) = (0.2,0.5,0.8,0)
-        _BackgroundColour("Background Colour", COLOR) = (0.2,0.5,0.8,0)
+        _SnowTex("Snow Texture", 2D) = "White" { }
+        _BackgroundTex("Background Colour", 2D) = "Blue" { }
         _Amplitude("_Amplitude", float) = 1.0
         _Iterations("_Iterations", float) = 1.0
         _VerticalOffset("_VerticalOffset", float) = 0.5
@@ -19,8 +19,6 @@ Shader "Custom/Unlit/SnowRidge"
             CGPROGRAM
             #pragma vertex vert
             #pragma fragment frag
-            // make fog work
-            #pragma multi_compile_fog
 
             #include "UnityCG.cginc"
             #include "UnityLightingCommon.cginc"
@@ -38,8 +36,9 @@ Shader "Custom/Unlit/SnowRidge"
                 float4 vertex : SV_POSITION;
             };
 
-            float4 _SnowColour;
-            float4 _BackgroundColour;
+            sampler2D _SnowTex;
+            float4 _SnowTex_ST;
+            sampler2D _BackgroundTex;
             float _Amplitude;
             float _Iterations;
             float _VerticalOffset;
@@ -49,33 +48,33 @@ Shader "Custom/Unlit/SnowRidge"
             {
                 VectorOutput o;
                 o.vertex = UnityObjectToClipPos(v.vertex);
-                o.uv = v.uv;
+                o.uv = TRANSFORM_TEX(v.uv, _SnowTex);
                 o.worldPos = mul(unity_ObjectToWorld, v.vertex);
 
                 return o;
             }
 
-            fixed4 frag (VectorOutput i) : SV_Target
+            fixed4 frag (VectorOutput IN) : SV_Target
             {
-                float2 uv = i.uv;
-                
-                float3 colourA = _SnowColour.rgb;
-                float3 colourB = _BackgroundColour.rgb;
+                float2 uv = IN.uv;
 
                 float t = 0;
                 float amplitude = _Amplitude;
                 float offset = 0;
+
+                fixed4 t1 = tex2D (_SnowTex, IN.uv);
+			    fixed4 t2 = tex2D (_BackgroundTex, IN.uv);
                 
                 for (half iterationCount = 0; iterationCount < _Iterations; iterationCount++)
                 {
-                    t = smoothstep(_MinimumBackgroundHeight + cos(i.worldPos.x) * 0.05,
-                        _VerticalOffset + sin(i.worldPos.x + offset) * amplitude,
+                    t = smoothstep(_MinimumBackgroundHeight + cos(IN.worldPos.x) * 0.05,
+                        _VerticalOffset + sin(IN.worldPos.x + offset) * amplitude,
                         uv.y);
                     amplitude *= 0.5;
                     offset = 1 - amplitude;
                 }
                 
-                float3 blend = lerp(colourA, colourB, t);
+                float3 blend = lerp(t2, t1, t);
 
                 return float4(blend, 1);
             }
