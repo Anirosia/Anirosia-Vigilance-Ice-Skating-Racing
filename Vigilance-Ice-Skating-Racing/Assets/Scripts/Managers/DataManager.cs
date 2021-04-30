@@ -23,7 +23,7 @@ public class DataManager
         DeleteFile(statsFilePath);
         DeleteFile(settingsFilePath);
     }
-
+    
     private static void DeleteFile(string filePath)
     {
         if (File.Exists(Application.persistentDataPath + filePath))
@@ -67,6 +67,31 @@ public class DataManager
         {
             InitializeMap();
         }
+        
+        //Checks if the map file exits
+        if (File.Exists(Application.persistentDataPath + charactersFilePath))
+        {
+            //Reads the whole file
+            var lines = File.ReadAllLines(Application.persistentDataPath + charactersFilePath);
+
+            //Iterates thru all of the lines in the file
+            for (var i = 0; i < lines.Length; i++)
+            {
+                var line = lines[i];
+
+                //If the line is empty, break out of the loop
+                if (line == "") break;
+
+                //Splits the line 
+                var splitLine = line.Split(';');
+
+                StatsAndAchievements.LoadCharacterData(uint.Parse(splitLine[0]), int.Parse(splitLine[1]) == 1);
+            }
+        }
+        else
+        {
+            InitializeCharacter();
+        }
 
         if (File.Exists(Application.persistentDataPath + statsFilePath))
         {
@@ -84,7 +109,9 @@ public class DataManager
 
             var splitLine = lines.Split(';');
 
-            GameManager.Instance.menuManager.SetAudioSettings(int.Parse(splitLine[0]) == 1, int.Parse(splitLine[1]) == 1);
+            //TODO
+            //Set variables on AudioManager
+            //GameManager.Instance.menuManager.SetAudioSettings(int.Parse(splitLine[0]) == 1, int.Parse(splitLine[1]) == 1);
         }
 
         return true;
@@ -95,6 +122,12 @@ public class DataManager
         StatsAndAchievements.LoadMapData(0, true, 0);
         StatsAndAchievements.LoadMapData(1, false, 0);
         StatsAndAchievements.LoadMapData(2, false, 0);
+    }
+    private static void InitializeCharacter()
+    {
+        StatsAndAchievements.LoadCharacterData(0, true);
+        StatsAndAchievements.LoadCharacterData(1, false);
+        StatsAndAchievements.LoadCharacterData(2, false);
     }
 }
 #region Structs

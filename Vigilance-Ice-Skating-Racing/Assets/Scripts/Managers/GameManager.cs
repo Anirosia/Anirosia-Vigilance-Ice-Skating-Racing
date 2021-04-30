@@ -3,6 +3,7 @@ using DefaultNamespace;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
+[RequireComponent(typeof(ObjectPool), typeof(ShopManager), typeof(AudioManager))]
 public class GameManager : MonoBehaviour
 {
     #region Variables
@@ -12,11 +13,10 @@ public class GameManager : MonoBehaviour
     [ReadOnlyInspector] public GameState gameState;
     
     [Header("Script References")]
-    public MenuManager menuManager;    
+    [HideInInspector] public ShopManager shopManager;    
     
     [Header("Level References")]
     public string[] levelNames;
-    public int[] costOfLevels;
 
     private bool scenesHaveBeenPreloaded = false;
     private bool loadEndlessScene = false;
@@ -30,7 +30,6 @@ public class GameManager : MonoBehaviour
     #endregion
 
     #region Mutators
-    public int CurrentDiffucultyIndex { get { return _currentLevel; } }
     public string CurrentLevelFolderName { get { return levelNames[_currentLevel]; } }
     public int CurrentDistance { get { return _currentDistance; } set { _currentDistance = value; } }
     #endregion
@@ -54,11 +53,11 @@ public class GameManager : MonoBehaviour
     void Start()
     {
         //Application Settings
-        Application.targetFrameRate = 60;
-        // QualitySettings.vSyncCount = 1;
+        Application.targetFrameRate = -1;
         // When Game starts load the menu:
         ChangeGameState(GameState.inMenu);
-        
+
+        shopManager = GetComponent<ShopManager>();
         ObjectPool.Instance.InitializePool();
         
         LoadSave();
@@ -176,7 +175,7 @@ public class GameManager : MonoBehaviour
     {
         DataManager.ResetData();
     }
-
+    
     private void OnApplicationQuit()
     {
         Save();
