@@ -16,12 +16,12 @@ namespace Gameplay
 		[ReadOnlyInspector] [SerializeField] private int viewDist;
 		[ReadOnlyInspector] [SerializeField] private float smooth;
 
-		private int desiredZoomInDistance = 3;
-		private int desiredZoomOutDistance = 8;
-		private bool isTargetNotNull;
+		private int _desiredZoomInDistance = 3;
+		private int _desiredZoomOutDistance = 8;
+		private bool _isTargetNotNull;
 		[HideInInspector]public Camera viewCamera;
-		private Vector3 savedOffset;
-		private float cameraLock = 1;
+		private Vector3 _savedOffset;
+		private float _cameraLock = 1;
 
 		[Header("Zoom Settings")]
 		[Header("Zoom Values")]
@@ -49,9 +49,9 @@ namespace Gameplay
 
 
 		private void OnEnable() {
-			isTargetNotNull = target != null;
+			_isTargetNotNull = target != null;
 			viewDist = Mathf.RoundToInt(viewCamera.orthographicSize);
-			savedOffset = offset;
+			_savedOffset = offset;
 			smooth = cameraSmoothing;
 			UnitNotionConversion();
 		}
@@ -61,7 +61,7 @@ namespace Gameplay
 		}
 
 		private void FixedUpdate() {
-			if (isTargetNotNull) {
+			if (_isTargetNotNull) {
 				var desiredPos = target.position + offset;
 				Vector3 smoothPos = Vector3.Lerp(transform.position, desiredPos, smooth);
 				transform.position = smoothPos;
@@ -69,9 +69,9 @@ namespace Gameplay
 		}
 
 		public void SelfReference(Transform objectTransform) {
-			if (!isTargetNotNull) {
+			if (!_isTargetNotNull) {
 				target = objectTransform;
-				isTargetNotNull = true;
+				_isTargetNotNull = true;
 			}
 		}
 
@@ -98,7 +98,7 @@ namespace Gameplay
 		}
 
 		private void UnitNotionConversion() {
-			var power = desiredZoomInDistance + zoomSmoothSpeed;
+			var power = _desiredZoomInDistance + zoomSmoothSpeed;
 			offsetSpeed = (float) Math.Round(setOffsetSpeed * Mathf.Pow(10, -power), 5);
 			zoomSpeed = (float) Math.Round(setZoomSpeed     * Mathf.Pow(10, -power), 5);
 			lockSpeed = (float) Math.Round(setLockSpeed     * Mathf.Pow(10, -power), 5);
@@ -108,18 +108,18 @@ namespace Gameplay
 		                                bool reset = false) {
 			Debug.Log("Camera Zoom In");
 			int zoomDistance;
-			zoomDistance = reset ? viewDist : desiredZoomInDistance;
+			zoomDistance = reset ? viewDist : _desiredZoomInDistance;
 
 			while (viewCamera.orthographicSize >= zoomDistance) {
 				viewCamera.orthographicSize -= zoomSpeed;
 				if (offset.x >= xOffset) offset.x -= offsetSpeed;
 				yield return new WaitForSeconds(Time.deltaTime);
 				if (camLock) {
-					if (smooth <= cameraLock) smooth += lockSpeed;
+					if (smooth <= _cameraLock) smooth += lockSpeed;
 				}
 			}
 
-			if (camLock) smooth = cameraLock;
+			if (camLock) smooth = _cameraLock;
 			offset.x = xOffset;
 			viewCamera.orthographicSize = zoomDistance;
 		}
@@ -127,7 +127,7 @@ namespace Gameplay
 		public IEnumerator CameraZoomOut(float xOffset = default, bool reset = false) {
 			Debug.Log("Camera Zoom Out");
 			int zoomDistance;
-			zoomDistance = reset ? viewDist : desiredZoomOutDistance;
+			zoomDistance = reset ? viewDist : _desiredZoomOutDistance;
 
 			while (viewCamera.orthographicSize <= zoomDistance) {
 				viewCamera.orthographicSize += zoomSpeed;
@@ -141,7 +141,7 @@ namespace Gameplay
 			}
 
 			smooth = cameraSmoothing;
-			offset.x = savedOffset.x;
+			offset.x = _savedOffset.x;
 			viewCamera.orthographicSize = zoomDistance;
 		}
 
@@ -149,9 +149,9 @@ namespace Gameplay
 			StopAllCoroutines();
 			Debug.Log("Camera Reset");
 			if (viewCamera.orthographicSize < viewDist)
-				return CameraZoomOut(savedOffset.x, true);
+				return CameraZoomOut(_savedOffset.x, true);
 			else
-				return CameraZoomIn(savedOffset.x, reset: true);
+				return CameraZoomIn(_savedOffset.x, reset: true);
 		}
 	}
 }

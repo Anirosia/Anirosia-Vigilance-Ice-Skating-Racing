@@ -68,7 +68,7 @@ Shader "Custom/Unlit/SnowRidge"
                 
                 for (half iterationCount = 0; iterationCount < _Iterations; iterationCount++)
                 {
-                    t = smoothstep(_MinimumBackgroundHeight + cos(i.worldPos.x) * 0.05 , _VerticalOffset + sin(i.worldPos.x + offset) * amplitude, uv.y);
+                    t = smoothstep(_MinimumBackgroundHeight + cos(i.worldPos.y) * 0.05 , _VerticalOffset + sin(i.worldPos.y + offset) * amplitude, uv.x);
                     amplitude *= 0.5;
                     offset = 1 - amplitude;
                 }

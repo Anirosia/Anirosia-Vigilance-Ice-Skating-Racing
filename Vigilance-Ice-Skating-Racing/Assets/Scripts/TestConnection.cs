@@ -1,0 +1,19 @@
+using System;
+using System.Collections;
+using System.Collections.Generic;
+using System.Net.NetworkInformation;
+using LevelScripts;
+using UnityEngine;
+
+public class TestConnection : MonoBehaviour
+{
+    public GameObject a1;
+    public GameObject a2;
+    // Start is called before the first frame update
+
+    private void Update(){
+        var p0 = a1.GetComponent<SurfaceGen>().EndPoint;
+        var p1 = a2.GetComponent<SurfaceGen>().StartPoint;
+        p1.position = p0.position;
+    }
+}
