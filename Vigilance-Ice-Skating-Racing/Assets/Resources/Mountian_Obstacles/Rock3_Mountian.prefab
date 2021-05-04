@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 1247031192159396196}
   - component: {fileID: 1247031192159396197}
   - component: {fileID: 2245725311526068886}
+  - component: {fileID: -1694769389650431142}
   m_Layer: 0
   m_Name: Rock3_Mountian
   m_TagString: Untagged
@@ -99,7 +100,7 @@ BoxCollider2D:
   m_Offset: {x: 0, y: 0.3}
   m_SpriteTilingProperty:
     border: {x: 0.06666666, y: 0.037333332, z: 0.041333333, w: 0.68266666}
-    pivot: {x: 0.5, y: 0.03}
+    pivot: {x: 0.5025484, y: 0.05}
     oldSize: {x: 1.3653333, y: 1.3653333}
     newSize: {x: 1.3653333, y: 1.3653333}
     adaptiveTilingThreshold: 0.5
@@ -109,3 +110,18 @@ BoxCollider2D:
   serializedVersion: 2
   m_Size: {x: 1.3653333, y: 0.65}
   m_EdgeRadius: 0
+--- !u!114 &-1694769389650431142
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1247031192159396202}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a9650da2e04e96c4eb32abe6bbcc9e1e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  layerMask:
+    serializedVersion: 2
+    m_Bits: 64
