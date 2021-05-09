@@ -1,13 +1,5 @@
-using System;
-using System;
 using System.Collections.Generic;
-using System.Net.NetworkInformation;
-using System.Numerics;
-using DefaultNamespace;
 using UnityEngine;
-using UnityEngine.SubsystemsImplementation;
-using UnityEngine.Timeline;
-using Quaternion = UnityEngine.Quaternion;
 using Random = UnityEngine.Random;
 using Vector2 = UnityEngine.Vector2;
 using Vector3 = UnityEngine.Vector3;
@@ -55,6 +47,7 @@ namespace LevelScripts
             CreateEndPoint();
             SpawnObstacles();
         }
+        
         private void CreateStartPoint(){
             var firstVertexPosition = _topVerticesPoints[0];
             var startPoint = new GameObject("StartPoint");

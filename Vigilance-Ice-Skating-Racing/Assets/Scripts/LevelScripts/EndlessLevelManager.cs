@@ -80,12 +80,10 @@ public class EndlessLevelManager : MonoBehaviour
             RemoveLevel();
         }
     }
-
     private void RemoveLevel(){
         ObjectPool.Instance.SetLevelInPool(activeChunks[0]);
         activeChunks.RemoveAt(0);
     }
-
     private void AddLevel(){
         GameObject level = GetNewLevel();
         level.transform.position = activeChunks[activeChunks.Count - 1].GetComponent<EndlessLevel>().nextLevelTransform.position;
