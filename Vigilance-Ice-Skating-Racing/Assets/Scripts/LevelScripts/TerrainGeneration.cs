@@ -47,7 +47,7 @@ namespace LevelScripts
 
             CreateStartPoint();
             CreateEndPoint();
-            Invoke("CreateRemoveFlagPoint", 0.5f);
+            // Invoke("CreateRemoveFlagPoint", 0.5f);
             SpawnObstacles();
         }
 
@@ -71,7 +71,7 @@ namespace LevelScripts
             EndPoint = endPoint.transform;
         }
 
-        void CreateRemoveFlagPoint(){
+        public void CreateRemoveFlagPoint(){
             var flag = new GameObject("Flag");
             flag.transform.SetParent(transform);
             flag.transform.localPosition = _topVerticesPoints[50];

@@ -180,10 +180,7 @@ MonoBehaviour:
   step: 0.5
   resolution: 20
   mapLength: 10
-  obstacles:
-  - {fileID: 7987220012473082516, guid: 3033adc43549cb44daadc3495344d8c9, type: 3}
-  - {fileID: 2942178936142116957, guid: 25785dbcc81881441b57bc3425156666, type: 3}
-  - {fileID: 1247031192159396202, guid: e82d914354e59aa4fb2927390aca4081, type: 3}
+  obstacles: []
   _layerMask:
     serializedVersion: 2
     m_Bits: 64
