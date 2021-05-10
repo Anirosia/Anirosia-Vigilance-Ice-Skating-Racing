@@ -8,6 +8,7 @@ public class EndlessLevel : MonoBehaviour
     public Transform nextLevelTransform;
     public GameObject coinSpawnPointParent;
     public GameObject varianceParent;
+    [HideInInspector]public Vector2 RespawnLocation { get; set; } 
     //--------------------Private--------------------
     private GameObject[] coinSpawnPoints;
     private GameObject[] variance;
@@ -32,6 +33,7 @@ public class EndlessLevel : MonoBehaviour
                 variance[i] = varianceParent.transform.GetChild(i).gameObject;
             }
         }
+        RespawnLocation = Vector2.zero;
     }
     private void OnDrawGizmos()
     {
@@ -70,4 +72,7 @@ public class EndlessLevel : MonoBehaviour
 
         coinSpawnPoints[randomIndex].SetActive(true);
     }
+
+    public void OnRespawn(GameObject player) => player.transform.position = RespawnLocation;
+    
 }

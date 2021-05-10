@@ -646,7 +646,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   debug: 0
   gameObjectsToBePooled: []
-  levelsToBePooled: []
+  levelsToBePooled:
+  - folderName: LevelOneNew
+    levelIndex: 0
+    listIndex: 0
+    amountOfLevels: 0
+    amountOfLoadedLevels: 0
 --- !u!114 &444202393
 MonoBehaviour:
   m_ObjectHideFlags: 0

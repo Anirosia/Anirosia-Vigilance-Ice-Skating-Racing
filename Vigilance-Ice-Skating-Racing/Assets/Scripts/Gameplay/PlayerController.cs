@@ -23,10 +23,10 @@ namespace Gameplay
 		[SerializeField] private float timeZeroToMax;
 		[SerializeField] private float timeMaxToZero;
 
-		private float forwardVelocity;
-		private float accelerationRatePerSec;
-		private bool isSliding;
-		private Rigidbody2D rb;
+		private float _forwardVelocity;
+		private float _accelerationRatePerSec;
+		private bool _isSliding;
+		private Rigidbody2D _rigidbody;
 
 		[Header("Current Values")] [ReadOnlyInspector] [SerializeField]
 		private Vector2 currentSpeedVelocity;
@@ -41,28 +41,28 @@ namespace Gameplay
 		[ReadOnlyInspector] [SerializeField] private CameraFollow cameraFollow;
 
 		// ======================================================================== for value reset
-		private float speedHolder;
-		private bool focusActionReset;
-		private Vector2 colliderOriginalHeight;
+		private float _speedHolder;
+		private bool _focusActionReset;
+		private Vector2 _colliderOriginalHeight;
 
-		private CapsuleCollider2D col2D;
-		private Vector2 groundNormal;
+		private CapsuleCollider2D _collider;
+		private Vector2 _groundNormal;
 
 		#endregion
 
 		private void Awake() {
 			playerInput = GetComponent<InputHandler>();
 			
-			rb = GetComponent<Rigidbody2D>();
-			col2D = GetComponent<CapsuleCollider2D>();
+			_rigidbody = GetComponent<Rigidbody2D>();
+			_collider = GetComponent<CapsuleCollider2D>();
 			if (cameraFollow == null) cameraFollow = FindObjectOfType<CameraFollow>();
 		}
 
 		private void Start() {
 			playerInput.Cam = cameraFollow.viewCamera;
-			focusActionReset = false;
-			accelerationRatePerSec = baseSpeed / timeZeroToMax;
-			colliderOriginalHeight = col2D.size;
+			_focusActionReset = false;
+			_accelerationRatePerSec = baseSpeed / timeZeroToMax;
+			_colliderOriginalHeight = _collider.size;
 			BaseReset();
 		}
 
@@ -93,18 +93,18 @@ namespace Gameplay
 
 		private void BaseReset() {
 			maxSpeed = baseSpeed;
-			speedHolder = baseSpeed;
+			_speedHolder = baseSpeed;
 			maxJump = baseJumpMultiplier;
-			rb.gravityScale = fallMultiplier;
+			_rigidbody.gravityScale = fallMultiplier;
 		}
 
 		private void ValueReset() {
-			maxSpeed = speedHolder;
+			maxSpeed = _speedHolder;
 			// maxJump = jumpHolder;
 		}
 
 		private bool IsGrounded() =>
-			Physics2D.BoxCast(col2D.bounds.center, col2D.bounds.size, 0f, Vector2.down, 0.01f, layer);
+			Physics2D.BoxCast(_collider.bounds.center, _collider.bounds.size, 0f, Vector2.down, 0.01f, layer);
 
 		private void RelativeToGround() {
 			Vector3 origin = transform.localPosition;
@@ -113,8 +113,8 @@ namespace Gameplay
 			Quaternion targetRotation;
 			RaycastHit2D hit = new RaycastHit2D();
 			hit = (Physics2D.Raycast(origin, dir, dist, layer));
-			groundNormal = hit.normal;
-			Quaternion groundRotation = Quaternion.FromToRotation(transform.up, groundNormal) * transform.rotation;
+			_groundNormal = hit.normal;
+			Quaternion groundRotation = Quaternion.FromToRotation(transform.up, _groundNormal) * transform.rotation;
 			if (IsGrounded()) transform.rotation = groundRotation;
 			else if (!IsGrounded() && hit) {
 				targetRotation = Quaternion.Slerp(transform.rotation, groundRotation, Time.deltaTime * 2f);
@@ -129,57 +129,57 @@ namespace Gameplay
 		}
 
 		private void ApplyMovement() {
-			var velocity = rb.velocity;
+			var velocity = _rigidbody.velocity;
 			var decelerationRate = -maxSpeed / timeMaxToZero;
 
-			if (forwardVelocity > maxSpeed) {
-				forwardVelocity += decelerationRate * Time.deltaTime;
-				forwardVelocity = Mathf.Max(forwardVelocity, maxSpeed);
+			if (_forwardVelocity > maxSpeed) {
+				_forwardVelocity += decelerationRate * Time.deltaTime;
+				_forwardVelocity = Mathf.Max(_forwardVelocity, maxSpeed);
 			}
 			else {
-				forwardVelocity += accelerationRatePerSec * Time.deltaTime;
-				forwardVelocity = Mathf.Min(forwardVelocity, maxSpeed);
+				_forwardVelocity += _accelerationRatePerSec * Time.deltaTime;
+				_forwardVelocity = Mathf.Min(_forwardVelocity, maxSpeed);
 			}
 
-			velocity = new Vector2(forwardVelocity, velocity.y);
-			rb.velocity = velocity;
+			velocity = new Vector2(_forwardVelocity, velocity.y);
+			_rigidbody.velocity = velocity;
 			//other value management
 			currentSpeedVelocity = velocity;
 		}
 
 		private void Jump() {
 			StopCoroutine(Slide());
-			isSliding = false;
-			col2D.size = colliderOriginalHeight;
-			rb.gravityScale = fallMultiplier;
-			Debug.Log("Jumped");
-			rb.velocity = new Vector2(rb.velocity.x, maxJump);
+			_isSliding = false;
+			_collider.size = _colliderOriginalHeight;
+			_rigidbody.gravityScale = fallMultiplier;
+			// Debug.Log("Jumped");
+			_rigidbody.velocity = new Vector2(_rigidbody.velocity.x, maxJump);
 		}
 
 		private void Focus(bool inputValue) {
 			float speedIncrease = maxSpeed;
 			var angle = transform.eulerAngles.z;
 			if (angle > 180) angle -= 360;
-			Debug.Log($"Player angle {angle}");
+			// Debug.Log($"Player angle {angle}");
 			if (angle < slopeAngle && inputValue) {
 				if (!canFocus) {
-					speedHolder = maxSpeed;
+					_speedHolder = maxSpeed;
 					speedIncrease += slopeSpeedIncrease;
 					cameraFollow.StopAllCoroutines();
 					cameraFollow.StartCoroutine(cameraFollow.CameraZoomIn(xOffset: 2, camLock: true));
 					maxSpeed = speedIncrease;
 					canFocus = true;
-					focusActionReset = false;
+					_focusActionReset = false;
 				}
 			}
 			else {
-				if (canFocus && !focusActionReset) {
-					if (maxSpeed <= speedHolder || maxSpeed >= speedHolder) {
-						Debug.Log($"Focus Reset");
+				if (canFocus && !_focusActionReset) {
+					if (maxSpeed <= _speedHolder || maxSpeed >= _speedHolder) {
+						// Debug.Log($"Focus Reset");
 						cameraFollow.StartCoroutine(cameraFollow.CameraZoomReset());
-						maxSpeed = speedHolder;
+						maxSpeed = _speedHolder;
 					}
-					focusActionReset = true;
+					_focusActionReset = true;
 				}
 			}
 		}
@@ -187,14 +187,14 @@ namespace Gameplay
 		#region Coroutine Methods
 
 		private IEnumerator Slide() {
-			var size = col2D.size;
-			col2D.size = new Vector2(size.x, size.y / 2);
-			if (!IsGrounded()) rb.gravityScale *= 2;
-			isSliding = true;
+			var size = _collider.size;
+			_collider.size = new Vector2(size.x, size.y / 2);
+			if (!IsGrounded()) _rigidbody.gravityScale *= 2;
+			_isSliding = true;
 			yield return new WaitForSeconds(1.5f);
-			isSliding = false;
-			col2D.size = colliderOriginalHeight;
-			rb.gravityScale = fallMultiplier;
+			_isSliding = false;
+			_collider.size = _colliderOriginalHeight;
+			_rigidbody.gravityScale = fallMultiplier;
 		}
 
 		#endregion

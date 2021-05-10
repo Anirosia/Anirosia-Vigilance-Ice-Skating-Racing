@@ -117,16 +117,6 @@ public class ObjectPool : MonoBehaviour
         go.SetActive(false);
         go.transform.position = Vector3.zero;
     }
-    public void SetLevelInPool(GameObject level)
-    {
-        //Transform variance = level.transform.GetChild(1);
-        //Make Variance in level false
-        //for (int i = 0; i < level.transform.GetChild(1).childCount; i++)
-        //{
-        //level.transform.GetChild(1).GetChild(i).gameObject.SetActive(false);
-        //}
-        level.SetActive(false);
-    }
     #endregion
 
     #region Get from Pool
@@ -167,66 +157,8 @@ public class ObjectPool : MonoBehaviour
         LogError("No Objects Left in Pool");
         return null;
     }
-
-    public GameObject GetLevelFromPool(int currentLevel)
-    {
-        if (!_isInitialized) InitializePool();
-        string name = GameManager.Instance.CurrentLevelFolderName;
-        int startPosInList = 0;
-        int endPointInList = 0;
-
-
-        for (int i = 0; i < _pooledLevels.Count; i++)
-        {
-            if (!levelsToBePooled[i].folderName.StartsWith(name))
-            {
-                startPosInList += levelsToBePooled[i].amountOfLevels;
-            }
-            else
-            {
-                endPointInList = startPosInList + levelsToBePooled[i].amountOfLevels;
-                break;
-            }
-        }
-
-        Log("Start Position in List is " + startPosInList);
-
-        if (startPosInList == -1)
-        {
-            LogError("Error in the pool, probably not Initialized");
-            return null;
-        }
-
-        int iss = 0;
-        
-        while (iss < 200)
-        {
-            iss++;
-            int randomIndex = UnityEngine.Random.Range(startPosInList, endPointInList);
-
-            if (!_pooledLevels[randomIndex].activeSelf)
-            {
-                //Apply Variance
-                return _pooledLevels[randomIndex];
-            }
-        }
-
-        for (int i = 0; i < _pooledLevels.Count; i++)
-        {
-            if (!_pooledLevels[i].activeSelf)
-            {
-                //Apply Variance
-                return _pooledLevels[i];
-            }
-        }
-
-
-        return null;
-
-    }
     #endregion
     #endregion
-
     #region Logging Functions
     private void Log(string msg)
     {
