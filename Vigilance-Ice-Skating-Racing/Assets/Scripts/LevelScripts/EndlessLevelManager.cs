@@ -2,10 +2,8 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using LevelScripts;
-using Managers;
 using Unity.Mathematics;
 using UnityEngine;
-using UnityEngine.InputSystem;
 
 public class EndlessLevelManager : MonoBehaviour
 {
@@ -63,7 +61,7 @@ public class EndlessLevelManager : MonoBehaviour
                 //reset level and player position
             }
             if(CheckLevelForRemoval() && _newFlagLocation) RemoveChunk();
-            yield return new WaitForSeconds(2.5f);
+            yield return new WaitForSeconds(1.5f);
         }
     }
 
@@ -97,7 +95,8 @@ public class EndlessLevelManager : MonoBehaviour
         StartCoroutine(ConnectChunks());
     }
     private void RemoveChunk(){
-        Debug.Log("Chunk Removed");
+        var temp = _chunks[0].transform.parent.gameObject;
+        Destroy(temp);
         _chunks.RemoveAt(0);
         _newFlagLocation = false;
         AddChunk();
