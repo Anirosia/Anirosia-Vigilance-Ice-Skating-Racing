@@ -3,7 +3,9 @@ using System.Collections;
 using System.Collections.Generic;
 using LevelScripts;
 using Managers;
+using Unity.Mathematics;
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 public class EndlessLevelManager : MonoBehaviour
 {
@@ -13,18 +15,19 @@ public class EndlessLevelManager : MonoBehaviour
 
     [Header("Assignables")]
     public GameObject player;
-    public GameObject chunk;
+    public GameObject chunkPrefab;
 
     [Header("Variables")]
     private int maxChunks = 3;
 
-    private List<Vector2> _chunkStartPoint = new List<Vector2>();
-    private List<Vector2> _chunkEndPoint = new List<Vector2>();
+    private List<GameObject> _chunks = new List<GameObject>();
+    private const int MAX_DISTANCE = 50000;
 
     //Platforms Generated
     private int platformsGenerated = 0;
     //Current Level Index
     private int currentLevel = 0;
+
     //Distance At Which platforms become harder and more variance is added
     public int[] difficultyDistance = new int[] {200, 500, 1000};
     //List of Active Chunks
@@ -33,89 +36,85 @@ public class EndlessLevelManager : MonoBehaviour
     private float playerStartPosX = 0;
     //If the level position is reset to Zero, add the previous position to account for that in the total distance
     private float offset = 0;
+    [SerializeField] private Vector3 _removePointLocation;
+    
+    private bool _newFlagLocation;
 
     //When A Level is Added Callback
     public static event Action<GameObject> OnLevelAdded;
     #endregion
 
-    #region Mutators
-    #endregion
-
     #region Unity Messages
     private void Start(){
-        playerStartPosX = player.transform.position.x;
-        InitializeLevels();
+        InitializeLevel();
+        StartCoroutine(CheckPlayerPosition());
+    }
+    private void Update(){
+        // GameManager.Instance.CurrentDistance = (int)(player.transform.position.x - playerStartPosX + offset);
     }
 
-    private void FixedUpdate(){
-        //CalculateLevelDifficulty();
-        CalculateChunks();
-        CheckLevelPosition();
-        GameManager.Instance.CurrentDistance = (int)(player.transform.position.x - playerStartPosX + offset);
-    }
+    private void OnDisable()=>StopAllCoroutines();
     #endregion
 
     #region Distance Checks
-    private void CheckLevelPosition(){
-        if(activeChunks.Count > 0 && activeChunks[0].transform.position.x > 1000) ResetLevelPosition();
+    IEnumerator CheckPlayerPosition(){
+        while (true){
+            if(PlayerFromMaxDistance()){
+                //reset level and player position
+            }
+            if(CheckLevelForRemoval() && _newFlagLocation) RemoveChunk();
+            yield return new WaitForSeconds(2.5f);
+        }
     }
 
+    bool CheckLevelForRemoval()=>player.transform.position.x > _removePointLocation.x;
+
+    bool PlayerFromMaxDistance(){
+        if(player.transform.position.x >= MAX_DISTANCE) return true;
+        if(player.transform.position.y >= MAX_DISTANCE) return true;
+        if(player.transform.position.z >= MAX_DISTANCE) return true;
+
+        return false;
+    }
     private void ResetLevelPosition(){
         //Reset All Platforms Positions to 0
         platformsGenerated = maxChunks;
     }
-
-    private void CalculateLevelDifficulty(){
-        //if (player.transform.position.x > GameManager.Instance.GetDifficultyLevel(currentLevel)) currentLevel++;
-    }
     #endregion
 
     #region Chunk Management
-    private void CalculateChunks(){
-        if(player.transform.position.x > activeChunks[activeChunks.Count - 1].transform.position.x - 20){
-            AddLevel();
-        }
-
-        if(player.transform.position.x > activeChunks[1].transform.position.x + 10){
-            RemoveLevel();
-        }
+    private void InitializeLevel(){
+        _newFlagLocation = false;
+        var fistChunk = Instantiate(chunkPrefab);
+        fistChunk.SetActive(true);
+        _chunks.Add(fistChunk);
+        AddChunk();
     }
-    private void RemoveLevel(){
-        ObjectPool.Instance.SetLevelInPool(activeChunks[0]);
-        activeChunks.RemoveAt(0);
+    private void AddChunk(){
+        Vector3 spawnObject = new Vector3(-1000, -1000, -1000);
+        var chunk = Instantiate(chunkPrefab, spawnObject, quaternion.identity);
+        _chunks.Add(chunk);
+        StartCoroutine(ConnectChunks());
     }
-    private void AddLevel(){
-        GameObject level = GetNewLevel();
-        level.transform.position = activeChunks[activeChunks.Count - 1].GetComponent<EndlessLevel>().nextLevelTransform.position;
-        level.SetActive(true);
-        activeChunks.Add(level);
-        platformsGenerated++;
-        OnLevelAdded?.Invoke(level);
+    private void RemoveChunk(){
+        Debug.Log("Chunk Removed");
+        _chunks.RemoveAt(0);
+        _newFlagLocation = false;
+        AddChunk();
+    }
+    private IEnumerator ConnectChunks(){
+        yield return new WaitForSeconds(.1f);
+        var currentChunk = _chunks[0].GetComponent<TerrainGeneration>();
+        var newChunk = _chunks[1].GetComponent<TerrainGeneration>();
+        newChunk.StartPoint.position = currentChunk.EndPoint.position;
+        yield return new WaitForSeconds(1f);
+        _removePointLocation = newChunk.FlagRemovePoint;
+        _newFlagLocation = true;
+        yield return null;
     }
     #endregion
 
-    private void InitializeLevels(){
-        GameObject level = GetNewLevel();
-        level.transform.position = Vector3.zero;
-        level.SetActive(true);
-        activeChunks.Add(level);
-        platformsGenerated++;
-        OnLevelAdded?.Invoke(level);
-        AddLevel();
-        AddLevel();
-    }
 
-    // private void CreateChunk(){
-    //     var newChunk = Instantiate(chunk);
-    //     var chunkConnectionPoint = newChunk.GetComponent<SurfaceGen>();
-    //     _chunkStartPoint.Add(chunkConnectionPoint.StartPoint);
-    //     _chunkEndPoint.Add(chunkConnectionPoint.EndPoint);
-    // }
 
-    private void ConnectChunks(){
-        
-    }
-    
 
-    private GameObject GetNewLevel()=>ObjectPool.Instance.GetLevelFromPool(currentLevel);
 }

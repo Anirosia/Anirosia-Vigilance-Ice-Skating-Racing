@@ -152,7 +152,7 @@ namespace Gameplay
 			_isSliding = false;
 			_collider.size = _colliderOriginalHeight;
 			_rigidbody.gravityScale = fallMultiplier;
-			Debug.Log("Jumped");
+			// Debug.Log("Jumped");
 			_rigidbody.velocity = new Vector2(_rigidbody.velocity.x, maxJump);
 		}
 
@@ -160,7 +160,7 @@ namespace Gameplay
 			float speedIncrease = maxSpeed;
 			var angle = transform.eulerAngles.z;
 			if (angle > 180) angle -= 360;
-			Debug.Log($"Player angle {angle}");
+			// Debug.Log($"Player angle {angle}");
 			if (angle < slopeAngle && inputValue) {
 				if (!canFocus) {
 					_speedHolder = maxSpeed;
@@ -175,7 +175,7 @@ namespace Gameplay
 			else {
 				if (canFocus && !_focusActionReset) {
 					if (maxSpeed <= _speedHolder || maxSpeed >= _speedHolder) {
-						Debug.Log($"Focus Reset");
+						// Debug.Log($"Focus Reset");
 						cameraFollow.StartCoroutine(cameraFollow.CameraZoomReset());
 						maxSpeed = _speedHolder;
 					}

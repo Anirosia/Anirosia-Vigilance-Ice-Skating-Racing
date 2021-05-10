@@ -1,3 +1,5 @@
+using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using Random = UnityEngine.Random;
@@ -24,7 +26,7 @@ namespace LevelScripts
 
         public Transform StartPoint { get; private set; }
         public Transform EndPoint { get; private set; }
-
+        public Vector3 FlagRemovePoint { get; private set; }
         private void Start()=>CreateMesh();
         private void CreateMesh(){
             var filter = GetComponent<MeshFilter>();
@@ -45,9 +47,10 @@ namespace LevelScripts
 
             CreateStartPoint();
             CreateEndPoint();
+            Invoke("CreateRemoveFlagPoint", 0.5f);
             SpawnObstacles();
         }
-        
+
         private void CreateStartPoint(){
             var firstVertexPosition = _topVerticesPoints[0];
             var startPoint = new GameObject("StartPoint");
@@ -66,8 +69,17 @@ namespace LevelScripts
             endPoint.transform.SetParent(transform);
             endPoint.transform.localPosition = lastVertexPosition;
             EndPoint = endPoint.transform;
-
         }
+
+        void CreateRemoveFlagPoint(){
+            var flag = new GameObject("Flag");
+            flag.transform.SetParent(transform);
+            flag.transform.localPosition = _topVerticesPoints[50];
+            flag.transform.SetParent(null);
+            FlagRemovePoint = flag.transform.position;
+            Destroy(flag, .1f);
+        }
+
 
         public GameObject[] obstacles;
         RaycastHit2D _hit = new RaycastHit2D();
