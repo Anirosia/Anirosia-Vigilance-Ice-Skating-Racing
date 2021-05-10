@@ -1,5 +1,3 @@
-using System;
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using Random = UnityEngine.Random;
@@ -8,7 +6,7 @@ using Vector3 = UnityEngine.Vector3;
 
 namespace LevelScripts
 {
-    public class TerrainGeneration : MonoBehaviour
+    public class TerrainChunkGeneration : MonoBehaviour
     {
         private List<Vector3[]> _curves = new List<Vector3[]>();
         private List<Vector3> _vertices = new List<Vector3>();

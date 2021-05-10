@@ -2,7 +2,7 @@ using System.Collections.Generic;
 using UnityEngine;
 namespace LevelScripts
 {
-    public class ChunkGeneration : MonoBehaviour
+    public class SingleChunkGeneration : MonoBehaviour
     {
         private Mesh _mesh;
 

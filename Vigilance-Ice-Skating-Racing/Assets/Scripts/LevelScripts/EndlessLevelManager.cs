@@ -20,7 +20,10 @@ public class EndlessLevelManager : MonoBehaviour
     [Header("Variables")]
     private int maxChunks = 3;
 
-    [SerializeField] private List<GameObject> _chunks = new List<GameObject>();
+
+    private List<GameObject> _chunks = new List<GameObject>();
+    private Vector3 _removePointLocation;
+    private bool _newFlagLocation;
     private const int MAX_DISTANCE_THRESHOLD = 500;
 
     //Current Level Index
@@ -28,15 +31,10 @@ public class EndlessLevelManager : MonoBehaviour
 
     //Distance At Which platforms become harder and more variance is added
     public int[] difficultyDistance = new int[] {200, 500, 1000};
-    //List of Active Chunks
-    private List<GameObject> activeChunks = new List<GameObject>();
     //Start Position of the Player
-    private float playerStartPosX = 0;
+    private float _playerStartPosX = 0;
     //If the level position is reset to Zero, add the previous position to account for that in the total distance
-    private float offset = 0;
-    [SerializeField] private Vector3 _removePointLocation;
-
-    private bool _newFlagLocation;
+    private float _offset = 0;
 
     //When A Level is Added Callback
     public static event Action<GameObject> OnLevelAdded;
@@ -44,16 +42,22 @@ public class EndlessLevelManager : MonoBehaviour
 
     #region Unity Messages
     private void Start(){
+        _playerStartPosX = player.transform.position.x;
         InitializeLevel();
         StartCoroutine(CheckPlayerPosition());
-    }
-    private void Update(){
-        // GameManager.Instance.CurrentDistance = (int)(player.transform.position.x - playerStartPosX + offset);
+        StartCoroutine(DistanceTraveled());
     }
     private void OnDisable()=>StopAllCoroutines();
     #endregion
 
     #region Distance Checks
+    IEnumerator DistanceTraveled(){
+        var gm = GameManager.Instance;
+        while (true){
+            gm.CurrentDistance =(int)(player.transform.position.x - _playerStartPosX + _offset);
+            yield return null;
+        }
+    }
     IEnumerator CheckPlayerPosition(){
         while (true){
             if(PlayerFromMaxDistance()){
@@ -69,10 +73,12 @@ public class EndlessLevelManager : MonoBehaviour
     bool PlayerFromMaxDistance()=>player.transform.position.magnitude > MAX_DISTANCE_THRESHOLD;
     private void ResetLevelPosition(){
         UnityEngine.Object[] objects = FindObjectsOfType(typeof(Transform));
+        _offset += player.transform.position.x;
         foreach (object o in objects){
             Transform t = (Transform)o;
             if(t.parent==null) t.position -= player.transform.position;
         }
+        
     }
     #endregion
 
@@ -105,8 +111,8 @@ public class EndlessLevelManager : MonoBehaviour
     }
     private IEnumerator ConnectChunks(){
         yield return new WaitForSeconds(.1f);
-        var currentChunk = _chunks[0].GetComponent<TerrainGeneration>();
-        var newChunk = _chunks[1].GetComponent<TerrainGeneration>();
+        var currentChunk = _chunks[0].GetComponent<TerrainChunkGeneration>();
+        var newChunk = _chunks[1].GetComponent<TerrainChunkGeneration>();
         newChunk.StartPoint.position = currentChunk.EndPoint.position;
         yield return new WaitForSeconds(1f);
         newChunk.CreateRemoveFlagPoint();

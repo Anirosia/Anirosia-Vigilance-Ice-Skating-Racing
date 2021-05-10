@@ -31,7 +31,9 @@ public class GameManager : MonoBehaviour
 
     #region Mutators
     public string CurrentLevelFolderName { get { return levelNames[_currentLevel]; } }
-    public int CurrentDistance { get { return _currentDistance; } set { _currentDistance = value; } }
+    public int CurrentDistance { get=>_currentDistance;
+        set=>_currentDistance = value;
+    }
     #endregion
 
     #region Singleton

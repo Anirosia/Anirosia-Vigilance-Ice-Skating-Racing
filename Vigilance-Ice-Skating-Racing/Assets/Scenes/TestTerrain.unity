@@ -141,7 +141,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!114 &516915872
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -255,7 +255,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!81 &847754741
 AudioListener:
   m_ObjectHideFlags: 0
@@ -356,7 +356,6 @@ MonoBehaviour:
   chunkPrefab: {fileID: 4188677434903482102, guid: c51910849a276f144aa7d041bf0ccdcb,
     type: 3}
   difficultyDistance: c8000000f4010000e8030000
-  _removePointLocation: {x: 0, y: 0, z: 0}
 --- !u!4 &968606532
 Transform:
   m_ObjectHideFlags: 0
@@ -510,7 +509,7 @@ PrefabInstance:
     - target: {fileID: 5947987212110920734, guid: 122e1ec9921153c4ba86485d5f1cb6f9,
         type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 5947987212110920805, guid: 122e1ec9921153c4ba86485d5f1cb6f9,
         type: 3}
