@@ -68,7 +68,7 @@ namespace Gameplay
             if(cameraFollow==null) cameraFollow = FindObjectOfType<CameraFollow>();
         }
         private void Start(){
-            playerInput.Cam = cameraFollow.viewCamera;
+            playerInput.Cam = cameraFollow.ViewCamera;
             _focusActionReset = false;
             _accelerationRatePerSec = baseSpeed / timeZeroToMax;
             _colliderOriginalHeight = _collider.size;
@@ -83,7 +83,7 @@ namespace Gameplay
             AnimationCalls();
         }
         private void FixedUpdate()=>ApplyMovement();
-        private void LateUpdate()=>cameraFollow.CameraWork(IsGrounded());
+        private void LateUpdate()=>cameraFollow.CameraWork(IsGrounded(), _isSliding);
   #endregion
 
         #region Movement Handlers

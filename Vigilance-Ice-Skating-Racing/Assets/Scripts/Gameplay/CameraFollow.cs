@@ -1,157 +1,151 @@
 ﻿using System;
 using System.Collections;
-using System.ComponentModel;
 using DefaultNamespace;
 using UnityEngine;
 
 namespace Gameplay
 {
-	public class CameraFollow : MonoBehaviour
-	{
-		[Header("Camera Settings")] [ReadOnlyInspector] [SerializeReference]
-		private float cameraSmoothing = 0.1f;
-		public Vector3 offset;
-		public Transform target;
-		[SerializeField] [Range(0, 1)] private float zoomSmoothSpeed;
-		[ReadOnlyInspector] [SerializeField] private int viewDist;
-		[ReadOnlyInspector] [SerializeField] private float smooth;
+    public class CameraFollow : MonoBehaviour
+    {
+        #region Fields
+        [Header("Camera Settings")]
+        [ReadOnlyInspector] [SerializeReference]
+        private float cameraSmoothing = 0.1f;
+        [SerializeField] private Vector3 offset;
+        [SerializeField] private Transform target;
+        [SerializeField] [Range(0, 1)] private float zoomSmoothSpeed;
+        [ReadOnlyInspector] [SerializeField] private int viewDist;
+        [ReadOnlyInspector] [SerializeField] private float smooth;
+        private int _desiredZoomInDistance = 3;
+        private int _desiredZoomOutDistance = 8;
+        private bool _isTargetNotNull;
+        private Camera _viewCamera;
+        private Vector3 _savedOffset;
+        private float _cameraLock = 1;
+        [Header("Zoom Settings")]
+        [Header("Zoom Values")]
+        [ReadOnlyInspector] [SerializeField] private float setOffsetSpeed = 17f;
+        [ReadOnlyInspector] [SerializeField] private float setZoomSpeed = 10f;
+        [ReadOnlyInspector] [SerializeField] private float setLockSpeed = 4.5f;
 
-		private int _desiredZoomInDistance = 3;
-		private int _desiredZoomOutDistance = 8;
-		private bool _isTargetNotNull;
-		[HideInInspector]public Camera viewCamera;
-		private Vector3 _savedOffset;
-		private float _cameraLock = 1;
+        [Header("Zoom Calculations")]
+        //execution after calculation
+        [ReadOnlyInspector] [SerializeField] private float offsetSpeed;
+        [ReadOnlyInspector] [SerializeField] private float zoomSpeed;
+        [ReadOnlyInspector] [SerializeField] private float lockSpeed;
+        private bool _actionCalled;
+  #endregion
 
-		[Header("Zoom Settings")]
-		[Header("Zoom Values")]
-		//setup
-		[ReadOnlyInspector]
-		[SerializeField]
-		private float setOffsetSpeed = 17f;
+        #region Properties
+        public Camera ViewCamera=>_viewCamera;
+  #endregion
 
-		[ReadOnlyInspector] [SerializeField] private float setZoomSpeed = 10f;
-		[ReadOnlyInspector] [SerializeField] private float setLockSpeed = 4.5f;
+        #region Start Methods
+        private void Awake(){
+            _viewCamera = GetComponent<Camera>();
+        }
+        private void OnEnable(){
+            _isTargetNotNull = target!=null;
+            viewDist = Mathf.RoundToInt(_viewCamera.orthographicSize);
+            _savedOffset = offset;
+            smooth = cameraSmoothing;
+            UnitNotionConversion();
+        }
 
-		[Header("Zoom Calculations")]
-		//execution after calculation
-		[ReadOnlyInspector]
-		[SerializeField]
-		private float offsetSpeed;
+        private void OnValidate(){
+            UnitNotionConversion();
+        }
+  #endregion
 
-		[ReadOnlyInspector] [SerializeField] private float zoomSpeed;
-		[ReadOnlyInspector] [SerializeField] private float lockSpeed;
-		private bool actionCalled;
+        #region Updates
+        private void FixedUpdate(){
+            if(_isTargetNotNull){
+                var desiredPos = target.position + offset;
+                Vector3 smoothPos = Vector3.Lerp(transform.position, desiredPos, smooth);
+                transform.position = smoothPos;
+            }
+        }
+        public void CameraWork(bool grounded, bool sliding){
+            if(!sliding){
+                if(!grounded && !_actionCalled){
+                    StopAllCoroutines();
+                    StartCoroutine(CameraZoomOut(enableY: true));
+                    _actionCalled = true;
+                }
+                else if(grounded && _actionCalled){
+                    StopAllCoroutines();
+                    StartCoroutine(CameraZoomReset());
+                    _actionCalled = false;
+                }
+            }
+        }
+  #endregion
 
-		private void Awake() {
-			viewCamera = GetComponent<Camera>();
-		}
+        #region Camera Actions
+        public IEnumerator CameraZoomIn(float xOffset = default, bool camLock = false,
+                                        bool reset = false){
+            // Debug.Log("Camera Zoom In");
+            int zoomDistance;
+            zoomDistance = reset ? viewDist : _desiredZoomInDistance;
 
+            while (_viewCamera.orthographicSize >= zoomDistance){
+                _viewCamera.orthographicSize -= zoomSpeed;
 
-		private void OnEnable() {
-			_isTargetNotNull = target != null;
-			viewDist = Mathf.RoundToInt(viewCamera.orthographicSize);
-			_savedOffset = offset;
-			smooth = cameraSmoothing;
-			UnitNotionConversion();
-		}
+                if(offset.y <= 0) offset.y += offsetSpeed * 1.5f;
 
-		private void OnValidate() {
-			UnitNotionConversion();
-		}
+                if(offset.x >= xOffset) offset.x -= offsetSpeed;
+                yield return new WaitForSeconds(Time.deltaTime);
+                if(camLock){
+                    if(smooth <= _cameraLock) smooth += lockSpeed;
+                }
+            }
 
-		private void FixedUpdate() {
-			if (_isTargetNotNull) {
-				var desiredPos = target.position + offset;
-				Vector3 smoothPos = Vector3.Lerp(transform.position, desiredPos, smooth);
-				transform.position = smoothPos;
-			}
-		}
+            if(camLock) smooth = _cameraLock;
+            offset.x = xOffset;
+            offset.y = _savedOffset.y;
+            _viewCamera.orthographicSize = zoomDistance;
+        }
+        private IEnumerator CameraZoomOut(float xOffset = default, bool reset = false, bool enableY = false){
+            // Debug.Log("Camera Zoom Out");
+            int zoomDistance;
+            zoomDistance = reset ? viewDist : _desiredZoomOutDistance;
+            while (_viewCamera.orthographicSize <= zoomDistance){
+                _viewCamera.orthographicSize += zoomSpeed;
+                if(offset.x <= xOffset) offset.x += offsetSpeed;
+                if(offset.y <= 0 && enableY) offset.y -= offsetSpeed;
+                if(_viewCamera.orthographicSize >= cameraSmoothing){
+                    if(smooth <= cameraSmoothing) smooth = cameraSmoothing;
+                    else smooth -= lockSpeed;
+                }
+                yield return new WaitForSeconds(Time.deltaTime);
+            }
+            smooth = cameraSmoothing;
+            offset.x = _savedOffset.x;
+            offset.y = _savedOffset.y;
+            _viewCamera.orthographicSize = zoomDistance;
+        }
+        public IEnumerator CameraZoomReset(){
+            StopAllCoroutines();
+            // Debug.Log("Camera Reset");
+            if(_viewCamera.orthographicSize < viewDist)
+                return CameraZoomOut(_savedOffset.x, true);
+            else
+                return CameraZoomIn(_savedOffset.x, reset: true);
+        }
+  #endregion
 
-		// public void SelfReference(Transform objectTransform) {
-		// 	if (!_isTargetNotNull) {
-		// 		target = objectTransform;
-		// 		_isTargetNotNull = true;
-		// 	}
-		// }
+        private void UnitNotionConversion(){
+            var power = _desiredZoomInDistance + zoomSmoothSpeed;
+            offsetSpeed = (float)Math.Round(setOffsetSpeed * Mathf.Pow(10, -power), 5);
+            zoomSpeed = (float)Math.Round(setZoomSpeed * Mathf.Pow(10, -power), 5);
+            lockSpeed = (float)Math.Round(setLockSpeed * Mathf.Pow(10, -power), 5);
+        }
 
-		public void CameraWork(bool grounded) {
-			//downhill handlers
-
-			var angle = Mathf.Floor(target.localEulerAngles.z);
-			if (angle > 180) angle -= 360;
-			// Debug.Log($"Player angle {angle}");
-			if (angle < -5 || angle > 5) smooth = .5f;
-			else smooth = cameraSmoothing;
-
-			//ground handler
-			if (!grounded && !actionCalled) {
-				StopAllCoroutines();
-				StartCoroutine(CameraZoomOut());
-				actionCalled = true;
-			}
-			else if (grounded && actionCalled) {
-				StopAllCoroutines();
-				StartCoroutine(CameraZoomReset());
-				actionCalled = false;
-			}
-		}
-
-		private void UnitNotionConversion() {
-			var power = _desiredZoomInDistance + zoomSmoothSpeed;
-			offsetSpeed = (float) Math.Round(setOffsetSpeed * Mathf.Pow(10, -power), 5);
-			zoomSpeed = (float) Math.Round(setZoomSpeed     * Mathf.Pow(10, -power), 5);
-			lockSpeed = (float) Math.Round(setLockSpeed     * Mathf.Pow(10, -power), 5);
-		}
-
-		public IEnumerator CameraZoomIn(float xOffset = default, bool camLock = false,
-		                                bool reset = false) {
-			// Debug.Log("Camera Zoom In");
-			int zoomDistance;
-			zoomDistance = reset ? viewDist : _desiredZoomInDistance;
-
-			while (viewCamera.orthographicSize >= zoomDistance) {
-				viewCamera.orthographicSize -= zoomSpeed;
-				if (offset.x >= xOffset) offset.x -= offsetSpeed;
-				yield return new WaitForSeconds(Time.deltaTime);
-				if (camLock) {
-					if (smooth <= _cameraLock) smooth += lockSpeed;
-				}
-			}
-
-			if (camLock) smooth = _cameraLock;
-			offset.x = xOffset;
-			viewCamera.orthographicSize = zoomDistance;
-		}
-
-		public IEnumerator CameraZoomOut(float xOffset = default, bool reset = false) {
-			// Debug.Log("Camera Zoom Out");
-			int zoomDistance;
-			zoomDistance = reset ? viewDist : _desiredZoomOutDistance;
-
-			while (viewCamera.orthographicSize <= zoomDistance) {
-				viewCamera.orthographicSize += zoomSpeed;
-				if (offset.x <= xOffset) offset.x += offsetSpeed;
-				if (viewCamera.orthographicSize >= cameraSmoothing) {
-					if (smooth <= cameraSmoothing) smooth = cameraSmoothing;
-					else smooth -= lockSpeed;
-				}
-
-				yield return new WaitForSeconds(Time.deltaTime);
-			}
-
-			smooth = cameraSmoothing;
-			offset.x = _savedOffset.x;
-			viewCamera.orthographicSize = zoomDistance;
-		}
-
-		public IEnumerator CameraZoomReset() {
-			StopAllCoroutines();
-			// Debug.Log("Camera Reset");
-			if (viewCamera.orthographicSize < viewDist)
-				return CameraZoomOut(_savedOffset.x, true);
-			else
-				return CameraZoomIn(_savedOffset.x, reset: true);
-		}
-	}
+        // public void SelfReference(Transform objectTransform) {
+        // 	if (!_isTargetNotNull) {
+        // 		target = objectTransform;
+        // 		_isTargetNotNull = true;
+        // 	}
+        // }
+    }
 }
