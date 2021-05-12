@@ -68,12 +68,12 @@ namespace Gameplay
 			}
 		}
 
-		public void SelfReference(Transform objectTransform) {
-			if (!_isTargetNotNull) {
-				target = objectTransform;
-				_isTargetNotNull = true;
-			}
-		}
+		// public void SelfReference(Transform objectTransform) {
+		// 	if (!_isTargetNotNull) {
+		// 		target = objectTransform;
+		// 		_isTargetNotNull = true;
+		// 	}
+		// }
 
 		public void CameraWork(bool grounded) {
 			//downhill handlers
@@ -106,7 +106,7 @@ namespace Gameplay
 
 		public IEnumerator CameraZoomIn(float xOffset = default, bool camLock = false,
 		                                bool reset = false) {
-			Debug.Log("Camera Zoom In");
+			// Debug.Log("Camera Zoom In");
 			int zoomDistance;
 			zoomDistance = reset ? viewDist : _desiredZoomInDistance;
 
@@ -125,7 +125,7 @@ namespace Gameplay
 		}
 
 		public IEnumerator CameraZoomOut(float xOffset = default, bool reset = false) {
-			Debug.Log("Camera Zoom Out");
+			// Debug.Log("Camera Zoom Out");
 			int zoomDistance;
 			zoomDistance = reset ? viewDist : _desiredZoomOutDistance;
 
@@ -147,7 +147,7 @@ namespace Gameplay
 
 		public IEnumerator CameraZoomReset() {
 			StopAllCoroutines();
-			Debug.Log("Camera Reset");
+			// Debug.Log("Camera Reset");
 			if (viewCamera.orthographicSize < viewDist)
 				return CameraZoomOut(_savedOffset.x, true);
 			else

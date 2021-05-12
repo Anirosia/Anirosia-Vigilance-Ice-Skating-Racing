@@ -8,23 +8,37 @@ namespace LevelScripts
 {
     public class TerrainChunkGeneration : MonoBehaviour
     {
+        #region Fields
         private List<Vector3[]> _curves = new List<Vector3[]>();
-        private List<Vector3> _vertices = new List<Vector3>();
+        [SerializeField] private List<Vector3> _vertices = new List<Vector3>();
         private List<int> _triangles = new List<int>();
-        private List<Vector2> _topVerticesPoints = new List<Vector2>();
+        [SerializeField] private List<Vector2> _topVerticesPoints = new List<Vector2>();
 
         public GameObject foreground;
         private Mesh _mesh;
 
+        //this also works as how you want the angle of the slope to be
         [Range(.5f, 1f)] public float step = 0.5f;
+        private float _stepHelper;
+
         [SerializeField] int resolution = 20;
         [SerializeField] int mapLength = 10;
 
-        private float _stepHelper;
+        [SerializeField] private GameObject[] obstacles;
+        [SerializeField] private LayerMask layerMask;
+        RaycastHit2D _hit = new RaycastHit2D();
 
+        [Header("Debug")]
+        public bool removeObjects;
+  #endregion
+
+        #region Properties
         public Transform StartPoint { get; private set; }
         public Transform EndPoint { get; private set; }
         public Vector3 FlagRemovePoint { get; private set; }
+  #endregion
+
+        #region Start Methods
         private void Start()=>CreateMesh();
         private void CreateMesh(){
             var filter = GetComponent<MeshFilter>();
@@ -46,9 +60,60 @@ namespace LevelScripts
             CreateStartPoint();
             CreateEndPoint();
             // Invoke("CreateRemoveFlagPoint", 0.5f);
-            SpawnObstacles();
+            if(!removeObjects) SpawnObstacles();
         }
+  #endregion
 
+        #region Generating Terrain
+        private void GenerateCurveConnections(){
+            var xPos = 0f;
+            for(int c = 0; c < mapLength; c++){
+                var curve = new Vector3[4];
+                for(int i = 0; i < curve.Length; i++){
+                    Vector3[] prev = null;
+                    if(_curves.Count > 0) prev = _curves[_curves.Count - 1];
+
+                    if(prev!=null && i==0) curve[i] = prev[curve.Length - 1];
+                    else if(prev!=null && i==1) curve[i] = 2f * prev[curve.Length - 1] - prev[curve.Length - 2];
+                    else curve[i] = new Vector3(xPos, Random.Range(1f, 2f), 0f);
+                    xPos += step;
+                }
+                _curves.Add(curve);
+            }
+        }
+        private void AddTerrainPoint(Vector3 point, int resCount){
+            //creates a corresponding point along the bottom
+            _vertices.Add(new Vector3(point.x, -_stepHelper, 0f));
+
+            //then add the top point
+            point.y -= _stepHelper - 1.5f;
+            _vertices.Add(point);
+            _topVerticesPoints.Add(point);
+
+            if(_vertices.Count >= 4){
+                int start = _vertices.Count - 4;
+                _triangles.Add(start + 0);
+                _triangles.Add(start + 1);
+                _triangles.Add(start + 2);
+                _triangles.Add(start + 1);
+                _triangles.Add(start + 3);
+                _triangles.Add(start + 2);
+            }
+            if(resCount!=resolution - 1) _stepHelper += 0.05f;
+        }
+        private void DrawConnections(){
+            _stepHelper = 0f;
+            foreach (var curve in _curves){
+                for(int i = 0; i < resolution; i++){
+                    float t = (float)i / (float)(resolution - 1);
+                    Vector3 point = BézierPoint(t, curve[0], curve[1], curve[2], curve[3]);
+                    AddTerrainPoint(point, i);
+                }
+            }
+        }
+  #endregion
+
+        #region Creating Reference Points
         private void CreateStartPoint(){
             var firstVertexPosition = _topVerticesPoints[0];
             var startPoint = new GameObject("StartPoint");
@@ -77,11 +142,9 @@ namespace LevelScripts
             FlagRemovePoint = flag.transform.position;
             Destroy(flag, .1f);
         }
+  #endregion
 
-
-        public GameObject[] obstacles;
-        RaycastHit2D _hit = new RaycastHit2D();
-        public LayerMask _layerMask;
+        #region Spawing
         private void SpawnObstacles(){
             var obstaclePerChunk = 5;
             List<Vector2> spawnPoints = new List<Vector2>();
@@ -94,61 +157,15 @@ namespace LevelScripts
                 var obstacle = Instantiate(obstacles[Random.Range(0, obstacles.GetLength(0))]);
 
 
-                _hit = Physics2D.Raycast(obstacle.transform.position, Vector2.down, 2f, _layerMask);
+                _hit = Physics2D.Raycast(obstacle.transform.position, Vector2.down, 2f, layerMask);
                 obstacle.transform.SetParent(transform);
                 obstacle.transform.localPosition = spawnPoint;
-                // obstacle.transform.rotation = ;
             }
         }
+  #endregion
 
+#region Helper Methods
         Vector2 GetRandomPoint()=>_topVerticesPoints[Random.Range(5, _topVerticesPoints.Count - 5)];
-
-        private void DrawConnections(){
-            _stepHelper = 0f;
-            foreach (var curve in _curves){
-                for(int i = 0; i < resolution; i++){
-                    float t = (float)i / (float)(resolution - 1);
-                    Vector3 point = BézierPoint(t, curve[0], curve[1], curve[2], curve[3]);
-                    AddTerrainPoint(point, i);
-                }
-            }
-        }
-
-        private void GenerateCurveConnections(){
-            var xPos = 0f;
-            for(int c = 0; c < mapLength; c++){
-                var curve = new Vector3[4];
-                for(int i = 0; i < curve.Length; i++){
-                    Vector3[] prev = null;
-                    if(_curves.Count > 0) prev = _curves[_curves.Count - 1];
-
-                    if(prev!=null && i==0) curve[i] = prev[curve.Length - 1];
-                    else if(prev!=null && i==1) curve[i] = 2f * prev[curve.Length - 1] - prev[curve.Length - 2];
-                    else curve[i] = new Vector3(xPos, Random.Range(1f, 2f), 0f);
-                    xPos += step;
-                }
-                _curves.Add(curve);
-            }
-        }
-
-        private void AddTerrainPoint(Vector3 point, int resCount){
-            _vertices.Add(new Vector3(point.x, -_stepHelper, 0f));
-            point.y -= _stepHelper;
-            _vertices.Add(point);
-            _topVerticesPoints.Add(point);
-
-            if(_vertices.Count >= 4){
-                int start = _vertices.Count - 4;
-                _triangles.Add(start + 0);
-                _triangles.Add(start + 1);
-                _triangles.Add(start + 2);
-                _triangles.Add(start + 1);
-                _triangles.Add(start + 3);
-                _triangles.Add(start + 2);
-            }
-            if(resCount!=resolution - 1) _stepHelper += 0.05f;
-        }
-
         private Vector3 BézierPoint(float t, Vector3 p0, Vector3 p1, Vector3 p2, Vector3 p3){
             Vector3 a = Vector3.Lerp(p0, p1, t);
             Vector3 b = Vector3.Lerp(p1, p2, t);
@@ -159,5 +176,8 @@ namespace LevelScripts
 
             return Vector3.Lerp(d, e, t);
         }
+  #endregion
+
+
     }
 }

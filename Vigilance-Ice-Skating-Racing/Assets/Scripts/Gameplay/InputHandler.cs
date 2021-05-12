@@ -74,7 +74,7 @@ namespace Gameplay
 				_trailRef = Instantiate(trailObject, _startTouchPos,
 					quaternion.identity);
 			StartCoroutine(TouchResponseUpdate());
-			Debug.Log($"Touch Began {_startTouchPos}");
+			// Debug.Log($"Touch Began {_startTouchPos}");
 		}
 
 		private void OnTouchEnded() {
@@ -82,22 +82,13 @@ namespace Gameplay
 			if (_trailRef != null) Destroy(_trailRef);
 			SwipeValue();
 			StartCoroutine(Released());
-			Debug.Log("Touch Ended");
+			// Debug.Log("Touch Ended");
 		}
 
 		private void DetermineSwipe(Vector2 swipeDelta) {
 			if (swipeDelta.magnitude > _deadZone) {
 				if (Mathf.Abs(swipeDelta.x) < Mathf.Abs(swipeDelta.y)) {
 					if (swipeDelta.y > _deadZone) {
-						// if (swipeDelta.y > swipeHeight) {
-						// 	//high jump
-						// 	debugColor = Color.green;
-						// }
-						// else {
-						// 	//low jump
-						//
-						// 	debugColor = Color.white;
-						// }
 						_swipeDirections = SwipeDirections.Up;
 						// Debug.Log($"Swiped Up");
 					}
@@ -162,8 +153,6 @@ namespace Gameplay
 					_swipeDirections = SwipeDirections.Press;
 					_debugColor = Color.red;
 				}
-
-
 				Debug.DrawLine(ScreenPointConvert(_startTouchPos), _screenTouchPosition, _debugColor);
 				yield return null; //to make it execute once per frame
 			}

@@ -20,12 +20,13 @@ public class EndlessLevelManager : MonoBehaviour
     [Header("Variables")]
     private int maxChunks = 3;
 
-
     private List<GameObject> _chunks = new List<GameObject>();
     private Vector3 _removePointLocation;
     private bool _newFlagLocation;
     private const int MAX_DISTANCE_THRESHOLD = 500;
 
+
+    private GameManager _gameManager;
     //Current Level Index
     private int currentLevel = 0;
 
@@ -41,23 +42,21 @@ public class EndlessLevelManager : MonoBehaviour
     #endregion
 
     #region Unity Messages
+    private void Awake()=>_gameManager = GameManager.Instance;
     private void Start(){
         _playerStartPosX = player.transform.position.x;
         InitializeLevel();
         StartCoroutine(CheckPlayerPosition());
-        StartCoroutine(DistanceTraveled());
     }
     private void OnDisable()=>StopAllCoroutines();
+
+    private void Update(){
+        //Distance Traveled
+        // _gameManager.CurrentDistance = (int)(player.transform.position.x - _playerStartPosX + _offset);
+    }
     #endregion
 
     #region Distance Checks
-    IEnumerator DistanceTraveled(){
-        var gm = GameManager.Instance;
-        while (true){
-            gm.CurrentDistance =(int)(player.transform.position.x - _playerStartPosX + _offset);
-            yield return null;
-        }
-    }
     IEnumerator CheckPlayerPosition(){
         while (true){
             if(PlayerFromMaxDistance()){
@@ -78,7 +77,7 @@ public class EndlessLevelManager : MonoBehaviour
             Transform t = (Transform)o;
             if(t.parent==null) t.position -= player.transform.position;
         }
-        
+
     }
     #endregion
 
@@ -87,6 +86,7 @@ public class EndlessLevelManager : MonoBehaviour
         _newFlagLocation = false;
         var fistChunk = Instantiate(chunkPrefab);
         fistChunk.SetActive(true);
+        fistChunk.transform.position = new Vector3(-10, 0, 0);
         _chunks.Add(fistChunk);
         AddChunk();
     }
