@@ -32,6 +32,7 @@ namespace Gameplay
         private float _forwardVelocity;
         private float _accelerationRatePerSec;
         private bool _isSliding;
+        [ReadOnlyInspector] [SerializeField] private bool _isStun;
         private Rigidbody2D _rigidbody;
 
         [Header("Current Values")] [ReadOnlyInspector] [SerializeField]
@@ -48,9 +49,11 @@ namespace Gameplay
         // ========================== Animation Values
         private static readonly int ASliding = Animator.StringToHash("Slide");
         private static readonly int AJumping = Animator.StringToHash("CanJump");
+        private static readonly int AStun = Animator.StringToHash("Stun");
 
         private float _speedHolder;
         private bool _focusActionReset;
+        private bool _stunCalled;
 
         private Animator _animator;
         private CapsuleCollider2D _collider;
@@ -84,12 +87,14 @@ namespace Gameplay
         }
         private void FixedUpdate()=>ApplyMovement();
         private void LateUpdate()=>cameraFollow.CameraWork(IsGrounded(), _isSliding);
+        private void OnTriggerEnter2D(Collider2D other)=>_isStun = (other.CompareTag("Obstacle"));
   #endregion
 
         #region Movement Handlers
         private void ApplyMovement(){
             var velocity = _rigidbody.velocity;
             var decelerationRate = -maxSpeed / timeMaxToZero;
+
 
             if(_forwardVelocity > maxSpeed){
                 _forwardVelocity += decelerationRate * Time.deltaTime;
@@ -98,6 +103,14 @@ namespace Gameplay
             else{
                 _forwardVelocity += _accelerationRatePerSec * Time.deltaTime;
                 _forwardVelocity = Mathf.Min(_forwardVelocity, maxSpeed);
+            }
+
+            if(_isStun){
+                _forwardVelocity = 0;
+                if(!_stunCalled){
+                    _stunCalled = true;
+                    StartCoroutine(Stun());
+                }
             }
 
             velocity = new Vector2(_forwardVelocity, velocity.y);
@@ -141,6 +154,7 @@ namespace Gameplay
         private void AnimationCalls(){
             _animator.SetBool(ASliding, _isSliding);
             _animator.SetBool(AJumping, IsGrounded());
+            _animator.SetBool(AStun, _isStun);
         }
         private void BaseReset(){
             maxSpeed = baseSpeed;
@@ -199,6 +213,12 @@ namespace Gameplay
             _isSliding = false;
             _collider.size = _colliderOriginalHeight;
             _rigidbody.gravityScale = fallMultiplier;
+        }
+        private IEnumerator Stun(){
+            cameraFollow.StartCoroutine(cameraFollow.CameraShake());
+            yield return new WaitForSeconds(1.5f);
+            _isStun = false;
+            _stunCalled = false;
         }
 		#endregion
 

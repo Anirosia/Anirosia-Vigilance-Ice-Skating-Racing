@@ -189,4 +189,4 @@ MonoBehaviour:
   layerMask:
     serializedVersion: 2
     m_Bits: 64
-  removeObjects: 1
+  removeObjects: 0

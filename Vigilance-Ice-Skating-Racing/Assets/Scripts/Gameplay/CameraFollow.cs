@@ -2,6 +2,8 @@
 using System.Collections;
 using DefaultNamespace;
 using UnityEngine;
+using UnityEngine.InputSystem;
+using Random = UnityEngine.Random;
 
 namespace Gameplay
 {
@@ -131,6 +133,23 @@ namespace Gameplay
                 return CameraZoomOut(_savedOffset.x, true);
             else
                 return CameraZoomIn(_savedOffset.x, reset: true);
+        }
+
+        private float _shakeTime = 1f;
+        private float _duration;
+        public IEnumerator CameraShake(){
+            _duration = 0;
+            var originalPos = offset;
+            var xMin = offset.x - 1;
+            var xMax = offset.x + 1;
+            while (_shakeTime > _duration){
+                var xOffset = offset.x + Random.Range(-1f, 1f) * .1f;
+                var yOffset = Random.Range(-1f, 1f) * .1f;
+                offset = new Vector3(Mathf.Clamp(xOffset, xMin, xMax), offset.y, offset.z);
+                _duration += Time.deltaTime;
+                yield return null;
+            }
+            offset = originalPos;
         }
   #endregion
 
