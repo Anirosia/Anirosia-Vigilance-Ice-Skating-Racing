@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Runtime.ExceptionServices;
 using LevelScripts;
 using Unity.Mathematics;
 using UnityEngine;
@@ -20,12 +21,14 @@ public class EndlessLevelManager : MonoBehaviour
     [Header("Variables")]
     private int maxChunks = 3;
 
-
-    private List<GameObject> _chunks = new List<GameObject>();
+    private GameObject[] _chunks = new GameObject[2];
+    private TerrainChunkGeneration[] _terrainChunkGenerations = new TerrainChunkGeneration[2];
     private Vector3 _removePointLocation;
     private bool _newFlagLocation;
-    private const int MAX_DISTANCE_THRESHOLD = 500;
+    private const int MAX_DISTANCE_THRESHOLD = 150;
 
+
+    private GameManager _gameManager;
     //Current Level Index
     private int currentLevel = 0;
 
@@ -41,34 +44,36 @@ public class EndlessLevelManager : MonoBehaviour
     #endregion
 
     #region Unity Messages
+    private void Awake()=>_gameManager = GameManager.Instance;
     private void Start(){
         _playerStartPosX = player.transform.position.x;
         InitializeLevel();
         StartCoroutine(CheckPlayerPosition());
-        StartCoroutine(DistanceTraveled());
     }
     private void OnDisable()=>StopAllCoroutines();
+
+    private void Update(){
+        //Distance Traveled
+        // _gameManager.CurrentDistance = (int)(player.transform.position.x - _playerStartPosX + _offset);
+    }
     #endregion
 
     #region Distance Checks
-    IEnumerator DistanceTraveled(){
-        var gm = GameManager.Instance;
-        while (true){
-            gm.CurrentDistance =(int)(player.transform.position.x - _playerStartPosX + _offset);
-            yield return null;
-        }
-    }
     IEnumerator CheckPlayerPosition(){
         while (true){
             if(PlayerFromMaxDistance()){
                 ResetLevelPosition();
-                AddChunk();
+                yield return new WaitForSeconds(.5f);
+                _terrainChunkGenerations[1].CreateRemoveFlagPoint();
+                _removePointLocation = _terrainChunkGenerations[1].FlagRemovePoint;
+                // RemoveExtraChunk();
+                // AddChunk();
             }
             if(CheckLevelForRemoval() && _newFlagLocation) RemoveLastChunk();
             yield return new WaitForSeconds(1.5f);
-            CleanUpExtra();
         }
     }
+
     bool CheckLevelForRemoval()=>player.transform.position.x > _removePointLocation.x;
     bool PlayerFromMaxDistance()=>player.transform.position.magnitude > MAX_DISTANCE_THRESHOLD;
     private void ResetLevelPosition(){
@@ -78,7 +83,6 @@ public class EndlessLevelManager : MonoBehaviour
             Transform t = (Transform)o;
             if(t.parent==null) t.position -= player.transform.position;
         }
-        
     }
     #endregion
 
@@ -87,32 +91,37 @@ public class EndlessLevelManager : MonoBehaviour
         _newFlagLocation = false;
         var fistChunk = Instantiate(chunkPrefab);
         fistChunk.SetActive(true);
-        _chunks.Add(fistChunk);
+        fistChunk.transform.position = new Vector3(-10, 0, 0);
+        _chunks[0] = fistChunk;
+        _terrainChunkGenerations[0] = fistChunk.GetComponent<TerrainChunkGeneration>();
         AddChunk();
     }
     private void AddChunk(){
         Vector3 spawnObject = new Vector3(-1000, -1000, -1000);
         var chunk = Instantiate(chunkPrefab, spawnObject, quaternion.identity);
-        _chunks.Add(chunk);
+        _chunks[1] = chunk;
+        _terrainChunkGenerations[1] = chunk.GetComponent<TerrainChunkGeneration>();
         StartCoroutine(ConnectChunks());
     }
     private void RemoveLastChunk(){
-        RemoveChunk();
+        var temp = _chunks[0].transform.parent.gameObject;
+        _chunks[0] = _chunks[1].gameObject;
+        _terrainChunkGenerations[0] = _terrainChunkGenerations[1];
+        _chunks[1] = null;
+        _terrainChunkGenerations[1] = null;
+        Destroy(temp);
         _newFlagLocation = false;
         AddChunk();
     }
-    private void CleanUpExtra(){
-        if(_chunks.Count > 2) RemoveChunk(2);
-    }
-    private void RemoveChunk(int chunkIndex = default){
-        var temp = _chunks[chunkIndex].transform.parent.gameObject;
-        _chunks.RemoveAt(chunkIndex);
+    private void RemoveExtraChunk(){
+        var temp = _chunks[1].transform.parent.gameObject;
+        _chunks[1] = null;
         Destroy(temp);
     }
     private IEnumerator ConnectChunks(){
         yield return new WaitForSeconds(.1f);
-        var currentChunk = _chunks[0].GetComponent<TerrainChunkGeneration>();
-        var newChunk = _chunks[1].GetComponent<TerrainChunkGeneration>();
+        var currentChunk = _terrainChunkGenerations[0];
+        var newChunk = _terrainChunkGenerations[1];
         newChunk.StartPoint.position = currentChunk.EndPoint.position;
         yield return new WaitForSeconds(1f);
         newChunk.CreateRemoveFlagPoint();

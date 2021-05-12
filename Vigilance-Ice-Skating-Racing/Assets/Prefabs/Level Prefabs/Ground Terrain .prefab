@@ -176,14 +176,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 852c9576bf7ed984da70ac4f7f62109d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _vertices: []
+  _topVerticesPoints: []
   foreground: {fileID: 4188677434236849497}
-  step: 0.5
+  step: 0.8
   resolution: 20
   mapLength: 10
   obstacles:
   - {fileID: 7987220012473082516, guid: 3033adc43549cb44daadc3495344d8c9, type: 3}
   - {fileID: 2942178936142116957, guid: 25785dbcc81881441b57bc3425156666, type: 3}
   - {fileID: 1247031192159396202, guid: e82d914354e59aa4fb2927390aca4081, type: 3}
-  _layerMask:
+  layerMask:
     serializedVersion: 2
     m_Bits: 64
+  removeObjects: 0
