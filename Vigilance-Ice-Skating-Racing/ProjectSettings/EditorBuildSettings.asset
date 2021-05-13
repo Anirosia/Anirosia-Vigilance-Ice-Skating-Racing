@@ -8,15 +8,6 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/Main.unity
     guid: 5a4d66a0b3078be4eb41fccc2c59ae0f
-  - enabled: 0
-    path: Assets/Scenes/EndlessRunner1.unity
-    guid: 881fe17c42405134296ee68d6e3f8774
-  - enabled: 0
-    path: 
-    guid: 00000000000000000000000000000000
-  - enabled: 0
-    path: Assets/Scenes/PlayerTestScene.unity
-    guid: c8f6ebdf6314c5e489d2e964f76a8044
   - enabled: 1
     path: Assets/Scenes/EndlessRunner.unity
     guid: d9a9d378c2f21414d8eeb7facc48800b
