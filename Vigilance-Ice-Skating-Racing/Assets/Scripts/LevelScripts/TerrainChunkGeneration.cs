@@ -10,11 +10,14 @@ namespace LevelScripts
     {
         #region Fields
         private List<Vector3[]> _curves = new List<Vector3[]>();
-        [SerializeField] private List<Vector3> _vertices = new List<Vector3>();
+        private List<Vector3> _vertices = new List<Vector3>();
         private List<int> _triangles = new List<int>();
-        [SerializeField] private List<Vector2> _topVerticesPoints = new List<Vector2>();
+        private List<Vector2> _topVerticesPoints = new List<Vector2>();
 
-        public GameObject foreground;
+        List<Vector2> _obstacleSpawnPoints = new List<Vector2>();
+        List<Vector2> _treeSpawnPoints = new List<Vector2>();
+
+        [SerializeField] private GameObject foreground;
         private Mesh _mesh;
 
         //this also works as how you want the angle of the slope to be
@@ -25,7 +28,10 @@ namespace LevelScripts
         [SerializeField] int mapLength = 10;
 
         [SerializeField] private GameObject[] obstacles;
+        [SerializeField] private GameObject[] trees;
         [SerializeField] private LayerMask layerMask;
+        [SerializeField] private int obstaclePerChunk = 5;
+        [SerializeField] private int treesPerChunk = 5;
         RaycastHit2D _hit = new RaycastHit2D();
 
         [Header("Debug")]
@@ -60,7 +66,10 @@ namespace LevelScripts
             CreateStartPoint();
             CreateEndPoint();
             // Invoke("CreateRemoveFlagPoint", 0.5f);
-            if(!removeObjects) SpawnObstacles();
+            if(!removeObjects){
+                SpawnObstacles();
+                SpawnTrees();
+            }
         }
   #endregion
 
@@ -146,26 +155,47 @@ namespace LevelScripts
 
         #region Spawing
         private void SpawnObstacles(){
-            var obstaclePerChunk = 5;
-            List<Vector2> spawnPoints = new List<Vector2>();
+
+            var baseValue = 0;
+            int increaseBy = _topVerticesPoints.Count / obstaclePerChunk;
+            var limit = increaseBy;
             for(int i = 0; i < obstaclePerChunk; i++){
-                var point = GetRandomPoint();
-                spawnPoints.Add(point);
+                var point = GetRandomPoint(baseValue, limit);
+                _obstacleSpawnPoints.Add(point);
+                baseValue = limit;
+                limit += increaseBy;
             }
 
-            foreach (var spawnPoint in spawnPoints){
+            foreach (var spawnPoint in _obstacleSpawnPoints){
                 var obstacle = Instantiate(obstacles[Random.Range(0, obstacles.GetLength(0))]);
-
-
                 _hit = Physics2D.Raycast(obstacle.transform.position, Vector2.down, 2f, layerMask);
                 obstacle.transform.SetParent(transform);
                 obstacle.transform.localPosition = spawnPoint;
             }
         }
+        private void SpawnTrees(){
+            var baseValue = 0;
+            int increaseBy = _topVerticesPoints.Count / treesPerChunk;
+            var limit = increaseBy;
+            for(int i = 0; i < treesPerChunk; i++){
+                var point = GetRandomPoint(baseValue,limit);
+                _treeSpawnPoints.Add(point);
+                baseValue = limit;
+                limit += increaseBy;
+            }
+
+            foreach (var spawnPoint in _treeSpawnPoints){
+                var temp = Random.value;
+                var tree = Instantiate(trees[Random.Range(0, trees.GetLength(0))]);
+                tree.transform.SetParent(transform);
+                if(temp > 0.5f) tree.transform.localPosition = new Vector3(spawnPoint.x, spawnPoint.y - .1f, .1f); // back
+                else tree.transform.localPosition = new Vector3(spawnPoint.x, spawnPoint.y - 0.75f, -0.1f); // front
+            }
+        }
   #endregion
 
 #region Helper Methods
-        Vector2 GetRandomPoint()=>_topVerticesPoints[Random.Range(5, _topVerticesPoints.Count - 5)];
+        Vector2 GetRandomPoint(int min, int max)=>_topVerticesPoints[Random.Range(min, max)];
         private Vector3 BézierPoint(float t, Vector3 p0, Vector3 p1, Vector3 p2, Vector3 p3){
             Vector3 a = Vector3.Lerp(p0, p1, t);
             Vector3 b = Vector3.Lerp(p1, p2, t);

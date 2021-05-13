@@ -26,7 +26,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4188677434236849497}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: -0.5, z: -0.193}
+  m_LocalPosition: {x: 0, y: -0.5, z: -0.2}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 4188677434903482106}
@@ -94,7 +94,7 @@ GameObject:
   - component: {fileID: 4188677434903482104}
   - component: {fileID: 4188677434903482105}
   m_Layer: 6
-  m_Name: 'Ground Terrain '
+  m_Name: Mountain Ground Terrain
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -176,8 +176,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 852c9576bf7ed984da70ac4f7f62109d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _vertices: []
-  _topVerticesPoints: []
   foreground: {fileID: 4188677434236849497}
   step: 0.8
   resolution: 20
@@ -186,7 +184,14 @@ MonoBehaviour:
   - {fileID: 7987220012473082516, guid: 3033adc43549cb44daadc3495344d8c9, type: 3}
   - {fileID: 2942178936142116957, guid: 25785dbcc81881441b57bc3425156666, type: 3}
   - {fileID: 1247031192159396202, guid: e82d914354e59aa4fb2927390aca4081, type: 3}
+  trees:
+  - {fileID: 2569417443942590131, guid: b2b822e2b6e04344f90ba0b32fd35407, type: 3}
+  - {fileID: 3848957918728842377, guid: f82f097a56717254a86a925deaa28df1, type: 3}
+  - {fileID: 597152138158343007, guid: ac1fe643b6dd92544b4ffcff44f104ad, type: 3}
+  - {fileID: 527468230710343245, guid: d5d118e580a53de4ea5b71fdece2e385, type: 3}
   layerMask:
     serializedVersion: 2
     m_Bits: 64
+  obstaclePerChunk: 8
+  treesPerChunk: 10
   removeObjects: 0

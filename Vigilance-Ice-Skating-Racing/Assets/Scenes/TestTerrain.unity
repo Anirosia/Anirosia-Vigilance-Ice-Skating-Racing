@@ -422,7 +422,6 @@ GameObject:
   m_Component:
   - component: {fileID: 968606532}
   - component: {fileID: 968606531}
-  - component: {fileID: 968606534}
   m_Layer: 0
   m_Name: Level Manager
   m_TagString: Untagged
@@ -461,26 +460,6 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &968606534
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 968606530}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c8ac2361b74403b4bbf4ea8550f4ee21, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  debug: 0
-  gameObjectsToBePooled: []
-  levelsToBePooled:
-  - folderName: 
-    levelIndex: 0
-    listIndex: 0
-    amountOfLevels: 0
-    amountOfLoadedLevels: 0
 --- !u!1 &1107022147
 GameObject:
   m_ObjectHideFlags: 0
