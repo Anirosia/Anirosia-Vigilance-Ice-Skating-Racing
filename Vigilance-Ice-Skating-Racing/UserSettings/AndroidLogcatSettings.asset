@@ -3,7 +3,7 @@
     "m_SelectedPackage": {
         "deviceId": "PT99621BA1A80401661",
         "name": "com.DefaultCompany.com.unity.template.mobile2D",
-        "processId": 1566,
+        "processId": 1997,
         "exited": false
     },
     "m_SelectedPriority": 0,
@@ -54,6 +54,12 @@
             "deviceId": "PT99621BA1A80401661",
             "name": "com.DefaultCompany.com.unity.template.mobile2D",
             "processId": 1566,
+            "exited": false
+        },
+        {
+            "deviceId": "PT99621BA1A80401661",
+            "name": "com.DefaultCompany.com.unity.template.mobile2D",
+            "processId": 1997,
             "exited": false
         }
     ],

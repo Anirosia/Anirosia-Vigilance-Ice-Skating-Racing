@@ -59,7 +59,7 @@ public class GameManager : MonoBehaviour
         Instantiate(graphTool);
   #endif
         //Application Settings
-        Application.targetFrameRate = 30;
+        Application.targetFrameRate = -1;
         // When Game starts load the menu:
         ChangeGameState(GameState.inMenu);
 
