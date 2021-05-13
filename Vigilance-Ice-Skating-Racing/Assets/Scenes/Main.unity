@@ -207,72 +207,6 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!1 &1054933133
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 1054933134}
-  - component: {fileID: 1054933135}
-  m_Layer: 0
-  m_Name: Object Pooler
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &1054933134
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1054933133}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_Children: []
-  m_Father: {fileID: 0}
-  m_RootOrder: 2
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &1054933135
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1054933133}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c8ac2361b74403b4bbf4ea8550f4ee21, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  debug: 0
-  gameObjectsToBePooled:
-  - name: Coin
-    amountToBePooled: 100
-    gameObjectToBePooled: {fileID: 9023222801416843937, guid: 3ddd2bd03cb81cf44ae6b8dd80689f32,
-      type: 3}
-    loadMoreIfNoneLeft: 1
-  levelsToBePooled:
-  - folderName: LevelOneNew
-    levelIndex: 0
-    listIndex: 0
-    amountOfLevels: 0
-    amountOfLoadedLevels: 0
-  - folderName: LevelTwo
-    levelIndex: 0
-    listIndex: 0
-    amountOfLevels: 0
-    amountOfLoadedLevels: 0
-  - folderName: LevelThree
-    levelIndex: 0
-    listIndex: 0
-    amountOfLevels: 0
-    amountOfLoadedLevels: 0
 --- !u!1001 &4450797512970284718
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -283,7 +217,17 @@ PrefabInstance:
     - target: {fileID: 1480913627155102927, guid: 11d76109c67ea544aa0c2619dec39e30,
         type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: -21.086792
+      value: -21.08667
+      objectReference: {fileID: 0}
+    - target: {fileID: 4450797513439504096, guid: 11d76109c67ea544aa0c2619dec39e30,
+        type: 3}
+      propertyPath: graphTool
+      value: 
+      objectReference: {fileID: 177638, guid: 0abab5bb77339e4428787a870eb31bd3, type: 3}
+    - target: {fileID: 4450797513439504096, guid: 11d76109c67ea544aa0c2619dec39e30,
+        type: 3}
+      propertyPath: levelNames.Array.size
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4450797513439504097, guid: 11d76109c67ea544aa0c2619dec39e30,
         type: 3}

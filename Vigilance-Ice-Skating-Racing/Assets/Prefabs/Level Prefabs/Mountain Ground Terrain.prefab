@@ -189,9 +189,12 @@ MonoBehaviour:
   - {fileID: 3848957918728842377, guid: f82f097a56717254a86a925deaa28df1, type: 3}
   - {fileID: 597152138158343007, guid: ac1fe643b6dd92544b4ffcff44f104ad, type: 3}
   - {fileID: 527468230710343245, guid: d5d118e580a53de4ea5b71fdece2e385, type: 3}
+  coinGameObject: {fileID: 9023222801416843937, guid: 3ddd2bd03cb81cf44ae6b8dd80689f32,
+    type: 3}
+  obstaclePerChunk: 8
+  treesPerChunk: 10
+  coinPerChunk: 5
   layerMask:
     serializedVersion: 2
     m_Bits: 64
-  obstaclePerChunk: 8
-  treesPerChunk: 10
   removeObjects: 0

@@ -46,7 +46,7 @@ public class MenuManager : MonoBehaviour
                 break;
             case GameManager.GameState.inEndlessMode:
                 endlessDistanceText.text = "Dist: " + GameManager.Instance.CurrentDistance;
-                //endlessCoinsText.text = "Coins: " + GameManager.Instance.CurrentCoins;
+                endlessCoinsText.text = "Coins: " + StatsAndAchievements.Coins;
                 break;
             case GameManager.GameState.Results:
                 resultsDistanceText.text = "Dist: " + GameManager.Instance.CurrentDistance;

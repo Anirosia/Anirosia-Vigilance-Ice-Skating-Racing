@@ -16,6 +16,7 @@ namespace LevelScripts
 
         List<Vector2> _obstacleSpawnPoints = new List<Vector2>();
         List<Vector2> _treeSpawnPoints = new List<Vector2>();
+        List<Vector2> _coinSpawnPoints = new List<Vector2>();
 
         [SerializeField] private GameObject foreground;
         private Mesh _mesh;
@@ -29,9 +30,13 @@ namespace LevelScripts
 
         [SerializeField] private GameObject[] obstacles;
         [SerializeField] private GameObject[] trees;
-        [SerializeField] private LayerMask layerMask;
+        [SerializeField] private GameObject coinGameObject;
+
         [SerializeField] private int obstaclePerChunk = 5;
         [SerializeField] private int treesPerChunk = 5;
+        [SerializeField] private int coinPerChunk = 5;
+
+        [SerializeField] private LayerMask layerMask;
         RaycastHit2D _hit = new RaycastHit2D();
 
         [Header("Debug")]
@@ -69,6 +74,7 @@ namespace LevelScripts
             if(!removeObjects){
                 SpawnObstacles();
                 SpawnTrees();
+                SpawnCoins();
             }
         }
   #endregion
@@ -178,7 +184,7 @@ namespace LevelScripts
             int increaseBy = _topVerticesPoints.Count / treesPerChunk;
             var limit = increaseBy;
             for(int i = 0; i < treesPerChunk; i++){
-                var point = GetRandomPoint(baseValue,limit);
+                var point = GetRandomPoint(baseValue, limit);
                 _treeSpawnPoints.Add(point);
                 baseValue = limit;
                 limit += increaseBy;
@@ -190,6 +196,23 @@ namespace LevelScripts
                 tree.transform.SetParent(transform);
                 if(temp > 0.5f) tree.transform.localPosition = new Vector3(spawnPoint.x, spawnPoint.y - .1f, .1f); // back
                 else tree.transform.localPosition = new Vector3(spawnPoint.x, spawnPoint.y - 0.75f, -0.1f); // front
+            }
+        }
+
+        private void SpawnCoins(){
+            var baseValue = 0;
+
+            for(int i = 0; i < _topVerticesPoints.Count; i += 20){
+                var point = GetRandomPoint(baseValue, i);
+                _coinSpawnPoints.Add(point);
+                baseValue = i;
+            }
+
+            foreach (var spawnPoint in _coinSpawnPoints){
+                var coin = Instantiate(coinGameObject);
+                coin.transform.SetParent(transform);
+                coin.transform.localPosition = new Vector3(spawnPoint.x, spawnPoint.y + .5f); // back
+
             }
         }
   #endregion

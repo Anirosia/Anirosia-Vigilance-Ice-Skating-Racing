@@ -141,14 +141,16 @@ namespace Gameplay
         private bool IsGrounded()=>Physics2D.OverlapCircle(_groundCheckObject.transform.position, groundRadius, layer);
   #endregion
         void UserInput(){
-            if(playerInput.SwipeUp){
-                if(IsGrounded()) Jump();
-                playerInput.HasPerformed = true;
-            }
-            Focus(playerInput.Holding);
-            if(playerInput.SwipeDown){
-                StartCoroutine(Slide());
-                playerInput.HasPerformed = true;
+            if(!_isStun){
+                if(playerInput.SwipeUp){
+                    if(IsGrounded()) Jump();
+                    playerInput.HasPerformed = true;
+                }
+                Focus(playerInput.Holding);
+                if(playerInput.SwipeDown){
+                    StartCoroutine(Slide());
+                    playerInput.HasPerformed = true;
+                }
             }
         }
         private void AnimationCalls(){
